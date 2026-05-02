@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obchodní Asistent AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f11;
+    --bg2: #16161a;
+    --bg3: #1e1e24;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.16);
+    --text: #f0eff4;
+    --text2: #9998a8;
+    --text3: #5a5968;
+    --accent: #7c6af7;
+    --accent-dim: rgba(124,106,247,0.15);
+    --accent-border: rgba(124,106,247,0.35);
+    --green: #3ecf8e;
+    --green-dim: rgba(62,207,142,0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --red: #f06060;
+    --red-dim: rgba(240,96,96,0.12);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.12);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* API KEY SCREEN */
+  #apiScreen {
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .api-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px;
+    width: 420px;
+    max-width: 95vw;
+  }
+  .api-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .api-logo::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+  .api-card h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .api-card p { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+  .api-card p a { color: var(--accent); text-decoration: none; }
+  .api-card p a:hover { text-decoration: underline; }
+  .api-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .api-input:focus { border-color: var(--accent-border); }
+  .api-btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .api-btn:hover { opacity: 0.85; }
+  .api-note {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* LAYOUT */
+  .app { display: flex; flex: 1; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 230px;
+    min-width: 230px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-top {
+    padding: 18px 14px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .new-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .new-btn:hover { background: rgba(124,106,247,0.22); }
+  .clients-scroll { flex: 1; overflow-y: auto; padding: 10px 8px; }
+  .clients-scroll::-webkit-scrollbar { width: 4px; }
+  .clients-scroll::-webkit-scrollbar-track { background: transparent; }
+  .clients-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 8px 4px;
+  }
+  .client-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: background 0.15s;
+    position: relative;
+    group: true;
+  }
+  .client-item:hover { background: var(--bg3); }
+  .client-item.active {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+  }
+  .client-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 26px;
+    background: var(--bg3);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .client-item.active .client-avatar {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-color: var(--accent-border);
+  }
+  .client-name {
+    font-size: 13px;
+    color: var(--text2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
+  .client-item.active .client-name { color: var(--text); font-weight: 500; }
+  .client-delete {
+    width: 20px; height: 20px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .client-item:hover .client-delete { display: flex; }
+  .client-delete:hover { color: var(--red); background: var(--red-dim); }
+  .sidebar-bottom {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .api-change-btn {
+    width: 100%;
+    padding: 7px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  .api-change-btn:hover { border-color: var(--border-hover); color: var(--text2); }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+  .top-bar {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg);
+  }
+  .top-client-info { flex: 1; min-width: 0; }
+  .top-client-name {
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .top-client-sub {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    margin-top: 1px;
+  }
+  .phase-select {
+    padding: 7px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .phase-select:focus { border-color: var(--accent-border); }
+
+  /* CHAT */
+  .chat-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .chat-scroll::-webkit-scrollbar { width: 4px; }
+  .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+  .chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text3);
+    padding: 40px;
+    text-align: center;
+  }
+  .empty-icon {
+    font-size: 36px;
+    margin-bottom: 6px;
+    filter: grayscale(0.3);
+  }
+  .empty-title { font-size: 15px; font-weight: 500; color: var(--text2); }
+  .empty-sub { font-size: 13px; line-height: 1.6; max-width: 320px; }
+
+  /* MESSAGES */
+  .msg-user {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .msg-user-bubble {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-lg);
+    border-bottom-right-radius: 4px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    max-width: 70%;
+    color: var(--text);
+  }
+  .msg-label {
+    font-size: 10px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 5px;
+    text-align: right;
+  }
+  .msg-ai-wrap { display: flex; flex-direction: column; gap: 8px; max-width: 88%; }
+
+  /* AI CARDS */
+  .ai-analysis {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 11px 14px;
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+  .ai-analysis strong { color: var(--text); font-weight: 500; font-size: 11px; display: block; margin-bottom: 4px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; }
+
+  .response-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .response-card:hover { border-color: var(--border-hover); }
+  .card-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .style-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+  .tag-empat { background: var(--green-dim); color: var(--green); border: 1px solid rgba(62,207,142,0.25); }
+  .tag-assert { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.25); }
+  .tag-close { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,96,96,0.25); }
+  .tag-info { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,165,250,0.25); }
+
+  .copy-btn {
+    margin-left: auto;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text3);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { border-color: var(--border-hover); color: var(--text2); }
+  .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+  .card-body { padding: 12px 14px; }
+  .card-response-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .card-tip {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+  .card-tip span { color: var(--text2); }
+  .card-next {
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+  }
+  .card-next::before { content: '→ '; }
+
+  /* LOADING */
+  .loading-msg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    max-width: 140px;
+  }
+  .ld { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: ld 1.2s infinite; }
+  .ld:nth-child(2) { animation-delay: 0.2s; }
+  .ld:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes ld { 0%,60%,100%{opacity:0.2;transform:scale(0.8)} 30%{opacity:1;transform:scale(1.1)} }
+
+  /* INPUT AREA */
+  .input-area {
+    border-top: 1px solid var(--border);
+    padding: 14px 20px 16px;
+    background: var(--bg);
+  }
+  .quick-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 11px;
+  }
+  .chip {
+    padding: 4px 11px;
+    font-size: 11.5px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
+  }
+  .chip:hover {
+    background: var(--bg2);
+    border-color: var(--border-hover);
+    color: var(--text2);
+  }
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .textarea-wrap { flex: 1; position: relative; }
+  textarea#inputBox {
+    width: 100%;
+    min-height: 42px;
+    max-height: 120px;
+    padding: 11px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    overflow-y: auto;
+    transition: border-color 0.2s;
+  }
+  textarea#inputBox:focus { border-color: var(--accent-border); }
+  textarea#inputBox::placeholder { color: var(--text3); }
+  .send-btn {
+    padding: 11px 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn:active { transform: scale(0.97); }
+  .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    width: 340px;
+    max-width: 95vw;
+  }
+  .modal-box h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .modal-box p { font-size: 12.5px; color: var(--text3); margin-bottom: 16px; line-height: 1.5; }
+  .modal-input {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--accent-border); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { border-color: var(--border-hover); color: var(--text2); }
+  .btn-confirm {
+    padding: 8px 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-confirm:hover { opacity: 0.85; }
+
+  /* NO CLIENT STATE */
+  .no-client {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text3);
+  }
+  .no-client-icon { font-size: 40px; filter: grayscale(0.5); }
+  .no-client-text { font-size: 14px; color: var(--text2); }
+  .no-client-sub { font-size: 12px; }
+
+  @media (max-width: 640px) {
+    .sidebar { width: 60px; min-width: 60px; }
+    .sidebar-top { padding: 12px 8px; }
+    .brand, .section-label, .client-name, .new-btn span, .api-change-btn span { display: none; }
+    .new-btn { justify-content: center; padding: 8px; }
+    .client-item { justify-content: center; padding: 8px; }
+    .client-delete { display: none !important; }
+    .sidebar-bottom { padding: 8px; }
+    .api-change-btn { justify-content: center; padding: 7px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- API KEY SCREEN -->
+<div id="apiScreen">
+  <div class="api-card">
+    <div class="api-logo"><span class="brand-dot"></span>SALES AI</div>
+    <h2>Zadej Anthropic API klíč</h2>
+    <p>Klíč se ukládá pouze do tvého prohlížeče a nikam se neposílá. Získáš ho na <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>.</p>
+    <input class="api-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" />
+    <button class="api-btn" onclick="saveApiKey()">Spustit aplikaci →</button>
+    <div class="api-note">Klíč se ukládá lokálně v prohlížeči (localStorage). Každý kolega zadá svůj vlastní klíč.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="appRoot" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand"><span class="brand-dot"></span>SALES AI</div>
+      <button class="new-btn" onclick="openModal()">
+        <span>＋</span><span>Nový klient</span>
+      </button>
+    </div>
+    <div class="clients-scroll">
+      <div class="section-label">Klienti</div>
+      <div id="clientsList"></div>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="api-change-btn" onclick="changeApiKey()">
+        <span>🔑</span><span>Změnit API klíč</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top-bar">
+      <div class="top-client-info">
+        <div class="top-client-name" id="topName">Vyberte klienta</div>
+        <div class="top-client-sub" id="topSub">← vyber ze seznamu nebo vytvoř nového</div>
+      </div>
+      <select class="phase-select" id="phaseSelect">
+        <option value="začátek hovoru">📞 Začátek</option>
+        <option value="prezentace nabídky" selected>📋 Nabídka</option>
+        <option value="uzavření">🤝 Uzavření</option>
+        <option value="follow-up">📧 Follow-up</option>
+      </select>
+    </div>
+
+    <div class="chat-scroll" id="chatScroll">
+      <div class="no-client" id="noClientState">
+        <div class="no-client-icon">⚡</div>
+        <div class="no-client-text">Vyber nebo vytvoř klienta</div>
+        <div class="no-client-sub">a zadej námitku nebo otázku</div>
+      </div>
+    </div>
+
+    <div class="input-area" id="inputArea">
+      <div class="quick-chips">
+        <span class="chip" onclick="fillInput('Nemám zájem')">nemám zájem</span>
+        <span class="chip" onclick="fillInput('Pošlete mi to emailem')">pošlete email</span>
+        <span class="chip" onclick="fillInput('Je to moc drahé')">moc drahé</span>
+        <span class="chip" onclick="fillInput('Musím se poradit s manželem/manželkou')">musím se poradit</span>
+        <span class="chip" onclick="fillInput('Teď nemám čas')">nemám čas</span>
+        <span class="chip" onclick="fillInput('Už mám smlouvu s jiným dodavatelem')">jiný dodavatel</span>
+        <span class="chip" onclick="fillInput('Co je to odchylka ve spotřebě?')">odchylka?</span>
+        <span class="chip" onclick="fillInput('Jak funguje fotovoltaika?')">FVE?</span>
+      </div>
+      <div class="input-row">
+        <div class="textarea-wrap">
+          <textarea id="inputBox" placeholder="Napiš námitku klienta nebo otázku..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        </div>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Odeslat →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal-box">
+    <h3>Nový klient</h3>
+    <p>Zadej jméno nebo firmu klienta — každý klient má vlastní historii hovoru.</p>
+    <input class="modal-input" type="text" id="clientNameInput" placeholder="Např. Jan Novák, Firma s.r.o." onkeydown="if(event.key==='Enter')confirmModal()" />
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Zrušit</button>
+      <button class="btn-confirm" onclick="confirmModal()">Vytvořit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+let API_KEY = '';
+let clients = JSON.parse(localStorage.getItem('sa_clients') || '[]');
+let activeId = localStorage.getItem('sa_activeId') || null;
+
+// ─── INIT ────────────────────────────────────────────────────
+function init() {
+  API_KEY = localStorage.getItem('sa_apikey') || '';
+  if (API_KEY) {
+    document.getElementById('apiScreen').style.display = 'none';
+    document.getElementById('appRoot').style.display = 'flex';
+    renderClients();
+    if (activeId && clients.find(c => c.id === activeId)) {
+      selectClient(activeId);
+    }
+  }
+}
+
+function saveApiKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val.startsWith('sk-ant')) { alert('Neplatný API klíč — musí začínat sk-ant-...'); return; }
+  API_KEY = val;
+  localStorage.setItem('sa_apikey', val);
+  document.getElementById('apiScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display = 'flex';
+  renderClients();
+}
+
+function changeApiKey() {
+  localStorage.removeItem('sa_apikey');
+  API_KEY = '';
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiScreen').style.display = 'flex';
+  document.getElementById('appRoot').style.display = 'none';
+}
+
+// ─── CLIENTS ─────────────────────────────────────────────────
+function saveClients() {
+  localStorage.setItem('sa_clients', JSON.stringify(clients));
+  localStorage.setItem('sa_activeId', activeId || '');
+}
+
+function getInitials(name) {
+  return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
+}
+
+function renderClients() {
+  const el = document.getElementById('clientsList');
+  if (!clients.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 10px;">Zatím žádní klienti</div>';
+    return;
+  }
+  el.innerHTML = clients.map(c => `
+    <div class="client-item ${c.id === activeId ? 'active' : ''}" onclick="selectClient('${c.id}')">
+      <div class="client-avatar">${getInitials(c.name)}</div>
+      <span class="client-name">${escHtml(c.name)}</span>
+      <button class="client-delete" onclick="deleteClient(event,'${c.id}')" title="Smazat">×</button>
+    </div>
+  `).join('');
+}
+
+function selectClient(id) {
+  activeId = id;
+  saveClients();
+  renderClients();
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('topName').textContent = c.name;
+  const msgs = c.history.filter(h => h.role === 'user').length;
+  document.getElementById('topSub').textContent = msgs
+    ? `${msgs} zpráv · fáze: ${document.getElementById('phaseSelect').value}`
+    : 'Zadej první námitku nebo otázku klienta';
+  renderChat();
+}
+
+function deleteClient(e, id) {
+  e.stopPropagation();
+  if (!confirm('Smazat klienta a celou historii?')) return;
+  clients = clients.filter(c => c.id !== id);
+  if (activeId === id) {
+    activeId = clients.length ? clients[0].id : null;
+  }
+  saveClients();
+  renderClients();
+  if (activeId) selectClient(activeId);
+  else {
+    document.getElementById('topName').textContent = 'Vyberte klienta';
+    document.getElementById('topSub').textContent = '← vyber ze seznamu nebo vytvoř nového';
+    document.getElementById('chatScroll').innerHTML = `<div class="no-client" id="noClientState"><div class="no-client-icon">⚡</div><div class="no-client-text">Vyber nebo vytvoř klienta</div><div class="no-client-sub">a zadej námitku nebo otázku</div></div>`;
+  }
+}
+
+// ─── MODAL ───────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('clientNameInput').value = '';
+  setTimeout(() => document.getElementById('clientNameInput').focus(), 50);
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+function confirmModal() {
+  const name = document.getElementById('clientNameInput').value.trim();
+  if (!name) return;
+  const id = 'c' + Date.now();
+  clients.push({ id, name, history: [] });
+  saveClients();
+  closeModal();
+  renderClients();
+  selectClient(id);
+}
+
+// ─── CHAT ────────────────────────────────────────────────────
+function renderChat() {
+  const c = clients.find(x => x.id === activeId);
+  const area = document.getElementById('chatScroll');
+  if (!c || !c.history.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Chat je prázdný</div><div class="empty-sub">Zadej námitku klienta nebo otázku do pole níže — nebo použij rychlé zkratky.</div></div>`;
+    return;
+  }
+  area.innerHTML = c.history.map(msg => {
+    if (msg.role === 'user') {
+      return `<div class="msg-user"><div><div class="msg-label">KLIENT ŘEKL</div><div class="msg-user-bubble">${escHtml(msg.content)}</div></div></div>`;
+    }
+    return renderAIMsg(msg.content);
+  }).join('');
+  area.scrollTop = area.scrollHeight;
+}
+
+function renderAIMsg(data) {
+  if (data.type === 'loading') {
+    return `<div class="loading-msg"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>`;
+  }
+  if (data.type === 'error') {
+    return `<div class="msg-ai-wrap"><div class="ai-analysis" style="border-left-color:var(--red)"><strong>CHYBA</strong>${escHtml(data.text)}</div></div>`;
+  }
+  if (data.type === 'info') {
+    return `<div class="msg-ai-wrap">
+      <div class="response-card">
+        <div class="card-header"><span class="style-tag tag-info">VYSVĚTLENÍ</span><button class="copy-btn" onclick="copyText(this,${JSON.stringify(data.text)})">Kopírovat</button></div>
+        <div class="card-body"><div class="card-response-text">${escHtml(data.text)}</div></div>
+      </div>
+    </div>`;
+  }
+
+  const tagClasses = ['tag-empat','tag-assert','tag-close'];
+  const tagLabels = ['EMPATICKÝ','ASERTIVNÍ','UZAVÍRACÍ'];
+
+  const analysisHtml = data.analysis
+    ? `<div class="ai-analysis"><strong>ANALÝZA</strong>${escHtml(data.analysis)}</div>` : '';
+
+  const cardsHtml = (data.responses || []).map((r, i) => `
+    <div class="response-card">
+      <div class="card-header">
+        <span class="style-tag ${tagClasses[i] || 'tag-info'}">${tagLabels[i] || 'VARIANTA'}</span>
+        <button class="copy-btn" onclick="copyText(this,${JSON.stringify(r.text)})">Kopírovat</button>
+      </div>
+      <div class="card-body">
+        <div class="card-response-text">${escHtml(r.text)}</div>
+        ${r.tip ? `<div class="card-tip"><span>${escHtml(r.tip)}</span></div>` : ''}
+        ${r.next ? `<div class="card-next">${escHtml(r.next)}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  return `<div class="msg-ai-wrap">${analysisHtml}${cardsHtml}</div>`;
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Zkopírováno';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Kopírovat'; btn.classList.remove('copied'); }, 2200);
+  });
+}
+
+// ─── INPUT ───────────────────────────────────────────────────
+function fillInput(text) {
+  const box = document.getElementById('inputBox');
+  box.value = text; box.focus(); autoResize(box);
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+// ─── SEND ────────────────────────────────────────────────────
+async function sendMessage() {
+  if (!activeId) { alert('Nejprve vyberte nebo vytvořte klienta.'); return; }
+  const box = document.getElementById('inputBox');
+  const text = box.value.trim();
+  if (!text) return;
+
+  const c = clients.find(x => x.id === activeId);
+  const phase = document.getElementById('phaseSelect').value;
+  box.value = ''; autoResize(box);
+  document.getElementById('sendBtn').disabled = true;
+
+  c.history.push({ role: 'user', content: text });
+  c.history.push({ role: 'ai', content: { type: 'loading' } });
+  saveClients();
+  renderChat();
+
+  const isExplanation = /co je|jak funguje|co znamená|vysvětli|pojem|odchylka|fotovoltaika|fve|solár|tarif|distribuc|silová|regulovan|spot|futures/i.test(text);
+  const recentObjHistory = c.history.slice(0, -2).filter(h => h.role === 'user').map(h => h.content).slice(-4);
+
+  const systemPrompt = isExplanation
+    ? `Jsi expert na energetiku (elektřina, plyn, fotovoltaika, energetické tarify v ČR). Odpovídáš obchodníkovi, který potřebuje rychle a jednoduše vysvětlit pojem klientovi. Buď stručný (max 4 věty), bez technického žargonu, přirozeně česky. Vrať POUZE JSON: {"type":"info","text":"..."}`
+    : `Jsi AI kouč pro obchodníky prodávající energetické produkty (elektřina, plyn, fotovoltaika) v ČR.
+Fáze hovoru: "${phase}".
+Předchozí námitky v tomto hovoru: ${JSON.stringify(recentObjHistory)}.
+Klient právě řekl: "${text}".
+
+Odpověz POUZE jako JSON v tomto formátu (žádný text navíc):
+{
+  "type": "objection",
+  "analysis": "1-2 věty — co si klient pravděpodobně myslí, proč to říká, jaká je jeho skutečná obava",
+  "responses": [
+    {
+      "text": "Empatická odpověď — uznáme pocit klienta, vytvoříme spojení",
+      "tip": "proč tato odpověď funguje",
+      "next": "doporučený další krok po této odpovědi"
+    },
+    {
+      "text": "Asertivní odpověď — přímá, sebevědomá, ale ne agresivní",
+      "tip": "proč tato odpověď funguje",
+      "next": "doporučený další krok"
+    },
+    {
+      "text": "Uzavírací odpověď — zaměřená na získání souhlasu nebo schůzky",
+      "tip": "proč tato odpověď funguje",
+      "next": "doporučený další krok"
+    }
+  ]
+}
+Odpovědi musí být krátké (2-3 věty), přirozené, v češtině, lidské — ne robotické.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const raw = data.content?.[0]?.text || '';
+    let parsed;
+    try {
+      parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch {
+      parsed = { type: 'info', text: raw };
+    }
+    c.history[c.history.length - 1] = { role: 'ai', content: parsed };
+  } catch (e) {
+    c.history[c.history.length - 1] = { role: 'ai', content: { type: 'error', text: 'Chyba: ' + e.message } };
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  const msgs = c.history.filter(h => h.role === 'user').length;
+  document.getElementById('topSub').textContent = `${msgs} zpráv · fáze: ${phase}`;
+  saveClients();
+  renderChat();
+}
+
+// ─── UTILS ───────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── START ───────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
