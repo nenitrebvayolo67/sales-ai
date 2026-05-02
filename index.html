@@ -3,192 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ušetřeno — Sales AI</title>
+<title>Usetreno Sales AI</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0f0f11;--bg2:#16161a;--bg3:#1e1e24;
-  --border:rgba(255,255,255,0.08);--border-h:rgba(255,255,255,0.16);
-  --text:#f0eff4;--text2:#9998a8;--text3:#5a5968;
-  --accent:#7c6af7;--accent-d:rgba(124,106,247,0.15);--accent-b:rgba(124,106,247,0.35);
-  --green:#3ecf8e;--green-d:rgba(62,207,142,0.12);
-  --red:#f06060;--red-d:rgba(240,96,96,0.12);
-  --blue:#60a5fa;--blue-d:rgba(96,165,250,0.12);
-  --amber:#f5a623;--amber-d:rgba(245,166,35,0.12);
-  --r:10px;--rl:14px;
-}
+:root{--bg:#0f0f11;--bg2:#16161a;--bg3:#1e1e24;--border:rgba(255,255,255,0.08);--borderh:rgba(255,255,255,0.16);--text:#f0eff4;--text2:#9998a8;--text3:#5a5968;--accent:#7c6af7;--accentd:rgba(124,106,247,0.15);--accentb:rgba(124,106,247,0.35);--green:#3ecf8e;--greend:rgba(62,207,142,0.12);--red:#f06060;--redd:rgba(240,96,96,0.12);--blue:#60a5fa;--blued:rgba(96,165,250,0.12);--amber:#f5a623;--amberd:rgba(245,166,35,0.12);--r:10px;--rl:14px;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
-
-/* API */
 #apiScreen{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;}
 .api-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:36px 40px;width:440px;max-width:95vw;}
 .api-logo{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.15em;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
 .bdot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
 .api-card h2{font-size:20px;font-weight:600;margin-bottom:8px;}
 .api-card p{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px;}
-.api-card p a{color:var(--accent);text-decoration:none;}
-.api-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);margin-bottom:10px;outline:none;transition:border-color .2s;}
-.api-input:focus{border-color:var(--accent-b);}
+.api-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:11px 14px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);margin-bottom:10px;outline:none;}
+.api-input:focus{border-color:var(--accentb);}
 .api-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
 .api-btn:hover{opacity:.85;}
 .api-note{font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5;}
-
-/* LAYOUT */
 .app{display:flex;flex:1;overflow:hidden;}
-
-/* SIDEBAR */
 .sidebar{width:235px;min-width:235px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;}
 .sidebar-top{padding:14px 12px 10px;border-bottom:1px solid var(--border);}
 .brand{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
-.new-btn{width:100%;padding:7px 12px;background:var(--accent-d);border:1px solid var(--accent-b);border-radius:var(--r);color:var(--accent);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;display:flex;align-items:center;gap:7px;transition:background .2s;}
+.new-btn{width:100%;padding:7px 12px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;display:flex;align-items:center;gap:7px;}
 .new-btn:hover{background:rgba(124,106,247,.22);}
-
-/* SIDEBAR TABS */
 .stabs{display:flex;border-bottom:1px solid var(--border);}
-.stab{flex:1;padding:7px 4px;font-size:11px;text-align:center;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.stab{flex:1;padding:7px 4px;font-size:11px;text-align:center;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .stab.on{color:var(--accent);border-bottom-color:var(--accent);}
 .spanel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
 .spanel.on{display:flex;}
 .spanel::-webkit-scrollbar{width:3px;}
 .spanel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-
-/* CLIENT LIST */
 .sec-label{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:10px 10px 4px;}
-.ci{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);cursor:pointer;margin:0 6px 2px;transition:background .15s;position:relative;}
+.ci{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);cursor:pointer;margin:0 6px 2px;position:relative;}
 .ci:hover{background:var(--bg3);}
-.ci.on{background:var(--accent-d);border:1px solid var(--accent-b);}
+.ci.on{background:var(--accentd);border:1px solid var(--accentb);}
 .ci-av{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;min-width:25px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
-.ci.on .ci-av{background:var(--accent-d);color:var(--accent);border-color:var(--accent-b);}
+.ci.on .ci-av{background:var(--accentd);color:var(--accent);border-color:var(--accentb);}
 .ci-name{font-size:12.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
 .ci.on .ci-name{color:var(--text);font-weight:500;}
-.ci-del{width:20px;height:20px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--text3);cursor:pointer;border-radius:4px;font-size:16px;line-height:1;flex-shrink:0;}
+.ci-del{width:22px;height:22px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--text3);cursor:pointer;border-radius:4px;font-size:18px;line-height:1;flex-shrink:0;padding:0;}
 .ci:hover .ci-del{display:flex;}
-.ci-del:hover{color:var(--red);background:var(--red-d);}
-
-/* KB */
+.ci-del:hover{color:var(--red);background:var(--redd);}
 .kb-sec{padding:8px 8px 2px;}
 .kb-sec-title{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:4px 4px 6px;}
-.kb-item{padding:6px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;font-size:12px;color:var(--text2);transition:background .15s;}
+.kb-item{padding:6px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;font-size:12px;color:var(--text2);}
 .kb-item:hover{background:var(--bg3);color:var(--text);}
-.kb-item.on{background:var(--green-d);color:var(--green);}
-
-.sidebar-bot{padding:10px 10px;border-top:1px solid var(--border);}
-.side-btn{width:100%;padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;transition:all .2s;}
-.side-btn:hover{border-color:var(--border-h);color:var(--text2);}
-
-/* MAIN */
+.kb-item.on{background:var(--greend);color:var(--green);}
+.sidebar-bot{padding:10px;border-top:1px solid var(--border);}
+.side-btn{width:100%;padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;}
+.side-btn:hover{border-color:var(--borderh);color:var(--text2);}
 .main{flex:1;display:flex;flex-direction:column;min-width:0;}
-
-/* TOP BAR */
 .topbar{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--bg);flex-shrink:0;}
 .top-info{flex:1;min-width:0;}
 .top-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .top-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px;}
-
-/* PHASE STEPS */
 .phase-bar{display:flex;gap:4px;padding:10px 18px 8px;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
 .phase-bar::-webkit-scrollbar{height:0;}
-.pstep{padding:5px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;transition:all .2s;}
-.pstep:hover{border-color:var(--border-h);color:var(--text2);}
-.pstep.on{background:var(--accent-d);border-color:var(--accent-b);color:var(--accent);font-weight:500;}
-
-/* SCRIPT PANEL */
+.pstep{padding:5px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;}
+.pstep:hover{border-color:var(--borderh);color:var(--text2);}
+.pstep.on{background:var(--accentd);border-color:var(--accentb);color:var(--accent);font-weight:500;}
 .script-panel{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 18px;flex-shrink:0;display:none;}
 .script-panel.vis{display:block;}
 .script-label{font-size:10px;font-weight:500;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:6px;}
 .script-text{font-size:12.5px;color:var(--text2);line-height:1.65;}
 .script-text strong{color:var(--accent);font-weight:500;}
-
-/* CHAT */
-.chat-scroll{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
-.chat-scroll::-webkit-scrollbar{width:3px;}
-.chat-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3);text-align:center;padding:40px;}
-.empty-icon{font-size:30px;margin-bottom:4px;}
-.empty-title{font-size:14px;font-weight:500;color:var(--text2);}
-.empty-sub{font-size:12px;line-height:1.6;max-width:300px;}
-
-.msg-user{display:flex;justify-content:flex-end;}
-.msg-user-bubble{background:var(--accent-d);border:1px solid var(--accent-b);border-radius:var(--rl);border-bottom-right-radius:4px;padding:9px 13px;font-size:13px;line-height:1.6;max-width:72%;}
-.msg-lbl{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px;text-align:right;}
-.ai-wrap{display:flex;flex-direction:column;gap:7px;max-width:92%;}
-
-/* AI CARDS */
-.ai-analysis{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--text2);line-height:1.6;}
-.ai-analysis strong{color:var(--text3);font-size:10px;display:block;margin-bottom:3px;font-family:'DM Mono',monospace;letter-spacing:.08em;}
-
-.rcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .2s;}
-.rcard:hover{border-color:var(--border-h);}
-.rcard-head{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-.stag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.06em;}
-.tag-e{background:var(--green-d);color:var(--green);border:1px solid rgba(62,207,142,.25);}
-.tag-c{background:var(--red-d);color:var(--red);border:1px solid rgba(240,96,96,.25);}
-.tag-i{background:var(--blue-d);color:var(--blue);border:1px solid rgba(96,165,250,.25);}
-.copy-btn{margin-left:auto;padding:3px 9px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text3);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s;flex-shrink:0;}
-.copy-btn:hover{border-color:var(--border-h);color:var(--text2);}
-.copy-btn.ok{border-color:var(--green);color:var(--green);}
-.rcard-body{padding:11px 13px;}
-.rcard-text{font-size:13px;line-height:1.7;color:var(--text);}
-.rcard-next{margin-top:7px;font-size:11.5px;color:var(--accent);font-family:'DM Mono',monospace;}
-.rcard-next::before{content:'→ ';}
-
-.loading-msg{display:flex;align-items:center;gap:5px;padding:13px 15px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);max-width:120px;}
-.ld{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:ld 1.2s infinite;}
-.ld:nth-child(2){animation-delay:.2s;}.ld:nth-child(3){animation-delay:.4s;}
-@keyframes ld{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1.1)}}
-
-/* KB DETAIL */
 .kb-detail{flex:1;overflow-y:auto;padding:18px;display:none;flex-direction:column;gap:10px;}
 .kb-detail.vis{display:flex;}
 .kb-dhead{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
 .kb-back{padding:5px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;}
-.kb-back:hover{border-color:var(--border-h);color:var(--text2);}
+.kb-back:hover{border-color:var(--borderh);color:var(--text2);}
 .kb-dtitle{font-size:15px;font-weight:600;}
 .kb-dcontent{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;font-size:12.5px;line-height:1.75;color:var(--text2);white-space:pre-wrap;}
-.kb-ask{padding:8px 14px;background:var(--accent-d);border:1px solid var(--accent-b);border-radius:var(--r);color:var(--accent);font-size:12px;font-family:'Sora',sans-serif;cursor:pointer;align-self:flex-start;}
-.kb-ask:hover{background:rgba(124,106,247,.25);}
-
-/* INPUT */
+.kb-ask{padding:8px 14px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-size:12px;font-family:'Sora',sans-serif;cursor:pointer;align-self:flex-start;}
+.chat-scroll{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+.chat-scroll::-webkit-scrollbar{width:3px;}
+.chat-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3);text-align:center;padding:40px;}
+.empty-icon{font-size:30px;margin-bottom:4px;}
+.empty-title{font-size:14px;font-weight:500;color:var(--text2);}
+.empty-sub{font-size:12px;line-height:1.6;max-width:300px;}
+.msg-user{display:flex;justify-content:flex-end;}
+.msg-user-bubble{background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--rl);border-bottom-right-radius:4px;padding:9px 13px;font-size:13px;line-height:1.6;max-width:72%;}
+.msg-lbl{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px;text-align:right;}
+.ai-wrap{display:flex;flex-direction:column;gap:7px;max-width:92%;}
+.ai-analysis{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--text2);line-height:1.6;}
+.ai-analysis strong{color:var(--text3);font-size:10px;display:block;margin-bottom:3px;font-family:'DM Mono',monospace;letter-spacing:.08em;}
+.rcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.rcard:hover{border-color:var(--borderh);}
+.rcard-head{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.stag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.06em;}
+.tag-e{background:var(--greend);color:var(--green);border:1px solid rgba(62,207,142,.25);}
+.tag-c{background:var(--amberd);color:var(--amber);border:1px solid rgba(245,166,35,.25);}
+.tag-i{background:var(--blued);color:var(--blue);border:1px solid rgba(96,165,250,.25);}
+.copy-btn{margin-left:auto;padding:3px 9px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text3);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;flex-shrink:0;}
+.copy-btn:hover{border-color:var(--borderh);color:var(--text2);}
+.copy-btn.ok{border-color:var(--green);color:var(--green);}
+.rcard-body{padding:11px 13px;}
+.rcard-text{font-size:13px;line-height:1.7;color:var(--text);}
+.rcard-next{margin-top:7px;font-size:11.5px;color:var(--accent);font-family:'DM Mono',monospace;}
+.rcard-next::before{content:'-> ';}
+.rcard-tip{margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:11.5px;color:var(--green);line-height:1.6;}
+.loading-msg{display:flex;align-items:center;gap:5px;padding:13px 15px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);max-width:120px;}
+.ld{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:ld 1.2s infinite;}
+.ld:nth-child(2){animation-delay:.2s;}.ld:nth-child(3){animation-delay:.4s;}
+@keyframes ld{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1.1)}}
 .input-area{border-top:1px solid var(--border);padding:10px 18px 13px;background:var(--bg);flex-shrink:0;}
 .chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
-.chip{padding:3px 10px;font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--text3);cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace;}
-.chip:hover{background:var(--bg2);border-color:var(--border-h);color:var(--text2);}
+.chip{padding:3px 10px;font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--text3);cursor:pointer;font-family:'DM Mono',monospace;}
+.chip:hover{background:var(--bg2);border-color:var(--borderh);color:var(--text2);}
 .input-row{display:flex;gap:8px;align-items:flex-end;}
-textarea#ibox{flex:1;min-height:40px;max-height:110px;padding:10px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;line-height:1.5;resize:none;outline:none;transition:border-color .2s;}
-textarea#ibox:focus{border-color:var(--accent-b);}
+textarea#ibox{flex:1;min-height:40px;max-height:110px;padding:10px 13px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;line-height:1.5;resize:none;outline:none;}
+textarea#ibox:focus{border-color:var(--accentb);}
 textarea#ibox::placeholder{color:var(--text3);}
-.send-btn{padding:10px 16px;background:var(--accent);border:none;border-radius:var(--rl);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .2s,transform .1s;}
+.send-btn{padding:10px 16px;background:var(--accent);border:none;border-radius:var(--rl);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;}
 .send-btn:hover{opacity:.85;}
 .send-btn:active{transform:scale(.97);}
 .send-btn:disabled{opacity:.35;cursor:not-allowed;}
-
-/* MODAL */
 .modal-ov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;}
 .modal-ov.on{display:flex;}
-.mbox{background:var(--bg2);border:1px solid var(--border-h);border-radius:var(--rl);padding:22px 26px;width:320px;max-width:95vw;}
+.mbox{background:var(--bg2);border:1px solid var(--borderh);border-radius:var(--rl);padding:22px 26px;width:320px;max-width:95vw;}
 .mbox h3{font-size:15px;font-weight:600;margin-bottom:6px;}
 .mbox p{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;}
-.minput{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:12px;transition:border-color .2s;}
-.minput:focus{border-color:var(--accent-b);}
+.minput{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:12px;}
+.minput:focus{border-color:var(--accentb);}
 .macts{display:flex;gap:8px;justify-content:flex-end;}
 .btn-no{padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;}
-.btn-no:hover{border-color:var(--border-h);color:var(--text2);}
+.btn-no:hover{border-color:var(--borderh);color:var(--text2);}
 .btn-yes{padding:7px 14px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
-.btn-yes:hover{opacity:.85;}
 </style>
 </head>
 <body>
-
 <div id="apiScreen">
   <div class="api-card">
-    <div class="api-logo"><span class="bdot"></span>UŠETŘENO · SALES AI</div>
-    <h2>Nastavení připojení</h2>
-    <p>Vlož URL tvého <strong>Cloudflare Workeru</strong> — vypadá jako:<br><code style="font-size:11px;color:var(--accent)">https://sales-ai.tvujucet.workers.dev</code></p>
-    <input class="api-input" type="text" id="apiKeyInput" placeholder="https://sales-ai.tvujucet.workers.dev" autocomplete="off" />
-    <button class="api-btn" onclick="saveKey()">Spustit asistenta →</button>
-    <div class="api-note">URL se uloží jen v tomto prohlížeči. Každý kolega ji zadá jednou.</div>
+    <div class="api-logo"><span class="bdot"></span>USETRENO SALES AI</div>
+    <h2>Nastaveni pripojeni</h2>
+    <p>Vloz URL Cloudflare Workeru:</p>
+    <input class="api-input" type="text" id="apiKeyInput" placeholder="https://dark-dream-de7c.nepouzitejucet.workers.dev" autocomplete="off" />
+    <button class="api-btn" id="startBtn">Spustit asistenta</button>
+    <div class="api-note">URL se ulozi jen v tomto prohlizeci.</div>
   </div>
 </div>
 
@@ -196,21 +148,21 @@ textarea#ibox::placeholder{color:var(--text3);}
   <div class="sidebar">
     <div class="sidebar-top">
       <div class="brand"><span class="bdot"></span>SALES AI</div>
-      <button class="new-btn" onclick="openModal()"><span>＋</span><span>Nový klient</span></button>
+      <button class="new-btn" id="newClientBtn"><span>+</span><span>Novy klient</span></button>
     </div>
     <div class="stabs">
-      <button class="stab on" onclick="switchTab('clients')">Klienti</button>
-      <button class="stab" onclick="switchTab('kb')">Znalosti</button>
+      <button class="stab on" id="tabClients">Klienti</button>
+      <button class="stab" id="tabKb">Znalosti</button>
     </div>
     <div class="spanel on" id="panel-clients">
-      <div class="sec-label">Aktivní klienti</div>
+      <div class="sec-label">Aktivni klienti</div>
       <div id="clientsList"></div>
     </div>
     <div class="spanel" id="panel-kb">
       <div id="kbList"></div>
     </div>
     <div class="sidebar-bot">
-      <button class="side-btn" onclick="changeKey()"><span>🔑</span><span>Změnit klíč</span></button>
+      <button class="side-btn" id="changeKeyBtn"><span>&#128273;</span><span>Zmenit URL</span></button>
     </div>
   </div>
 
@@ -218,477 +170,443 @@ textarea#ibox::placeholder{color:var(--text3);}
     <div class="topbar">
       <div class="top-info">
         <div class="top-name" id="topName">Vyberte klienta</div>
-        <div class="top-sub" id="topSub">← vyber klienta nebo procházej Znalosti</div>
+        <div class="top-sub" id="topSub">vyberte klienta ze seznamu vlevo</div>
       </div>
     </div>
 
-    <!-- FÁZE HOVORU -->
-    <div class="phase-bar" id="phaseBar">
-      <button class="pstep on" onclick="setPhase(0)">📞 Úvod</button>
-      <button class="pstep" onclick="setPhase(1)">❓ Důvod zájmu</button>
-      <button class="pstep" onclick="setPhase(2)">🏢 Důvěra</button>
-      <button class="pstep" onclick="setPhase(3)">📄 Faktura</button>
-      <button class="pstep" onclick="setPhase(4)">⚙️ Preference</button>
-      <button class="pstep" onclick="setPhase(5)">🤝 Uzavření</button>
-    </div>
-
-    <!-- SCRIPT NÁPOVĚDA -->
+    <div class="phase-bar" id="phaseBar"></div>
     <div class="script-panel" id="scriptPanel">
-      <div class="script-label">DOPORUČENÝ SKRIPT</div>
+      <div class="script-label">SKRIPT</div>
       <div class="script-text" id="scriptText"></div>
     </div>
 
-    <!-- KB DETAIL -->
     <div class="kb-detail" id="kbDetail">
       <div class="kb-dhead">
-        <button class="kb-back" onclick="closeKb()">← Zpět</button>
+        <button class="kb-back" id="kbBackBtn">zpet</button>
         <div class="kb-dtitle" id="kbTitle"></div>
       </div>
       <div class="kb-dcontent" id="kbContent"></div>
-      <button class="kb-ask" onclick="askKb()">Zeptat se AI na tento proces ↗</button>
+      <button class="kb-ask" id="kbAskBtn">Zeptat se AI na tento proces</button>
     </div>
 
     <div class="chat-scroll" id="chatScroll">
       <div class="empty-state">
-        <div class="empty-icon">⚡</div>
-        <div class="empty-title">Připraven na hovor</div>
-        <div class="empty-sub">Vyber klienta, nastav fázi hovoru a zadej námitku.</div>
+        <div class="empty-icon">&#9889;</div>
+        <div class="empty-title">Pripraveno</div>
+        <div class="empty-sub">Vyber klienta a zadej namitku.</div>
       </div>
     </div>
 
     <div class="input-area">
       <div class="chips" id="chipsBar"></div>
       <div class="input-row">
-        <textarea id="ibox" placeholder="Zadej námitku klienta..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMsg()">Odeslat →</button>
+        <textarea id="ibox" placeholder="Zadej namitku klienta..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn">Odeslat</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal-ov" id="modalOv" onclick="closeModalOut(event)">
+<div class="modal-ov" id="modalOv">
   <div class="mbox">
-    <h3>Nový klient</h3>
-    <p>Zadej jméno nebo firmu — každý klient má vlastní historii.</p>
-    <input class="minput" type="text" id="clientNameInput" placeholder="Např. Jan Novák..." onkeydown="if(event.key==='Enter')confirmModal()" />
+    <h3>Novy klient</h3>
+    <p>Zadej jmeno nebo firmu.</p>
+    <input class="minput" type="text" id="clientNameInput" placeholder="Jan Novak..." />
     <div class="macts">
-      <button class="btn-no" onclick="closeModal()">Zrušit</button>
-      <button class="btn-yes" onclick="confirmModal()">Vytvořit</button>
+      <button class="btn-no" id="modalCancel">Zrusit</button>
+      <button class="btn-yes" id="modalConfirm">Vytvorit</button>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════
-// KONFIGURACE — sem vlož URL tvého Cloudflare Workeru
-// ═══════════════════════════════════════════════════
-const WORKER_URL = 'https://dark-dream-de7c.nepouzitejucet.workers.dev';
+var WORKER_URL = 'https://dark-dream-de7c.nepouzitejucet.workers.dev';
 
-// ═══════════════════════════════════════════════════
-// FÁZE HOVORU + SCRIPTY + CHIPS
-// ═══════════════════════════════════════════════════
-const PHASES = [
-  {
-    name: 'Úvod',
-    script: '<strong>Dobrý den, u telefonu [vaše jméno] z portálu Ušetřeno.cz.</strong> Slyšíme se dobře? Volám na základě kalkulace, kterou jste si dělal na našem portálu. Předpokládám, že jste se porovnával vy, je to tak?',
-    chips: ['Nezajímám se o to', 'Odkud máte moje číslo?', 'Nemám čas', 'Volal jste mi minule'],
-    context: 'Jsme na začátku hovoru — zákazník právě zvedl telefon. Cílem je navázat kontakt a zjistit zda volám správnému člověku.'
-  },
-  {
-    name: 'Důvod zájmu',
-    script: '<strong>Zeptám se jen — co vás k tomu přivedlo?</strong> Bylo to vyšší vyúčtování, končící fixace, nebo něco jiného?',
-    chips: ['Jen jsem se díval', 'Přišlo mi vysoké vyúčtování', 'Končí mi smlouva', 'Kamarád mi to doporučil'],
-    context: 'Zjišťujeme důvod zájmu — co zákazníka motivovalo. Cílem je pochopit jeho situaci a potřebu.'
-  },
-  {
-    name: 'Budování důvěry',
-    script: '<strong>Jsme jeden z největších nezávislých srovnávačů energií v Česku</strong> — od roku 2018 pod skupinou ČSOB. Porovnáváme nezávisle a zdarma všechny dodavatele — od menších až po ČEZ, E.ON, innogy nebo Pražskou energetiku.',
-    chips: ['Proč bych vám měl věřit?', 'To je nějaký podvod?', 'Já nic nepodepíšu', 'ČSOB? Já jsem u jiné banky'],
-    context: 'Budujeme důvěru a představujeme Ušetřeno.cz. Zákazník může být skeptický — cílem je uklidnit a vysvětlit nezávislost.'
-  },
-  {
-    name: 'Práce s fakturou',
-    script: '<strong>Máte vyúčtování spíš elektronicky nebo v papírové podobě?</strong> Super, tak vás poprosím — otevřete si poslední vyúčtování a podíváme se na to spolu.',
-    chips: ['Fakturu nemám po ruce', 'Nemám ji doma', 'Nemám čas to hledat', 'Proč ji potřebujete?'],
-    context: 'Potřebujeme zákazníka navigovat k faktuře abychom získali EAN, spotřebu a tarif. Zákazník může váhat.'
-  },
-  {
-    name: 'Preference',
-    script: '<strong>Předpokládám, že budeme vybírat velkého a stabilního dodavatele</strong> s garantovanou cenou — je to tak? Máte u současného dodavatele nějaký benefit, nebo tam jednoduše odebíráte a platíte?',
-    chips: ['Nechci nic měnit', 'Jsem spokojený', 'Co z toho budete mít vy?', 'Jak dlouho by smlouva byla?'],
-    context: 'Zjišťujeme preference a rekapitulujeme — cílem je potvrdit co zákazník chce a připravit půdu pro nabídku.'
-  },
-  {
-    name: 'Uzavření',
-    script: '<strong>Takže když to shrnu</strong> — najdeme vám velkého a stabilního dodavatele, s garantovanou cenou a co největší úsporou. Sedí to takhle? Perfektní. V tom případě vám nejlépe vychází dodavatel [název] — a hned vysvětlím proč.',
-    chips: ['Musím se poradit s manželem/manželkou', 'Pošlete mi to emailem', 'Ještě si to rozmyslím', 'Je to závazné?'],
-    context: 'Uzavírací fáze — zákazník slyší nabídku. Cílem je překonat poslední námitky a získat souhlas.'
-  }
+var PHASES = [
+  {name:'Uvod', script:'<strong>Dobry den, u telefonu [vase jmeno] z portalu Usetreno.cz.</strong> Slysime se dobre? Volam na zaklade kalkulace, kterou jste si delal na nasem portalu. Predpokladam, ze jste se porovnaval vy, je to tak?', chips:['Nezajimam se o to','Odkud mate moje cislo?','Nemam cas','Volal jste mi minule'], context:'Zacatek hovoru, navazani kontaktu.'},
+  {name:'Duvod zajmu', script:'<strong>Zeptam se jen - co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?', chips:['Jen jsem se dival','Prislo mi vysoke vyuctovani','Konci mi smlouva','Kamarad mi to doporucil'], context:'Zjistujeme proc zakaznik volal.'},
+  {name:'Duvera', script:'<strong>Jsme jeden z nejvetsich nezavislych srovnavaku energii v Cesku</strong> - od roku 2018 pod skupinou CSOB. Porovnavame nezavisle a zdarma vsechny dodavatele.', chips:['Proc bych vam mel verit?','To je nejaky podvod?','Ja nic nepodepisu','CSOB? Ja jsem u jine banky'], context:'Budujeme duveru, zakaznik muze byt skepticky.'},
+  {name:'Faktura', script:'<strong>Mate vyuctovani spis elektronicky nebo v papirove podobe?</strong> Super, tak vas poprosim - otevrte si posledni vyuctovani a podivame se na to spolu.', chips:['Fakturu nemam po ruce','Nemam ji doma','Nemam cas to hledat','Proc ji potrebujete?'], context:'Navigujeme zakaznika k fakture pro ziskani udaju.'},
+  {name:'Preference', script:'<strong>Predpokladam, ze budeme vybirat velkeho a stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?', chips:['Nechci nic menit','Jsem spokojeny','Co z toho budete mit vy?','Jak dlouho by smlouva byla?'], context:'Zjistujeme preference a rekapitulujeme.'},
+  {name:'Uzavreni', script:'<strong>Takze kdyz to shrnu</strong> - najdeme vam velkeho a stabilniho dodavatele, s garantovanou cenou a co nejvetsi usporou. Sedi to takhle?', chips:['Musim se poradit s manzelemmanzelkou','Poslete mi to emailem','Jeste si to rozmyslim','Je to zavazne?'], context:'Uzaviraci faze, prekonani poslednich namitek.'}
 ];
 
-let currentPhase = 0;
+var KB = [
+  {id:'dokumenty',cat:'Procesy',title:'Dokumenty ke smlouve',content:'POSLEDNI VYUCTOVANI:\n- Overeni: jmeno, prijmeni / nazev firmy, adresa\n- Data: EAN/EIC, adresa OM, jistic, sazba, spotreba\n- Zakaznik nema: vyzada od dodavatele opis\n\nSMLOUVA / DODATEK:\n- Urceni uvazku, vypovedi lhuta\n- Centropol: dodat VOP | Innogy: prvni+druhou stranu\n\nZMENA DODAVATELE:\n- Posledni vyuctovani + smlouva od soucasneho dodavatele\n- Zakaznik vypovedel sam: dodat akceptaci vypovedi'},
+  {id:'terminy',cat:'Procesy',title:'Terminy a vypovedi',content:'HRANICNI TERMINY:\n- CEZ, Lama, E.ON, Centropol, DE, Innogy: 10 prac. dni pred podanim vypovedi\n- Yello, PRE: 17 pracovnich dni\n- MND: 12 pracovnich dni + poznamka pro MND\n\nURGENTNI SMLOUVA - rizikova pokud mene nez 30 dni pred terminem:\n- Proces Usetreno: ~15 dni | Partneri: ~10 dni | OTE: min 10 dni'},
+  {id:'mezidodavatel',cat:'Procesy',title:'Mezidodavatel',content:'Zakaznik podepsal smlouvu s dalsim dodavatelem - ceka v mezidobi.\n\nNA SMLOUVU uvedeme dodavatele ktereho budeme vypovedat = kdo aktualne dodava!\n\nYello, MND: mohou vypovidat po zahajeni dodavky\nE.ON, PRE, PPAS, CEZ a dalsi: NE\n\nVYPOVIDA ZAKAZNIK: funguje u vsech partneru'},
+  {id:'aukce',cat:'Procesy',title:'Aukce',content:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: Smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a E.ON vypovida aukci za klienty.\nDodat akceptaci vypovedi smlouvy s aukci.\n\nZname: Terra Group, Simply Energy, Ceska aukce, Energeticka kancelar, D-test, A Tender'},
+  {id:'fve',cat:'Procesy',title:'Fotovoltaika FVE',content:'Usetreno NEUZAVIRA smlouvu na vykup FVE.\nUzavirame smlouvu na beznou dodavku + informujeme partnera o zajmu o vykup.\n\nOd 2018: zakaznik s FVE musi mit 2 elektromery a 2 EANy.\nZaloha musi byt 0 Kc, mesicni fakturace.\n\nKDO POSKYTUJE VYKUP:\n- Centropol: ~800 Kc/MWh\n- Yello (skrz PRE), E.ON\n- PPAS se smlouvou: 950 Kc, bez: 450 Kc'},
+  {id:'dpi',cat:'Pojmy',title:'DPI - Dodavatel posledni instance',content:'Kdyz soucasny dodavatel nemuze dodavat, nastupuje DPI automaticky pres OTE za regulovane ceny.\n\nPo 6 mesicich hrozi neopravneny odber (cerny odber)!\nPRE posila pouze jednu vyzvu a ihned odpoji.\n\nResit okamzite jako urgentni smlouvu.'},
+  {id:'odchylka',cat:'Pojmy',title:'Co je odchylka',content:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK TO RICT ZAKAZNIKOVI:\nPredstavte si ze si objednate 100 litru vody ale spotrebujete jen 80 - za tech 20 litru zaplatite navic. Dodavatele fungují stejne s elektrinou na burze. Vetsi dodavatele lepe ridi portfolio = nizsi odchylky.'},
+  {id:'tipy',cat:'Tipy',title:'Osvedcene techniky',content:'OBECNE:\n- Mluv o konkretni uspore v Kc, ne procentech\n- Zakaznik kupuje klid, ne elektrinu\n- Nikdy nezlehcuj obavy - nejdriv potvrd, pak odpovez\n- Konci vzdy otazkou ktera drzi zakaznika v hovoru\n\nNEMAM CAS:\n- Nezahazuj vsechny karty hned\n- Jasne, nechci zdrzovat. Jen jsem zaznamenal vasi kalkulaci - co vas k tomu privedlo?\n\nPOSLETE EMAIL:\n- Email se neuzavira, emailem se odklada\n- Samozrejme poslu. Abych poslal relevantni nabidku, potrebuji jen par udaju...\n\nMUSIM SE PORADIT:\n- S kym se potrebujete poradit? Mohu byt pritomen te diskuzi?'}
+];
+
+var currentPhase = 0;
+var activeKbId = null;
+var clients = JSON.parse(localStorage.getItem('sa_clients') || '[]');
+var activeId = localStorage.getItem('sa_activeId') || null;
+
+function getWorkerUrl() {
+  return localStorage.getItem('sa_worker_url') || WORKER_URL;
+}
+
+function init() {
+  document.getElementById('startBtn').addEventListener('click', function() {
+    var v = document.getElementById('apiKeyInput').value.trim();
+    if (!v) v = WORKER_URL;
+    localStorage.setItem('sa_worker_url', v);
+    showApp();
+  });
+
+  document.getElementById('changeKeyBtn').addEventListener('click', function() {
+    document.getElementById('apiScreen').style.display = 'flex';
+    document.getElementById('appRoot').style.display = 'none';
+  });
+
+  document.getElementById('newClientBtn').addEventListener('click', openModal);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('modalConfirm').addEventListener('click', confirmModal);
+  document.getElementById('modalOv').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.getElementById('clientNameInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') confirmModal();
+  });
+
+  document.getElementById('tabClients').addEventListener('click', function() { switchTab('clients'); });
+  document.getElementById('tabKb').addEventListener('click', function() { switchTab('kb'); });
+  document.getElementById('kbBackBtn').addEventListener('click', closeKb);
+  document.getElementById('kbAskBtn').addEventListener('click', askKb);
+
+  document.getElementById('sendBtn').addEventListener('click', sendMsg);
+  document.getElementById('ibox').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+  });
+  document.getElementById('ibox').addEventListener('input', function() { autoResize(this); });
+
+  var stored = localStorage.getItem('sa_worker_url');
+  if (stored) {
+    showApp();
+  }
+}
+
+function showApp() {
+  document.getElementById('apiScreen').style.display = 'none';
+  document.getElementById('appRoot').style.display = 'flex';
+  renderPhaseBar();
+  renderClients();
+  renderKbList();
+  renderChips();
+  setPhase(0);
+  if (activeId && clients.find(function(c) { return c.id === activeId; })) {
+    selectClient(activeId);
+  }
+}
+
+function renderPhaseBar() {
+  var bar = document.getElementById('phaseBar');
+  var icons = ['Uvod','Duvod','Duvera','Faktura','Preference','Uzavreni'];
+  bar.innerHTML = PHASES.map(function(p, i) {
+    return '<button class="pstep' + (i === 0 ? ' on' : '') + '" data-phase="' + i + '">' + p.name + '</button>';
+  }).join('');
+  bar.querySelectorAll('.pstep').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setPhase(parseInt(this.getAttribute('data-phase')));
+    });
+  });
+}
 
 function setPhase(i) {
   currentPhase = i;
-  document.querySelectorAll('.pstep').forEach((b,j) => b.classList.toggle('on', j===i));
-  const sp = document.getElementById('scriptPanel');
-  const st = document.getElementById('scriptText');
-  sp.classList.add('vis');
-  st.innerHTML = PHASES[i].script;
+  document.querySelectorAll('.pstep').forEach(function(b, j) {
+    b.classList.toggle('on', j === i);
+  });
+  document.getElementById('scriptPanel').classList.add('vis');
+  document.getElementById('scriptText').innerHTML = PHASES[i].script;
   renderChips();
 }
 
 function renderChips() {
-  const bar = document.getElementById('chipsBar');
-  const chips = PHASES[currentPhase].chips;
-  bar.innerHTML = chips.map(c => `<span class="chip" onclick="fillInput('${c.replace(/'/g,"&#39;")}')">${c}</span>`).join('');
+  var bar = document.getElementById('chipsBar');
+  var chips = PHASES[currentPhase].chips;
+  bar.innerHTML = chips.map(function(c) {
+    return '<span class="chip" data-text="' + c.replace(/"/g, '&quot;') + '">' + c + '</span>';
+  }).join('');
+  bar.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      fillInput(this.getAttribute('data-text'));
+    });
+  });
 }
 
-// ═══════════════════════════════════════════════════
-// ZNALOSTNÍ BÁZE
-// ═══════════════════════════════════════════════════
-const KB = [
-  {id:'dokumenty',cat:'Procesy',title:'Dokumenty ke smlouvě',content:`POSLEDNÍ VYÚČTOVÁNÍ (kompletní):
-• Ověření: jméno, příjmení / název firmy, trvalá adresa
-• Data na smlouvu: EAN/EIC, adresa OM, jistič, distribuční sazba, spotřeba, produkt
-• Zákazník nemá: požádá dodavatele o opis nebo stáhne ze zákaznického portálu
-
-SMLOUVA / DODATEK:
-• Určení úvazku u současného dodavatele, výpovědní lhůta
-• Zákazník nemá: vyžádá výpis smluvních údajů nebo potvrzení o platnosti
-
-OBČANSKÝ PRŮKAZ / ARES:
-• Jméno, příjmení / firma, datum narození / IČ, trvalá adresa / sídlo
-
-ZMĚNA DODAVATELE — potřebuješ:
-• Poslední vyúčtování + smlouva/dodatek od současného dodavatele
-• Centropol: doložit veškeré VOP | Innogy: první + druhou stranu smlouvy
-• Zákazník vypověděl sám: doložit akceptaci výpovědi
-• Navýšení ceny: doložit dopis/e-mail o navýšení`},
-  {id:'terminy',cat:'Procesy',title:'Termíny a výpovědi',content:`HRANIČNÍ TERMÍNY pro export smlouvy:
-• ČEZ, Lama, E.ON, Centropol, Dobrá Energie, Innogy: 10 prac. dní před podáním výpovědi
-• Yello, PRE: 17 pracovních dní před podáním výpovědi
-• MND: 12 pracovních dní před podáním výpovědi + poznámka pro MND
-
-URGENTNÍ SMLOUVA — riziková pokud vygenerována méně než 30 dní před termínem:
-• Proces Ušetřeno: průměrně 15 dní | Proces partnerů: průměrně 10 dní | OTE: min. 10 dní
-
-VÝPOVĚĎ ZAJIŠŤUJE ZÁKAZNÍK:
-• Vygenerovat: 30 dní před změnou dodavatele
-• Podepsaná na BO: 5 pracovních dní před změnou ceny
-• Předáno na partnera: 3 pracovní dny před změnou ceny`},
-  {id:'mezidodavatel',cat:'Procesy',title:'Mezidodavatel',content:`CO JE MEZIDODAVATEL:
-Zákazník podepsal smlouvu s dalším dodavatelem = odebírá od současného, ale má dalšího čekajícího.
-
-NA NOVOU SMLOUVU uvádíme dodavatele, kterého budeme vypovídat = toho kdo v době výpovědi aktuálně dodává!
-
-VYPOVÍDÁ NOVÝ DODAVATEL v 15 dnech po zahájení:
-• Yello, MND: ANO | E.ON, PRE, PPAS, DE, Centropol, ČEZ, Lama, Innogy: NE
-
-VYPOVÍDÁ ZÁKAZNÍK: funguje u všech partnerů
-
-BEZPEČNÝ ZPŮSOB: zákazník má pouze jednoho mezidodavatele + máme podložený termín zahájení dodávky`},
-  {id:'aukce',cat:'Procesy',title:'Energetická aukce',content:`CO JE AUKČNÍ SPOLEČNOST:
-Zprostředkovatel smlouvy s plnou mocí jednat za zákazníka. Spadá pod regulaci ERU.
-
-DŮLEŽITÉ: Smlouvu lze zrušit nejpozději v 15 dnech po zahájení dodávky!
-
-BEZPEČNÝ ZPŮSOB:
-• Zákazník vypovídá smlouvu s aukční společností sám
-• MND a E.ON vypovídá aukční společnosti za klienty
-• Doložit akceptaci výpovědi smlouvy s aukční společností
-
-ZNÁMÉ AUKČNÍ SPOLEČNOSTI: Terra Group, Simply Energy, Česká aukční společnost, Energetická kancelář, D-test, A Tender, eCentre`},
-  {id:'fve',cat:'Procesy',title:'Fotovoltaika (FVE)',content:`ZÁKAZNÍK S FVE — důležitá pravidla:
-• Ušetřeno NEUZAVÍRÁ smlouvu na výkup FVE
-• Uzavíráme smlouvu na běžnou dodávku + informujeme partnera o zájmu o výkup
-• Od 2018 musí mít zákazník s FVE 2 elektroměry a 2 EANy
-• Záloha musí být 0 Kč, má měsíční fakturaci
-
-KDO POSKYTUJE VÝKUP FVE:
-• Centropol: ~800 Kč/MWh | Yello Energy (skrz PRE) | E.ON
-• PPAS: se smlouvou na dodávku = 950 Kč, bez = 450 Kč`},
-  {id:'dpi',cat:'Pojmy',title:'DPI — Dodavatel poslední instance',content:`CO JE DPI:
-Pokud současný obchodník nemůže dodávat, nastupuje DPI automaticky přes OTE za regulované ceny.
-
-DŮLEŽITÉ:
-• Po 6 měsících hrozí neoprávněný odběr (černý odběr)
-• Vždy ověřit termín a doložit dokument potvrzení DPI
-• PRE posílá pouze jednu výzvu a poté ihned odpojí!
-
-ŠTÍTEK V SOVĚ: "DPI" | POZNÁMKA: OP: Urgent DPI od dd.mm.rrrr`},
-  {id:'odchylka',cat:'Pojmy',title:'Co je odchylka',content:`ODCHYLKA = rozdíl mezi předpokládanou a skutečnou spotřebou elektřiny/plynu.
-
-JAK TO ŘÍCT ZÁKAZNÍKOVI:
-"Představte si, že si objednáte 100 litrů vody, ale spotřebujete jen 80 — za těch zbývajících 20 litrů zaplatíte navíc. Dodavatelé fungují stejně s elektřinou na burze. Větší dodavatelé lépe řídí portfolio = nižší odchylky = nižší cena pro vás."`},
-  {id:'zakazany',cat:'Procesy',title:'Zakázaný prodej',content:`CO NELZE SJEDNAT:
-• Smlouvu pro více partnerů na 1 odběrné místo s aktivní smlouvou
-• Mezidodavatel na E.ON, Centropol, PPAS, PRE, ČEZ, DE, Lama, Innogy bez akceptace výpovědi
-• Aukci bez doložení výpovědi a akceptace
-• Přepis s akceptací výpovědi pokud je datum ukončení za méně než 14 dní
-• Přepis z IČO na domácnost — výjimkou je MND a Dobrá Energie
-• E.ON cashback pokud klient nemá účet u ČSOB
-• Yello a PPAS plyn v Praze`},
-  {id:'tipy',cat:'Tipy obchodníků',title:'Osvědčené techniky',content:`OBECNÉ ZÁSADY:
-• Vždy mluv o konkrétních číslech — úspory v Kč, ne v procentech
-• Zákazník kupuje klid, ne elektřinu — prodávej bezstarostnost
-• Nikdy nezlehčuj obavy — nejdřív potvrď, pak odpověz
-• Uzavírací otázka: "Co vám brání začít šetřit od příštího měsíce?"
-
-"NEMÁM ZÁJEM":
-• Neptej se "proč?" — zákazník se uzavře
-• "To chápu. Mohu se zeptat, kolik teď za elektřinu platíte?"
-
-"POŠLETE MI TO EMAILEM":
-• Emailem se neuzavírá, emailem se odkládá
-• "Samozřejmě pošlu. Abych poslal relevantní nabídku, potřebuji vědět vaši spotřebu..."
-
-"MUSÍM SE PORADIT":
-• "S kým se potřebujete poradit? Mohu být přítomen té diskuze?"
-• "Co by vás od toho zdrželo, kdybych garantoval úsporu X Kč?"`},
-];
-
-// ═══════════════════════════════════════════════════
-// SYSTEM PROMPT
-// ═══════════════════════════════════════════════════
-function buildPrompt(phaseIdx, histItems) {
-  const phase = PHASES[phaseIdx];
-  const hist = histItems.slice(-3).filter(h=>h.role==='user').map(h=>h.content).join(', ');
-
-  // Pouze relevantni KB polozky podle faze - kratsi prompt = rychlejsi odpoved
-  const phaseKbMap = {
-    0: ['tipy'],
-    1: ['tipy'],
-    2: ['tipy'],
-    3: ['dokumenty','tipy'],
-    4: ['dokumenty','tipy'],
-    5: ['tipy','mezidodavatel','aukce','zakazany']
-  };
-  const relevantIds = phaseKbMap[phaseIdx] || ['tipy'];
-  const kbText = KB.filter(k => relevantIds.includes(k.id))
-    .map(k => '## ' + k.title + '
-' + k.content).join('
-
----
-
-');
-
-  return 'Jsi AI kouc pro obchodniky Usetreno.cz (energie v CR).
-' +
-    'Faze: ' + phase.name + '. ' + phase.context + '
-' +
-    'Predchozi namitky: ' + (hist||'zadne') + '
-
-' +
-    'Znalosti:
-' + kbText + '
-
-' +
-    'INSTRUKCE:
-' +
-    '1. NAMITKA KLIENTA: 2 odpovedi (empaticka + uzaviraci), max 2 vety kazda.
-' +
-    'FORMAT: {"type":"objection","analysis":"1 veta","responses":[{"style":"EMPATICKY","text":"...","next":"..."},{"style":"UZAVIRACI","text":"...","next":"..."}]}
-
-' +
-    '2. DOTAZ OBCHODNIKA: prakticky, jako zkuseny kolega.
-' +
-    'FORMAT: {"type":"info","text":"odpoved","customer_tip":"jak to rict zakaznikovi (jen pokud relevantni)"}
-
-' +
-    'Pouze cisty JSON, bez markdown.'
-}
-function init(){
-  API_KEY=localStorage.getItem('sa_apikey')||'';
-  if(API_KEY){
-    document.getElementById('apiScreen').style.display='none';
-    document.getElementById('appRoot').style.display='flex';
-    renderClients(); renderKbList(); renderChips();
-    setPhase(0);
-    if(activeId&&clients.find(c=>c.id===activeId)) selectClient(activeId);
-  }
-}
-function saveKey(){
-  const v=document.getElementById('apiKeyInput').value.trim();
-  if(!v){alert('Zadej heslo.');return;}
-  API_KEY=v; localStorage.setItem('sa_apikey',v);
-  document.getElementById('apiScreen').style.display='none';
-  document.getElementById('appRoot').style.display='flex';
-  renderClients(); renderKbList(); renderChips(); setPhase(0);
-}
-function changeKey(){
-  localStorage.removeItem('sa_apikey'); API_KEY='';
-  document.getElementById('apiKeyInput').value='';
-  document.getElementById('apiScreen').style.display='flex';
-  document.getElementById('appRoot').style.display='none';
+function switchTab(tab) {
+  document.getElementById('tabClients').classList.toggle('on', tab === 'clients');
+  document.getElementById('tabKb').classList.toggle('on', tab === 'kb');
+  document.getElementById('panel-clients').classList.toggle('on', tab === 'clients');
+  document.getElementById('panel-kb').classList.toggle('on', tab === 'kb');
 }
 
-// TABS
-function switchTab(tab){
-  document.querySelectorAll('.stab').forEach((b,i)=>b.classList.toggle('on',(i===0&&tab==='clients')||(i===1&&tab==='kb')));
-  document.getElementById('panel-clients').classList.toggle('on',tab==='clients');
-  document.getElementById('panel-kb').classList.toggle('on',tab==='kb');
+function renderKbList() {
+  var cats = [];
+  KB.forEach(function(k) { if (cats.indexOf(k.cat) === -1) cats.push(k.cat); });
+  document.getElementById('kbList').innerHTML = cats.map(function(cat) {
+    return '<div class="kb-sec"><div class="kb-sec-title">' + cat + '</div>' +
+      KB.filter(function(k) { return k.cat === cat; }).map(function(k) {
+        return '<div class="kb-item' + (k.id === activeKbId ? ' on' : '') + '" data-id="' + k.id + '">' + k.title + '</div>';
+      }).join('') + '</div>';
+  }).join('');
+  document.getElementById('kbList').querySelectorAll('.kb-item').forEach(function(el) {
+    el.addEventListener('click', function() { openKb(this.getAttribute('data-id')); });
+  });
 }
 
-// KB
-function renderKbList(){
-  const cats=[...new Set(KB.map(k=>k.cat))];
-  document.getElementById('kbList').innerHTML=cats.map(cat=>`
-    <div class="kb-sec">
-      <div class="kb-sec-title">${cat}</div>
-      ${KB.filter(k=>k.cat===cat).map(k=>`<div class="kb-item ${k.id===activeKbId?'on':''}" onclick="openKb('${k.id}')">${k.title}</div>`).join('')}
-    </div>`).join('');
-}
-function openKb(id){
-  const kb=KB.find(k=>k.id===id); if(!kb)return;
-  activeKbId=id; renderKbList();
-  document.getElementById('kbTitle').textContent=kb.title;
-  document.getElementById('kbContent').textContent=kb.content;
+function openKb(id) {
+  var kb = KB.find(function(k) { return k.id === id; });
+  if (!kb) return;
+  activeKbId = id;
+  renderKbList();
+  document.getElementById('kbTitle').textContent = kb.title;
+  document.getElementById('kbContent').textContent = kb.content;
   document.getElementById('kbDetail').classList.add('vis');
-  document.getElementById('chatScroll').style.display='none';
+  document.getElementById('chatScroll').style.display = 'none';
 }
-function closeKb(){
-  activeKbId=null; renderKbList();
+
+function closeKb() {
+  activeKbId = null;
+  renderKbList();
   document.getElementById('kbDetail').classList.remove('vis');
-  document.getElementById('chatScroll').style.display='flex';
-}
-function askKb(){
-  const kb=KB.find(k=>k.id===activeKbId); if(!kb)return;
-  closeKb(); switchTab('clients');
-  fillInput(`Vysvětli stručně: ${kb.title}`);
+  document.getElementById('chatScroll').style.display = 'flex';
 }
 
-// CLIENTS
-function saveClients(){
-  localStorage.setItem('sa_clients',JSON.stringify(clients));
-  localStorage.setItem('sa_activeId',activeId||'');
-}
-function getInits(name){return name.trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';}
-function renderClients(){
-  const el=document.getElementById('clientsList');
-  if(!clients.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 12px;">Zatím žádní klienti</div>';return;}
-  el.innerHTML=clients.map(c=>`
-    <div class="ci ${c.id===activeId?'on':''}" onclick="selectClient('${c.id}')">
-      <div class="ci-av">${getInits(c.name)}</div>
-      <span class="ci-name">${esc(c.name)}</span>
-      <button class="ci-del" onclick="delClient(event,'${c.id}')" title="Smazat klienta">×</button>
-    </div>`).join('');
-}
-function selectClient(id){
-  activeId=id; saveClients(); renderClients();
-  const c=clients.find(x=>x.id===id); if(!c)return;
-  document.getElementById('topName').textContent=c.name;
-  const n=c.history.filter(h=>h.role==='user').length;
-  document.getElementById('topSub').textContent=n?`${n} zpráv · fáze: ${PHASES[currentPhase].name}`:'Zadej námitku nebo otázku';
-  closeKb(); renderChat();
-}
-function delClient(e,id){
-  e.stopPropagation(); e.preventDefault();
-  if(!confirm('Smazat klienta a historii?'))return;
-  clients=clients.filter(c=>c.id!==id);
-  if(activeId===id) activeId=clients.length?clients[0].id:null;
-  saveClients(); renderClients();
-  if(activeId) selectClient(activeId);
-  else{document.getElementById('topName').textContent='Vyberte klienta';document.getElementById('topSub').textContent='← vyber klienta nebo procházej Znalosti';renderChat();}
+function askKb() {
+  var kb = KB.find(function(k) { return k.id === activeKbId; });
+  if (!kb) return;
+  closeKb();
+  switchTab('clients');
+  fillInput('Vysvetli stucne: ' + kb.title);
 }
 
-// MODAL
-function openModal(){document.getElementById('modalOv').classList.add('on');document.getElementById('clientNameInput').value='';setTimeout(()=>document.getElementById('clientNameInput').focus(),50);}
-function closeModal(){document.getElementById('modalOv').classList.remove('on');}
-function closeModalOut(e){if(e.target===document.getElementById('modalOv'))closeModal();}
-function confirmModal(){
-  const name=document.getElementById('clientNameInput').value.trim(); if(!name)return;
-  const id='c'+Date.now(); clients.push({id,name,history:[]});
-  saveClients(); closeModal(); renderClients(); selectClient(id);
+function saveClients() {
+  localStorage.setItem('sa_clients', JSON.stringify(clients));
+  localStorage.setItem('sa_activeId', activeId || '');
 }
 
-// CHAT
-function renderChat(){
-  const c=clients.find(x=>x.id===activeId);
-  const area=document.getElementById('chatScroll');
-  area.style.display='flex';
-  if(!c||!c.history.length){
-    area.innerHTML=`<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">Chat je prázdný</div><div class="empty-sub">Zadej námitku nebo použij rychlé zkratky níže.</div></div>`;
+function getInits(name) {
+  return name.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2) || '?';
+}
+
+function renderClients() {
+  var el = document.getElementById('clientsList');
+  if (!clients.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 12px;">Zadni klienti</div>';
     return;
   }
-  area.innerHTML=c.history.map(msg=>{
-    if(msg.role==='user') return `<div class="msg-user"><div><div class="msg-lbl">NÁMITKA / DOTAZ</div><div class="msg-user-bubble">${esc(msg.content)}</div></div></div>`;
+  el.innerHTML = clients.map(function(c) {
+    return '<div class="ci' + (c.id === activeId ? ' on' : '') + '" data-id="' + c.id + '">' +
+      '<div class="ci-av">' + getInits(c.name) + '</div>' +
+      '<span class="ci-name">' + esc(c.name) + '</span>' +
+      '<button class="ci-del" data-del="' + c.id + '" title="Smazat">x</button>' +
+      '</div>';
+  }).join('');
+  el.querySelectorAll('.ci').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      if (e.target.classList.contains('ci-del')) return;
+      selectClient(this.getAttribute('data-id'));
+    });
+  });
+  el.querySelectorAll('.ci-del').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      delClient(this.getAttribute('data-del'));
+    });
+  });
+}
+
+function selectClient(id) {
+  activeId = id;
+  saveClients();
+  renderClients();
+  var c = clients.find(function(x) { return x.id === id; });
+  if (!c) return;
+  document.getElementById('topName').textContent = c.name;
+  var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
+  document.getElementById('topSub').textContent = n ? (n + ' zprav') : 'Zadej namitku';
+  closeKb();
+  renderChat();
+}
+
+function delClient(id) {
+  if (!confirm('Smazat klienta a historii?')) return;
+  clients = clients.filter(function(c) { return c.id !== id; });
+  if (activeId === id) activeId = clients.length ? clients[0].id : null;
+  saveClients();
+  renderClients();
+  if (activeId) selectClient(activeId);
+  else {
+    document.getElementById('topName').textContent = 'Vyberte klienta';
+    renderChat();
+  }
+}
+
+function openModal() {
+  document.getElementById('modalOv').classList.add('on');
+  document.getElementById('clientNameInput').value = '';
+  setTimeout(function() { document.getElementById('clientNameInput').focus(); }, 50);
+}
+
+function closeModal() { document.getElementById('modalOv').classList.remove('on'); }
+
+function confirmModal() {
+  var name = document.getElementById('clientNameInput').value.trim();
+  if (!name) return;
+  var id = 'c' + Date.now();
+  clients.push({id: id, name: name, history: []});
+  saveClients();
+  closeModal();
+  renderClients();
+  selectClient(id);
+}
+
+function renderChat() {
+  var c = clients.find(function(x) { return x.id === activeId; });
+  var area = document.getElementById('chatScroll');
+  area.style.display = 'flex';
+  if (!c || !c.history.length) {
+    area.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128172;</div><div class="empty-title">Chat je prazdny</div><div class="empty-sub">Zadej namitku nebo otazku.</div></div>';
+    return;
+  }
+  area.innerHTML = c.history.map(function(msg) {
+    if (msg.role === 'user') {
+      return '<div class="msg-user"><div><div class="msg-lbl">NAMITKA / DOTAZ</div><div class="msg-user-bubble">' + esc(msg.content) + '</div></div></div>';
+    }
     return renderAI(msg.content);
   }).join('');
-  area.scrollTop=area.scrollHeight;
+  area.scrollTop = area.scrollHeight;
 }
 
-function renderAI(data){
-  if(data.type==='loading') return `<div class="loading-msg"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>`;
-  if(data.type==='error') return `<div class="ai-wrap"><div class="ai-analysis" style="border-left-color:var(--red)"><strong>CHYBA</strong>${esc(data.text)}</div></div>`;
-  if(data.type==='info'){
-    const customerTip = data.customer_tip ? `<div class="rcard-next" style="color:var(--green);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-family:'Sora',sans-serif;font-size:12.5px;"><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);display:block;margin-bottom:4px;">JAK TO ŘÍCT ZÁKAZNÍKOVI</span>${esc(data.customer_tip)}</div>` : '';
-    return `<div class="ai-wrap"><div class="rcard"><div class="rcard-head"><span class="stag tag-i">ODPOVĚĎ PRO OBCHODNÍKA</span><button class="copy-btn" onclick="cp(this,${JSON.stringify(data.text)})">Kopírovat</button></div><div class="rcard-body"><div class="rcard-text">${esc(data.text)}</div>${customerTip}</div></div></div>`;
+function renderAI(data) {
+  if (data.type === 'loading') return '<div class="loading-msg"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>';
+  if (data.type === 'error') return '<div class="ai-wrap"><div class="ai-analysis" style="border-left-color:var(--red)"><strong>CHYBA</strong>' + esc(data.text) + '</div></div>';
+  if (data.type === 'info') {
+    var tip = data.customer_tip ? '<div class="rcard-tip">Zakaznikovi: ' + esc(data.customer_tip) + '</div>' : '';
+    return '<div class="ai-wrap"><div class="rcard"><div class="rcard-head"><span class="stag tag-i">ODPOVED</span>' + copyBtn(data.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(data.text) + '</div>' + tip + '</div></div></div>';
   }
-
-  const tagMap={'EMPATICKÝ':'tag-e','UZAVÍRACÍ':'tag-c'};
-  const analysis=data.analysis?`<div class="ai-analysis"><strong>SITUACE</strong>${esc(data.analysis)}</div>`:'';
-  const cards=(data.responses||[]).map(r=>`
-    <div class="rcard">
-      <div class="rcard-head"><span class="stag ${tagMap[r.style]||'tag-i'}">${r.style||'ODPOVĚĎ'}</span><button class="copy-btn" onclick="cp(this,${JSON.stringify(r.text)})">Kopírovat</button></div>
-      <div class="rcard-body">
-        <div class="rcard-text">${esc(r.text)}</div>
-        ${r.next?`<div class="rcard-next">${esc(r.next)}</div>`:''}
-      </div>
-    </div>`).join('');
-  return `<div class="ai-wrap">${analysis}${cards}</div>`;
+  var tagMap = {'EMPATICKY': 'tag-e', 'PRIMOCAREJSI': 'tag-c', 'EMPATICKY ': 'tag-e'};
+  var analysis = data.analysis ? '<div class="ai-analysis"><strong>SITUACE</strong>' + esc(data.analysis) + '</div>' : '';
+  var cards = (data.responses || []).map(function(r) {
+    var tag = tagMap[r.style] || 'tag-i';
+    return '<div class="rcard"><div class="rcard-head"><span class="stag ' + tag + '">' + esc(r.style || 'ODPOVED') + '</span>' + copyBtn(r.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
+  }).join('');
+  return '<div class="ai-wrap">' + analysis + cards + '</div>';
 }
 
-function cp(btn,text){
-  navigator.clipboard.writeText(text).then(()=>{btn.textContent='✓ Zkopírováno';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Kopírovat';btn.classList.remove('ok');},2200);});
+function copyBtn(text) {
+  return '<button class="copy-btn" data-copy="' + text.replace(/"/g, '&quot;') + '">Kopirovat</button>';
 }
 
-// INPUT
-function fillInput(text){const b=document.getElementById('ibox');b.value=text;b.focus();autoResize(b);}
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
-function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('copy-btn')) {
+    var text = e.target.getAttribute('data-copy');
+    navigator.clipboard.writeText(text).then(function() {
+      e.target.textContent = 'Zkopirovat!';
+      e.target.classList.add('ok');
+      setTimeout(function() { e.target.textContent = 'Kopirovat'; e.target.classList.remove('ok'); }, 2000);
+    });
+  }
+});
 
-// SEND
-async function sendMsg(){
-  if(!activeId){alert('Nejprve vyber nebo vytvoř klienta.');return;}
-  const box=document.getElementById('ibox');
-  const text=box.value.trim(); if(!text)return;
-  const c=clients.find(x=>x.id===activeId);
-  box.value=''; autoResize(box);
-  document.getElementById('sendBtn').disabled=true;
-  c.history.push({role:'user',content:text});
-  c.history.push({role:'ai',content:{type:'loading'}});
-  saveClients(); renderChat();
+function fillInput(text) {
+  var b = document.getElementById('ibox');
+  b.value = text;
+  b.focus();
+  autoResize(b);
+}
 
-  try{
-    const resp=await fetch(WORKER_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-5',
-        max_tokens:400,
-        system:buildPrompt(currentPhase,c.history.slice(0,-2)),
-        messages:[{role:'user',content:text}]
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
+function buildPrompt(phaseIdx, histItems) {
+  var phase = PHASES[phaseIdx];
+  var hist = histItems.slice(-3).filter(function(h) { return h.role === 'user'; }).map(function(h) { return h.content; }).join(', ');
+  var phaseKbMap = {0:['tipy'],1:['tipy'],2:['tipy'],3:['dokumenty','tipy'],4:['dokumenty','tipy'],5:['tipy','mezidodavatel','aukce']};
+  var relevantIds = phaseKbMap[phaseIdx] || ['tipy'];
+  var kbText = KB.filter(function(k) { return relevantIds.indexOf(k.id) !== -1; }).map(function(k) { return k.title + ': ' + k.content; }).join(' | ');
+
+  return 'Jsi zkuseny obchodni kouc pro obchodniky Usetreno.cz (energie CR).\n' +
+    'Faze: ' + phase.name + '. ' + phase.context + '\n' +
+    'Predchozi namitky: ' + (hist || 'zadne') + '\n\n' +
+    'Znalosti: ' + kbText + '\n\n' +
+    'STYL ODPOVEDI - dulezite:\n' +
+    'Odpovedi jako skutecny lidsky rozhovor po telefonu. Max 2 vety.\n' +
+    'Princip: pochopeni -> rozklichovani -> reseni. Nikdy vsechno najednou.\n' +
+    'Kazda odpoved konci otazkou ktera drzi zakaznika v hovoru.\n' +
+    'Zadna cisla dokud neziskas zajem zakaznika.\n\n' +
+    'PRIKLADY:\n' +
+    'Namitka: Nemam cas, jsem v praci\n' +
+    'Spravne: Jasne, nechci zdrzovat. Jen jsem zaznamenal vasi kalkulaci - co vas k tomu privedlo?\n' +
+    'Spatne: Prumerna domacnost usetri az 6000 Kc rocne.\n\n' +
+    'Namitka: Zajimaly me ceny ale ted nemam cas\n' +
+    'Spravne: Rozumim - v kolik koncite v praci? Zavolam potom.\n\n' +
+    'Pro NAMITKU: 2 odpovedi - mekka a primocarejsi. Obe konci otazkou.\n' +
+    'FORMAT: {"type":"objection","analysis":"1 veta","responses":[{"style":"EMPATICKY","text":"...","next":"..."},{"style":"PRIMOCAREJSI","text":"...","next":"..."}]}\n\n' +
+    'Pro DOTAZ OBCHODNIKA: jako zkuseny kolega.\n' +
+    'FORMAT: {"type":"info","text":"odpoved","customer_tip":"jak to rict zakaznikovi"}\n\n' +
+    'Pouze cisty JSON, bez markdown.';
+}
+
+async function sendMsg() {
+  if (!activeId) { alert('Nejprve vyber klienta.'); return; }
+  var box = document.getElementById('ibox');
+  var text = box.value.trim();
+  if (!text) return;
+  var c = clients.find(function(x) { return x.id === activeId; });
+  box.value = '';
+  autoResize(box);
+  document.getElementById('sendBtn').disabled = true;
+  c.history.push({role: 'user', content: text});
+  c.history.push({role: 'ai', content: {type: 'loading'}});
+  saveClients();
+  renderChat();
+
+  try {
+    var workerUrl = getWorkerUrl();
+    var resp = await fetch(workerUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        system: buildPrompt(currentPhase, c.history.slice(0, -2)),
+        messages: [{role: 'user', content: text}]
       })
     });
-    if(!resp.ok){const err=await resp.json();throw new Error(err.error?.message||`HTTP ${resp.status}`);}
-    const data=await resp.json();
-    const raw=data.content?.[0]?.text||'';
-    let parsed;
-    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}
-    catch{parsed={type:'info',text:raw};}
-    c.history[c.history.length-1]={role:'ai',content:parsed};
-  }catch(e){
-    c.history[c.history.length-1]={role:'ai',content:{type:'error',text:'Chyba připojení: '+e.message+'. Zkontroluj že Cloudflare Worker běží a URL je správná.'}};
+    if (!resp.ok) {
+      var err = await resp.json();
+      throw new Error(err.error ? err.error.message : 'HTTP ' + resp.status);
+    }
+    var data = await resp.json();
+    var raw = data.content && data.content[0] ? data.content[0].text : '';
+    var parsed;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
+    catch(e) { parsed = {type: 'info', text: raw}; }
+    c.history[c.history.length - 1] = {role: 'ai', content: parsed};
+  } catch(e) {
+    c.history[c.history.length - 1] = {role: 'ai', content: {type: 'error', text: 'Chyba: ' + e.message}};
   }
 
-  document.getElementById('sendBtn').disabled=false;
-  const n=c.history.filter(h=>h.role==='user').length;
-  document.getElementById('topSub').textContent=`${n} zpráv · fáze: ${PHASES[currentPhase].name}`;
-  saveClients(); renderChat();
+  document.getElementById('sendBtn').disabled = false;
+  var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
+  document.getElementById('topSub').textContent = n + ' zprav';
+  saveClients();
+  renderChat();
 }
 
-function esc(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 init();
 </script>
