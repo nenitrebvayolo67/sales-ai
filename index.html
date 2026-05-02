@@ -452,42 +452,52 @@ JAK TO ŘÍCT ZÁKAZNÍKOVI:
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════════════
 function buildPrompt(phaseIdx, histItems) {
-  const kbText = KB.map(k=>`## ${k.title}\n${k.content}`).join('\n\n---\n\n');
   const phase = PHASES[phaseIdx];
-  const hist = histItems.slice(-4).filter(h=>h.role==='user').map(h=>h.content).join(', ');
-  return `Jsi AI koučem pro obchodníky Ušetřeno.cz, kteří sjednávají smlouvy na dodávku elektřiny a plynu v ČR.
+  const hist = histItems.slice(-3).filter(h=>h.role==='user').map(h=>h.content).join(', ');
 
-AKTUÁLNÍ FÁZE HOVORU: ${phase.name}
-KONTEXT FÁZE: ${phase.context}
-PŘEDCHOZÍ NÁMITKY V TOMTO HOVORU: ${hist||'žádné'}
+  // Pouze relevantni KB polozky podle faze - kratsi prompt = rychlejsi odpoved
+  const phaseKbMap = {
+    0: ['tipy'],
+    1: ['tipy'],
+    2: ['tipy'],
+    3: ['dokumenty','tipy'],
+    4: ['dokumenty','tipy'],
+    5: ['tipy','mezidodavatel','aukce','zakazany']
+  };
+  const relevantIds = phaseKbMap[phaseIdx] || ['tipy'];
+  const kbText = KB.filter(k => relevantIds.includes(k.id))
+    .map(k => '## ' + k.title + '
+' + k.content).join('
 
-ZNALOSTNÍ BÁZE:
-${kbText}
+---
 
-INSTRUKCE — rozliš typ dotazu:
+');
 
-1. NÁMITKA KLIENTA (klient řekl něco negativního, váhá, odmítá):
-   - Vrať 2 odpovědi: empatickou a uzavírací
-   - Každá max 2 věty, okamžitě použitelná v hovoru
-   - FORMÁT: {"type":"objection","analysis":"1 věta co zákazník myslí","responses":[{"style":"EMPATICKÝ","text":"...","next":"co říct dál"},{"style":"UZAVÍRACÍ","text":"...","next":"co říct dál"}]}
+  return 'Jsi AI kouc pro obchodniky Usetreno.cz (energie v CR).
+' +
+    'Faze: ' + phase.name + '. ' + phase.context + '
+' +
+    'Predchozi namitky: ' + (hist||'zadne') + '
 
-2. DOTAZ OBCHODNÍKA (obchodník se ptá na pojmy, procesy, situace, jak něco vysvětlit):
-   - Odpověz jako zkušený kolega / mentor — srozumitelně, konkrétně, prakticky
-   - Klidně delší odpověď pokud situace vyžaduje vysvětlení
-   - Pokud jde o vysvětlení zákazníkovi: přidej i jak to zákazníkovi říct jednoduše
-   - FORMÁT: {"type":"info","text":"odpověď pro obchodníka","customer_tip":"jak to říct zákazníkovi jednoduše (pouze pokud relevantní)"}
+' +
+    'Znalosti:
+' + kbText + '
 
-Odpovídej VŽDY jako čistý JSON, nikdy jinak. Bez markdown, bez backticks.`;
+' +
+    'INSTRUKCE:
+' +
+    '1. NAMITKA KLIENTA: 2 odpovedi (empaticka + uzaviraci), max 2 vety kazda.
+' +
+    'FORMAT: {"type":"objection","analysis":"1 veta","responses":[{"style":"EMPATICKY","text":"...","next":"..."},{"style":"UZAVIRACI","text":"...","next":"..."}]}
+
+' +
+    '2. DOTAZ OBCHODNIKA: prakticky, jako zkuseny kolega.
+' +
+    'FORMAT: {"type":"info","text":"odpoved","customer_tip":"jak to rict zakaznikovi (jen pokud relevantni)"}
+
+' +
+    'Pouze cisty JSON, bez markdown.'
 }
-
-// ═══════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════
-let API_KEY='';
-let clients=JSON.parse(localStorage.getItem('sa_clients')||'[]');
-let activeId=localStorage.getItem('sa_activeId')||null;
-let activeKbId=null;
-
 function init(){
   API_KEY=localStorage.getItem('sa_apikey')||'';
   if(API_KEY){
@@ -656,7 +666,7 @@ async function sendMsg(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-5',
-        max_tokens:800,
+        max_tokens:400,
         system:buildPrompt(currentPhase,c.history.slice(0,-2)),
         messages:[{role:'user',content:text}]
       })
