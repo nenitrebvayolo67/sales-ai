@@ -6,277 +6,342 @@
 <title>Sales AI - Usetreno</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0f11;--bg2:#16161a;--bg3:#1e1e24;--brd:rgba(255,255,255,0.08);--brdh:rgba(255,255,255,0.16);--tx:#f0eff4;--tx2:#9998a8;--tx3:#5a5968;--ac:#7c6af7;--acd:rgba(124,106,247,0.15);--acb:rgba(124,106,247,0.35);--gn:#3ecf8e;--gnd:rgba(62,207,142,0.12);--rd:#f06060;--rdd:rgba(240,96,96,0.12);--bl:#60a5fa;--bld:rgba(96,165,250,0.12);--am:#f5a623;--amd:rgba(245,166,35,0.12);--r:10px;--rl:14px;}
+:root{
+  --bg:#0a0a0c;--bg2:#111114;--bg3:#18181c;--bg4:#1e1e24;
+  --brd:rgba(255,255,255,0.07);--brdh:rgba(255,255,255,0.14);
+  --tx:#eeedf2;--tx2:#8a8999;--tx3:#4a4958;
+  --ac:#6c5ce7;--acd:rgba(108,92,231,0.12);--acb:rgba(108,92,231,0.3);
+  --gn:#00b894;--gnd:rgba(0,184,148,0.1);--gnb:rgba(0,184,148,0.25);
+  --rd:#e17055;--rdd:rgba(225,112,85,0.1);
+  --am:#fdcb6e;--amd:rgba(253,203,110,0.1);
+  --bl:#74b9ff;--bld:rgba(116,185,255,0.1);
+  --r:8px;--rl:12px;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
-#apiScreen{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;}
-.api-card{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:36px 40px;width:440px;max-width:95vw;}
-.api-logo{font-size:12px;color:var(--ac);margin-bottom:20px;display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;letter-spacing:.1em;}
-.bdot{width:7px;height:7px;border-radius:50%;background:var(--ac);box-shadow:0 0 10px var(--ac);}
-.api-card h2{font-size:20px;font-weight:600;margin-bottom:8px;}
-.api-card p{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:18px;}
-.api-inp{width:100%;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:11px 14px;font-family:'DM Mono',monospace;font-size:13px;color:var(--tx);margin-bottom:10px;outline:none;}
-.api-inp:focus{border-color:var(--acb);}
-.api-btn{width:100%;padding:11px;background:var(--ac);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:14px;font-weight:500;cursor:pointer;}
-.api-btn:hover{opacity:.85;}
-.api-note{font-size:11px;color:var(--tx3);margin-top:10px;}
+
+/* SETUP */
+#setup{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;}
+.setup-box{background:var(--bg2);border:1px solid var(--brd);border-radius:16px;padding:40px;width:420px;max-width:95vw;text-align:center;}
+.setup-logo{font-family:'DM Mono',monospace;font-size:11px;color:var(--ac);letter-spacing:.15em;margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px var(--ac);}
+.setup-box h2{font-size:22px;font-weight:600;margin-bottom:8px;}
+.setup-box p{font-size:13px;color:var(--tx2);margin-bottom:20px;line-height:1.6;}
+.setup-inp{width:100%;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:12px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);margin-bottom:12px;outline:none;}
+.setup-inp:focus{border-color:var(--acb);}
+.setup-btn{width:100%;padding:12px;background:var(--ac);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.02em;}
+.setup-btn:hover{opacity:.88;}
+
+/* APP LAYOUT */
 .app{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:240px;min-width:240px;background:var(--bg2);border-right:1px solid var(--brd);display:flex;flex-direction:column;}
-.sb-top{padding:14px 12px 10px;border-bottom:1px solid var(--brd);}
-.brand{font-family:'DM Mono',monospace;font-size:11px;color:var(--ac);letter-spacing:.12em;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
-.new-btn{width:100%;padding:7px 12px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;display:flex;align-items:center;gap:7px;}
-.new-btn:hover{background:rgba(124,106,247,.22);}
-.stabs{display:flex;border-bottom:1px solid var(--brd);}
-.stab{flex:1;padding:7px 2px;font-size:10px;text-align:center;cursor:pointer;color:var(--tx3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;}
-.stab.on{color:var(--ac);border-bottom-color:var(--ac);}
-.spanel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
-.spanel.on{display:flex;}
-.spanel::-webkit-scrollbar{width:3px;}
-.spanel::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px;}
-.sec-lbl{font-size:10px;font-weight:500;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:10px 10px 4px;}
-.ci{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);cursor:pointer;margin:0 6px 2px;}
+
+/* LEFT SIDEBAR - clients only */
+.sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--brd);display:flex;flex-direction:column;}
+.sb-head{padding:16px 14px 12px;border-bottom:1px solid var(--brd);}
+.sb-brand{font-family:'DM Mono',monospace;font-size:10px;color:var(--ac);letter-spacing:.15em;display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+.sb-new{width:100%;padding:8px 12px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
+.sb-new:hover{background:rgba(108,92,231,.2);}
+.sb-clients{flex:1;overflow-y:auto;padding:8px;}
+.sb-clients::-webkit-scrollbar{width:3px;}
+.sb-clients::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px;}
+.sb-lbl{font-size:9px;font-weight:600;color:var(--tx3);letter-spacing:.12em;text-transform:uppercase;padding:6px 6px 4px;}
+.ci{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;transition:background .15s;}
 .ci:hover{background:var(--bg3);}
 .ci.on{background:var(--acd);border:1px solid var(--acb);}
-.ci-av{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;min-width:25px;background:var(--bg3);color:var(--tx2);border:1px solid var(--brd);}
-.ci.on .ci-av{background:var(--acd);color:var(--ac);border-color:var(--acb);}
-.ci-name{font-size:12.5px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
-.ci.on .ci-name{color:var(--tx);font-weight:500;}
-.ci-del{width:20px;height:20px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--tx3);cursor:pointer;border-radius:4px;font-size:15px;flex-shrink:0;}
+.ci-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;min-width:28px;background:var(--bg4);color:var(--tx2);}
+.ci.on .ci-av{background:var(--acb);color:var(--ac);}
+.ci-info{flex:1;min-width:0;}
+.ci-name{font-size:12.5px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;}
+.ci.on .ci-name{color:var(--tx);}
+.ci-status{font-size:9px;margin-top:2px;}
+.s-z{color:var(--gn);}
+.s-r{color:var(--am);}
+.s-u{color:var(--bl);}
+.s-n{color:var(--rd);}
+.ci-del{width:18px;height:18px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--tx3);cursor:pointer;border-radius:4px;font-size:14px;flex-shrink:0;}
 .ci:hover .ci-del{display:flex;}
 .ci-del:hover{color:var(--rd);}
-.sb-lbl{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:500;white-space:nowrap;}
-.sl-z{background:rgba(62,207,142,.15);color:var(--gn);}
-.sl-r{background:rgba(245,166,35,.15);color:var(--am);}
-.sl-u{background:rgba(96,165,250,.15);color:var(--bl);}
-.sl-n{background:rgba(240,96,96,.15);color:var(--rd);}
-.kb-sec{padding:8px 8px 2px;}
-.kb-sec-t{font-size:10px;font-weight:500;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:4px 4px 6px;}
-.kb-item{padding:6px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;font-size:12px;color:var(--tx2);}
-.kb-item:hover{background:var(--bg3);color:var(--tx);}
-.kb-item.on{background:var(--gnd);color:var(--gn);}
-.sb-bot{padding:10px;border-top:1px solid var(--brd);}
-.sb-btn{width:100%;padding:6px 10px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.sb-btn:hover{border-color:var(--brdh);color:var(--tx2);}
-.main{flex:1;display:flex;flex-direction:column;min-width:0;}
-.topbar{padding:10px 18px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:10px;background:var(--bg);flex-shrink:0;}
-.top-info{flex:1;min-width:0;}
-.top-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.top-sub{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:1px;}
-.top-acts{display:flex;gap:6px;flex-shrink:0;}
-.top-btn{padding:5px 10px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
-.top-btn:hover{border-color:var(--brdh);color:var(--tx2);}
-.top-btn.on{background:var(--acd);border-color:var(--acb);color:var(--ac);}
-.st-sel{padding:5px 8px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx2);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;outline:none;}
-.phase-bar{display:flex;gap:4px;padding:8px 18px;border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;}
+.sb-foot{padding:10px 14px;border-top:1px solid var(--brd);display:flex;flex-direction:column;gap:4px;}
+.sb-foot-btn{padding:6px 10px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-family:'Sora',sans-serif;font-size:10px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;width:100%;}
+.sb-foot-btn:hover{border-color:var(--brdh);color:var(--tx2);}
+
+/* MAIN AREA */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);}
+
+/* TOP BAR */
+.topbar{padding:12px 20px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.tb-client{flex:1;min-width:0;}
+.tb-name{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tb-sub{font-size:11px;color:var(--tx3);margin-top:1px;font-family:'DM Mono',monospace;}
+.tb-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.tb-sel{padding:6px 10px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx2);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;outline:none;}
+.tb-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);cursor:pointer;font-size:15px;color:var(--tx2);position:relative;}
+.tb-btn:hover{border-color:var(--brdh);color:var(--tx);}
+.tb-btn.on{background:var(--acd);border-color:var(--acb);color:var(--ac);}
+.tb-btn-lbl{font-size:9px;font-family:'DM Mono',monospace;}
+
+/* PHASE BAR */
+.phase-bar{display:flex;gap:4px;padding:8px 20px;border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;align-items:center;}
 .phase-bar::-webkit-scrollbar{height:0;}
-.pstep{padding:4px 10px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--brd);color:var(--tx3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;}
-.pstep:hover{border-color:var(--brdh);color:var(--tx2);}
-.pstep.on{background:var(--acd);border-color:var(--acb);color:var(--ac);font-weight:500;}
-.script-panel{background:var(--bg2);border-bottom:1px solid var(--brd);padding:8px 18px;flex-shrink:0;display:none;}
-.script-panel.vis{display:block;}
-.script-lbl{font-size:10px;font-weight:500;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px;}
-.script-txt{font-size:12px;color:var(--tx2);line-height:1.6;}
-.script-txt strong{color:var(--ac);font-weight:500;}
-.notes-panel{background:var(--bg2);border-bottom:1px solid var(--brd);padding:8px 18px;flex-shrink:0;display:none;}
-.notes-panel.vis{display:flex;gap:8px;align-items:flex-start;}
-.notes-lbl{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:4px;white-space:nowrap;}
-.notes-inp{flex:1;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:6px 10px;color:var(--tx);font-family:'Sora',sans-serif;font-size:12px;resize:none;outline:none;min-height:36px;max-height:80px;}
+.phase-lbl{font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;white-space:nowrap;}
+.ph{padding:4px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--brd);color:var(--tx3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;transition:all .15s;}
+.ph:hover{border-color:var(--brdh);color:var(--tx2);}
+.ph.on{background:var(--acd);border-color:var(--acb);color:var(--ac);font-weight:500;}
+
+/* NOTES PANEL */
+.notes-bar{border-bottom:1px solid var(--brd);padding:10px 20px;display:none;gap:10px;align-items:flex-start;flex-shrink:0;}
+.notes-bar.vis{display:flex;}
+.notes-inp{flex:1;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:7px 12px;color:var(--tx);font-family:'Sora',sans-serif;font-size:12.5px;resize:none;outline:none;min-height:36px;max-height:80px;}
 .notes-inp:focus{border-color:var(--acb);}
-.notes-save{padding:6px 12px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
-.kb-detail{flex:1;overflow-y:auto;padding:18px;display:none;flex-direction:column;gap:10px;}
-.kb-detail.vis{display:flex;}
-.kb-dhead{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
-.kb-back{padding:5px 10px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;}
-.kb-back:hover{border-color:var(--brdh);color:var(--tx2);}
-.kb-dtitle{font-size:15px;font-weight:600;}
-.kb-dlink{font-size:11px;color:var(--ac);text-decoration:none;margin-left:auto;}
-.kb-dlink:hover{text-decoration:underline;}
-.kb-dcontent{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);padding:14px 16px;font-size:12.5px;line-height:1.75;color:var(--tx2);white-space:pre-wrap;}
-.kb-tip{background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.2);border-radius:var(--r);padding:10px 14px;font-size:12.5px;color:var(--gn);line-height:1.6;}
-.kb-tip strong{display:block;margin-bottom:4px;font-size:10px;letter-spacing:.08em;font-family:'DM Mono',monospace;}
-.kb-ask{padding:8px 14px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:12px;font-family:'Sora',sans-serif;cursor:pointer;align-self:flex-start;}
-.chat-scroll{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
-.chat-scroll::-webkit-scrollbar{width:3px;}
-.chat-scroll::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px;}
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--tx3);text-align:center;padding:40px;}
-.empty-icon{font-size:30px;margin-bottom:4px;}
-.empty-title{font-size:14px;font-weight:500;color:var(--tx2);}
-.empty-sub{font-size:12px;line-height:1.6;max-width:300px;}
-.msg-user{display:flex;justify-content:flex-end;}
-.msg-bubble{background:var(--acd);border:1px solid var(--acb);border-radius:var(--rl);border-bottom-right-radius:4px;padding:9px 13px;font-size:13px;line-height:1.6;max-width:72%;}
-.msg-lbl{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;margin-bottom:4px;text-align:right;}
-.ai-wrap{display:flex;flex-direction:column;gap:7px;max-width:92%;}
-.ai-analysis{background:var(--bg2);border:1px solid var(--brd);border-left:3px solid var(--ac);border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--tx2);line-height:1.6;}
-.ai-analysis strong{color:var(--tx3);font-size:10px;display:block;margin-bottom:3px;font-family:'DM Mono',monospace;letter-spacing:.08em;}
+.notes-save{padding:7px 14px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
+
+/* SCRIPT HINT */
+.script-hint{border-bottom:1px solid var(--brd);padding:8px 20px;display:none;flex-shrink:0;}
+.script-hint.vis{display:block;}
+.sh-lbl{font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px;}
+.sh-txt{font-size:12px;color:var(--tx2);line-height:1.6;}
+.sh-txt strong{color:var(--ac);}
+
+/* CHAT */
+.chat{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.chat::-webkit-scrollbar{width:3px;}
+.chat::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px;}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--tx3);text-align:center;}
+.empty-ico{font-size:36px;margin-bottom:8px;}
+.empty-t{font-size:14px;font-weight:500;color:var(--tx2);}
+.empty-s{font-size:12px;line-height:1.6;max-width:280px;}
+
+/* MESSAGES */
+.msg-u{display:flex;justify-content:flex-end;}
+.msg-bbl{background:var(--acd);border:1px solid var(--acb);border-radius:var(--rl);border-bottom-right-radius:3px;padding:10px 14px;font-size:13px;line-height:1.6;max-width:70%;}
+.msg-lbl{font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;margin-bottom:4px;text-align:right;}
+.ai-wrap{display:flex;flex-direction:column;gap:8px;max-width:90%;}
+
+/* SITUATION */
+.situation{background:var(--bg2);border:1px solid var(--brd);border-left:2px solid var(--ac);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.6;}
+.situation-lbl{font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.08em;display:block;margin-bottom:3px;}
+
+/* RESPONSE CARDS */
 .rcard{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);overflow:hidden;}
 .rcard:hover{border-color:var(--brdh);}
-.rcard-head{padding:9px 13px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:8px;}
-.stag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.06em;}
-.tag-e{background:var(--gnd);color:var(--gn);border:1px solid rgba(62,207,142,.25);}
-.tag-c{background:var(--amd);color:var(--am);border:1px solid rgba(245,166,35,.25);}
-.tag-i{background:var(--bld);color:var(--bl);border:1px solid rgba(96,165,250,.25);}
-.copy-btn{margin-left:auto;padding:3px 9px;background:transparent;border:1px solid var(--brd);border-radius:6px;color:var(--tx3);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;flex-shrink:0;}
-.copy-btn:hover{border-color:var(--brdh);color:var(--tx2);}
-.copy-btn.ok{border-color:var(--gn);color:var(--gn);}
-.rcard-body{padding:11px 13px;}
-.rcard-text{font-size:13px;line-height:1.7;color:var(--tx);}
-.rcard-next{margin-top:7px;font-size:11.5px;color:var(--ac);font-family:'DM Mono',monospace;}
-.rcard-next::before{content:'-> ';}
-.rcard-tip{margin-top:6px;padding-top:6px;border-top:1px solid var(--brd);font-size:11.5px;color:var(--gn);line-height:1.6;}
-.loading-msg{display:flex;align-items:center;gap:5px;padding:13px 15px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);max-width:120px;}
-.ld{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:ld 1.2s infinite;}
-.ld:nth-child(2){animation-delay:.2s;}.ld:nth-child(3){animation-delay:.4s;}
-@keyframes ld{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1.1)}}
-.summary-msg{background:var(--bg2);border:1px solid rgba(62,207,142,.2);border-left:3px solid var(--gn);border-radius:var(--r);padding:12px 14px;font-size:12.5px;color:var(--tx2);line-height:1.7;max-width:92%;}
-.summary-msg strong{color:var(--gn);font-size:10px;display:block;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.08em;}
-.input-area{border-top:1px solid var(--brd);padding:10px 18px 13px;background:var(--bg);flex-shrink:0;}
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-.chip{padding:3px 10px;font-size:11px;background:var(--bg3);border:1px solid var(--brd);border-radius:20px;color:var(--tx3);cursor:pointer;font-family:'DM Mono',monospace;}
-.chip:hover{background:var(--bg2);border-color:var(--brdh);color:var(--tx2);}
+.rcard-top{padding:10px 14px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:10px;}
+.badge{font-size:9px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;}
+.badge-p{background:var(--gnd);color:var(--gn);border:1px solid var(--gnb);}
+.badge-r{background:var(--amd);color:var(--am);border:1px solid rgba(253,203,110,.3);}
+.badge-i{background:var(--bld);color:var(--bl);border:1px solid rgba(116,185,255,.3);}
+.cpbtn{margin-left:auto;padding:4px 10px;background:transparent;border:1px solid var(--brd);border-radius:6px;color:var(--tx3);font-size:10px;font-family:'DM Mono',monospace;cursor:pointer;flex-shrink:0;transition:all .15s;}
+.cpbtn:hover{border-color:var(--brdh);color:var(--tx2);}
+.cpbtn.ok{border-color:var(--gn);color:var(--gn);}
+.rcard-body{padding:12px 14px;}
+.rcard-txt{font-size:13.5px;line-height:1.75;color:var(--tx);}
+.rcard-next{margin-top:8px;font-size:11px;color:var(--ac);font-family:'DM Mono',monospace;padding-top:8px;border-top:1px solid var(--brd);}
+.rcard-next::before{content:'DALSI KROK: ';}
+.rcard-tip{margin-top:6px;font-size:11.5px;color:var(--gn);padding-top:8px;border-top:1px solid var(--brd);}
+
+/* INFO CARD */
+.info-card{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);overflow:hidden;}
+.info-top{padding:10px 14px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:10px;}
+.info-body{padding:12px 14px;}
+.info-txt{font-size:13.5px;line-height:1.75;color:var(--tx);}
+.info-ctip{margin-top:10px;padding:10px 12px;background:var(--gnd);border:1px solid var(--gnb);border-radius:var(--r);font-size:12px;color:var(--gn);line-height:1.6;}
+.info-ctip strong{display:block;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px;opacity:.7;}
+
+/* SUMMARY */
+.summary{background:var(--bg2);border:1px solid var(--gnb);border-left:3px solid var(--gn);border-radius:var(--r);padding:14px 16px;font-size:13px;color:var(--tx2);line-height:1.7;max-width:90%;}
+.summary strong{color:var(--gn);font-size:9px;display:block;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.1em;}
+
+/* ERROR */
+.err-card{background:var(--rdd);border:1px solid rgba(225,112,85,.2);border-radius:var(--r);padding:12px 14px;font-size:12.5px;color:var(--rd);line-height:1.6;max-width:90%;}
+
+/* LOADING */
+.loading{display:flex;align-items:center;gap:5px;padding:14px 16px;background:var(--bg2);border:1px solid var(--brd);border-radius:var(--rl);width:90px;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--ac);animation:pulse 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1.1)}}
+
+/* PANEL DRAWER - for KB, Dodav, Fraze */
+.drawer{position:fixed;top:0;right:0;width:380px;max-width:95vw;height:100vh;background:var(--bg2);border-left:1px solid var(--brd);z-index:50;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:10px;}
+.drawer-title{font-size:14px;font-weight:600;flex:1;}
+.drawer-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--brd);border-radius:var(--r);cursor:pointer;font-size:16px;color:var(--tx2);}
+.drawer-close:hover{border-color:var(--brdh);color:var(--tx);}
+.drawer-tabs{display:flex;border-bottom:1px solid var(--brd);}
+.dtab{flex:1;padding:8px;font-size:11px;text-align:center;cursor:pointer;color:var(--tx3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.dtab.on{color:var(--ac);border-bottom-color:var(--ac);}
+.drawer-content{flex:1;overflow-y:auto;padding:12px;}
+.drawer-content::-webkit-scrollbar{width:3px;}
+.drawer-content::-webkit-scrollbar-thumb{background:var(--brd);border-radius:4px;}
+.kb-cat{font-size:9px;font-weight:600;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:8px 4px 4px;}
+.kb-row{padding:8px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;font-size:12.5px;color:var(--tx2);transition:background .15s;}
+.kb-row:hover{background:var(--bg3);color:var(--tx);}
+.kb-row.on{background:var(--gnd);color:var(--gn);}
+.kb-detail-view{display:none;flex-direction:column;gap:10px;}
+.kb-detail-view.vis{display:flex;}
+.kb-back{padding:6px 12px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;align-self:flex-start;}
+.kb-back:hover{border-color:var(--brdh);color:var(--tx2);}
+.kb-detail-title{font-size:15px;font-weight:600;}
+.kb-detail-link{font-size:11px;color:var(--ac);text-decoration:none;}
+.kb-detail-link:hover{text-decoration:underline;}
+.kb-detail-content{background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);padding:12px 14px;font-size:12px;line-height:1.75;color:var(--tx2);white-space:pre-wrap;}
+.kb-detail-tip{background:var(--gnd);border:1px solid var(--gnb);border-radius:var(--r);padding:10px 12px;font-size:12px;color:var(--gn);line-height:1.6;}
+.kb-detail-tip strong{display:block;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px;}
+.kb-ask-btn{padding:8px 14px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:12px;font-family:'Sora',sans-serif;cursor:pointer;align-self:flex-start;}
+.phrase-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);background:var(--bg3);margin-bottom:4px;font-size:12px;color:var(--tx2);}
+.phrase-item span{flex:1;}
+.p-use{padding:3px 8px;background:transparent;border:1px solid var(--brd);border-radius:4px;color:var(--tx3);font-size:10px;cursor:pointer;font-family:'DM Mono',monospace;}
+.p-use:hover{border-color:var(--ac);color:var(--ac);}
+.p-del{padding:2px 6px;background:transparent;border:none;color:var(--tx3);font-size:14px;cursor:pointer;}
+.p-del:hover{color:var(--rd);}
+.add-phrase{display:flex;gap:6px;margin-top:8px;}
+.add-phrase input{flex:1;padding:8px 10px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx);font-family:'Sora',sans-serif;font-size:12px;outline:none;}
+.add-phrase input:focus{border-color:var(--acb);}
+.add-phrase button{padding:8px 12px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
+.overlay{position:fixed;inset:0;z-index:49;background:rgba(0,0,0,.4);display:none;}
+.overlay.vis{display:block;}
+
+/* INPUT */
+.input-area{border-top:1px solid var(--brd);padding:12px 20px 14px;background:var(--bg2);flex-shrink:0;}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.chip{padding:4px 11px;font-size:11px;background:var(--bg4);border:1px solid var(--brd);border-radius:20px;color:var(--tx3);cursor:pointer;font-family:'DM Mono',monospace;transition:all .15s;}
+.chip:hover{background:var(--bg3);border-color:var(--brdh);color:var(--tx2);}
 .input-row{display:flex;gap:8px;align-items:flex-end;}
-textarea#ibox{flex:1;min-height:40px;max-height:110px;padding:10px 13px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rl);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px;line-height:1.5;resize:none;outline:none;}
+textarea#ibox{flex:1;min-height:42px;max-height:120px;padding:11px 14px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--rl);color:var(--tx);font-family:'Sora',sans-serif;font-size:13.5px;line-height:1.5;resize:none;outline:none;transition:border-color .2s;}
 textarea#ibox:focus{border-color:var(--acb);}
 textarea#ibox::placeholder{color:var(--tx3);}
-.send-btn{padding:10px 16px;background:var(--ac);border:none;border-radius:var(--rl);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;}
-.send-btn:hover{opacity:.85;}
-.send-btn:disabled{opacity:.35;cursor:not-allowed;}
-.modal-ov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;}
-.modal-ov.on{display:flex;}
-.mbox{background:var(--bg2);border:1px solid var(--brdh);border-radius:var(--rl);padding:22px 26px;width:320px;max-width:95vw;}
-.mbox h3{font-size:15px;font-weight:600;margin-bottom:6px;}
-.mbox p{font-size:12px;color:var(--tx3);margin-bottom:12px;line-height:1.5;}
-.minput{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:12px;}
-.minput:focus{border-color:var(--acb);}
-.macts{display:flex;gap:8px;justify-content:flex-end;}
-.btn-no{padding:7px 14px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;}
-.btn-yes{padding:7px 14px;background:var(--ac);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
-.phrases-list{display:flex;flex-direction:column;gap:4px;padding:4px 0;}
-.phrase-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:var(--r);background:var(--bg3);font-size:12px;color:var(--tx2);}
-.phrase-item span{flex:1;}
-.phrase-use{padding:2px 8px;background:transparent;border:1px solid var(--brd);border-radius:4px;color:var(--tx3);font-size:10px;cursor:pointer;font-family:'DM Mono',monospace;}
-.phrase-use:hover{border-color:var(--ac);color:var(--ac);}
-.phrase-del{padding:2px 6px;background:transparent;border:none;color:var(--tx3);font-size:14px;cursor:pointer;}
-.phrase-del:hover{color:var(--rd);}
-.add-phrase{display:flex;gap:6px;margin-top:8px;}
-.add-phrase input{flex:1;padding:7px 10px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx);font-family:'Sora',sans-serif;font-size:12px;outline:none;}
-.add-phrase input:focus{border-color:var(--acb);}
-.add-phrase button{padding:7px 12px;background:var(--acd);border:1px solid var(--acb);border-radius:var(--r);color:var(--ac);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
+.send{padding:11px 18px;background:var(--ac);border:none;border-radius:var(--rl);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;letter-spacing:.02em;}
+.send:hover{opacity:.85;}
+.send:disabled{opacity:.3;cursor:not-allowed;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
+.modal-bg.on{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--brd);border-radius:16px;padding:24px 28px;width:320px;max-width:95vw;}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:6px;}
+.modal p{font-size:12px;color:var(--tx3);margin-bottom:14px;}
+.modal-inp{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:14px;}
+.modal-inp:focus{border-color:var(--acb);}
+.modal-acts{display:flex;gap:8px;justify-content:flex-end;}
+.m-no{padding:8px 16px;background:transparent;border:1px solid var(--brd);border-radius:var(--r);color:var(--tx3);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;}
+.m-yes{padding:8px 16px;background:var(--ac);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<div id="apiScreen">
-  <div class="api-card">
-    <div class="api-logo"><span class="bdot"></span>SALES AI - USETRENO</div>
-    <h2>Nastaveni pripojeni</h2>
-    <p>Vloz URL Cloudflare Workeru:</p>
-    <input class="api-inp" type="text" id="apiInp" placeholder="https://dark-dream-de7c.nepouzitejucet.workers.dev" />
-    <button class="api-btn" id="startBtn">Spustit asistenta</button>
-    <div class="api-note">URL se ulozi v prohlizeci. Kazdy kolega ji zada jednou.</div>
+<div id="setup">
+  <div class="setup-box">
+    <div class="setup-logo"><span class="sdot"></span>SALES AI · USETRENO</div>
+    <h2>Pripojeni</h2>
+    <p>Vloz URL Cloudflare Workeru pro aktivaci AI.</p>
+    <input class="setup-inp" type="text" id="setupInp" placeholder="https://dark-dream-de7c.nepouzitejucet.workers.dev" />
+    <button class="setup-btn" id="setupBtn">Spustit</button>
   </div>
 </div>
 
-<div class="app" id="appRoot" style="display:none">
+<div class="app" id="app" style="display:none">
+
+  <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sb-top">
-      <div class="brand"><span class="bdot"></span>SALES AI</div>
-      <button class="new-btn" id="newBtn">+ Novy klient</button>
+    <div class="sb-head">
+      <div class="sb-brand"><span class="sdot"></span>SALES AI</div>
+      <button class="sb-new" id="newClientBtn">+ Novy klient</button>
     </div>
-    <div class="stabs">
-      <button class="stab on" id="tab0">Klienti</button>
-      <button class="stab" id="tab1">Znalosti</button>
-      <button class="stab" id="tab2">Dodav.</button>
-      <button class="stab" id="tab3">Fraze</button>
-    </div>
-    <div class="spanel on" id="p0">
-      <div class="sec-lbl">Aktivni klienti</div>
+    <div class="sb-clients">
+      <div class="sb-lbl">Klienti</div>
       <div id="clientsList"></div>
     </div>
-    <div class="spanel" id="p1"><div id="kbList"></div></div>
-    <div class="spanel" id="p2"><div id="dodList"></div></div>
-    <div class="spanel" id="p3">
-      <div style="padding:10px;">
-        <div class="sec-lbl">Fraze tymu</div>
-        <div class="phrases-list" id="phrasesList"></div>
-        <div class="add-phrase">
-          <input type="text" id="phraseInp" placeholder="Pridat frazi..." />
-          <button id="phraseAddBtn">+ Pridat</button>
-        </div>
-      </div>
-    </div>
-    <div class="sb-bot">
-      <button class="sb-btn" id="changeBtn">Zmenit URL</button>
+    <div class="sb-foot">
+      <button class="sb-foot-btn" id="changeUrlBtn">Zmenit URL</button>
     </div>
   </div>
 
+  <!-- MAIN -->
   <div class="main">
+
+    <!-- TOP BAR -->
     <div class="topbar">
-      <div class="top-info">
-        <div class="top-name" id="topName">Vyberte klienta</div>
-        <div class="top-sub" id="topSub">vyberte klienta ze seznamu</div>
+      <div class="tb-client">
+        <div class="tb-name" id="tbName">Vyberte klienta</div>
+        <div class="tb-sub" id="tbSub">zvolte klienta ze seznamu vlevo</div>
       </div>
-      <div class="top-acts">
-        <select class="st-sel" id="stSel">
-          <option value="">-- stav --</option>
+      <div class="tb-actions">
+        <select class="tb-sel" id="stSel">
+          <option value="">Stav...</option>
           <option value="z">Zajem</option>
           <option value="r">Rozmysli</option>
           <option value="u">Uzavreno</option>
           <option value="n">Nezajem</option>
         </select>
-        <button class="top-btn" id="notesBtn">Poznamky</button>
-        <button class="top-btn" id="summaryBtn">Shrnuti</button>
+        <button class="tb-btn" id="notesBtn" title="Poznamky">&#128221;</button>
+        <button class="tb-btn" id="summaryBtn" title="Shrnuti hovoru">&#128196;</button>
+        <button class="tb-btn" id="drawerBtn" title="Znalosti a dodavatele">&#128218;</button>
       </div>
     </div>
 
-    <div class="notes-panel" id="notesPanel">
-      <div class="notes-lbl">POZNAMKY</div>
-      <textarea class="notes-inp" id="notesInp" placeholder="Poznamky k tomuto klientovi..."></textarea>
-      <button class="notes-save" id="notesSaveBtn">Ulozit</button>
+    <!-- NOTES -->
+    <div class="notes-bar" id="notesBar">
+      <textarea class="notes-inp" id="notesInp" placeholder="Poznamky k tomuto klientovi..." rows="1"></textarea>
+      <button class="notes-save" id="notesSave">Ulozit</button>
     </div>
 
-    <div class="phase-bar" id="phaseBar"></div>
-    <div class="script-panel" id="scriptPanel">
-      <div class="script-lbl">SKRIPT</div>
-      <div class="script-txt" id="scriptTxt"></div>
+    <!-- PHASE BAR -->
+    <div class="phase-bar">
+      <div class="phase-lbl">FAZE</div>
+      <div id="phases"></div>
     </div>
 
-    <div class="kb-detail" id="kbDetail">
-      <div class="kb-dhead">
-        <button class="kb-back" id="kbBackBtn">zpet</button>
-        <div class="kb-dtitle" id="kbTitle"></div>
-        <a class="kb-dlink" id="kbLink" href="#" target="_blank"></a>
-      </div>
-      <div class="kb-dcontent" id="kbContent"></div>
-      <div class="kb-tip" id="kbTip" style="display:none"><strong>PRODEJNI TIP</strong><span id="kbTipTxt"></span></div>
-      <button class="kb-ask" id="kbAskBtn">Zeptat se AI na toto</button>
+    <!-- SCRIPT HINT -->
+    <div class="script-hint" id="scriptHint">
+      <div class="sh-lbl">SKRIPT</div>
+      <div class="sh-txt" id="scriptTxt"></div>
     </div>
 
-    <div class="chat-scroll" id="chatScroll">
-      <div class="empty-state">
-        <div class="empty-icon">&#9889;</div>
-        <div class="empty-title">Pripraveno na hovor</div>
-        <div class="empty-sub">Vyber klienta a zadej namitku nebo dotaz.</div>
+    <!-- CHAT -->
+    <div class="chat" id="chat">
+      <div class="empty">
+        <div class="empty-ico">&#9889;</div>
+        <div class="empty-t">Pripraveno na hovor</div>
+        <div class="empty-s">Vyber klienta a zadej namitku klienta nebo dotaz.</div>
       </div>
     </div>
 
+    <!-- INPUT -->
     <div class="input-area">
-      <div class="chips" id="chipsBar"></div>
+      <div class="chips" id="chips"></div>
       <div class="input-row">
         <textarea id="ibox" placeholder="Zadej namitku klienta nebo svuj dotaz..." rows="1"></textarea>
-        <button class="send-btn" id="sendBtn">Odeslat</button>
+        <button class="send" id="sendBtn">Odeslat</button>
       </div>
     </div>
+
   </div>
 </div>
 
-<div class="modal-ov" id="modalOv">
-  <div class="mbox">
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-title" id="drawerTitle">Znalosti</div>
+    <button class="drawer-close" id="drawerClose">x</button>
+  </div>
+  <div class="drawer-tabs">
+    <button class="dtab on" id="dtab0">Znalosti</button>
+    <button class="dtab" id="dtab1">Dodavatele</button>
+    <button class="dtab" id="dtab2">Fraze</button>
+  </div>
+  <div class="drawer-content" id="drawerContent"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
     <h3>Novy klient</h3>
-    <p>Zadej jmeno nebo firmu.</p>
-    <input class="minput" type="text" id="clientInp" placeholder="Jan Novak..." />
-    <div class="macts">
-      <button class="btn-no" id="modalNo">Zrusit</button>
-      <button class="btn-yes" id="modalYes">Vytvorit</button>
+    <p>Zadej jmeno klienta nebo nazev firmy.</p>
+    <input class="modal-inp" type="text" id="modalInp" placeholder="Jan Novak..." />
+    <div class="modal-acts">
+      <button class="m-no" id="modalNo">Zrusit</button>
+      <button class="m-yes" id="modalYes">Vytvorit</button>
     </div>
   </div>
 </div>
@@ -285,137 +350,126 @@ textarea#ibox::placeholder{color:var(--tx3);}
 var WU = 'https://dark-dream-de7c.nepouzitejucet.workers.dev';
 
 var PHASES = [
-  {n:'Uvod', s:'<strong>Dobry den, u telefonu [vase jmeno] z portalu Usetreno.cz.</strong> Slysime se dobre? Volam na zaklade kalkulace, kterou jste si delal na nasem portalu.', c:['Nezajimam se','Odkud mate cislo?','Nemam cas','Uz jsem to resil'], ctx:'Zacatek hovoru, navazani kontaktu.'},
-  {n:'Duvod', s:'<strong>Zeptam se jen - co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?', c:['Jen jsem se dival','Vysoke vyuctovani','Konci smlouva','Kamarad doporucil'], ctx:'Zjistujeme proc zakaznik volal.'},
-  {n:'Duvera', s:'<strong>Jsme jeden z nejvetsich nezavislych srovnavaku energii v Cesku</strong> - od roku 2018 pod skupinou CSOB. Nezavisle a zdarma.', c:['Proc bych veril?','Je to podvod?','Nic nepodepisu','Jsem u jine banky'], ctx:'Budujeme duveru.'},
-  {n:'Faktura', s:'<strong>Mate vyuctovani elektronicky nebo v papirove podobe?</strong> Super, otevrte si posledni vyuctovani a podivame se spolu.', c:['Nemam fakturu','Neni doma','Nemam cas','Proc ji potrebujete?'], ctx:'Navigujeme k fakture pro ziskani udaju.'},
-  {n:'Preference', s:'<strong>Predpokladam velkeho stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?', c:['Nechci menit','Jsem spokojeny','Co z toho mate?','Jak dlouho smlouva?'], ctx:'Zjistujeme preference, priprava na vyber dodavatele.'},
-  {n:'Uzavreni', s:'<strong>Vezmete si prosim tuzku a papir.</strong> Napiste si: nova cena za MWh je [X] a rocni uspora vam vychazi priblizne [X] korun. Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani a platite mene.', c:['Musim se poradit','Poslete email','Jeste rozmyslim','Je to zavazne?'], ctx:'Uzaviraci faze - tuzka a papir, cena, uzavreni.'}
+  {n:'Uvod',s:'<strong>Dobry den, u telefonu [jmeno] z Usetreno.cz.</strong> Volam na zaklade kalkulace z naseho portalu. Predpokladam ze jste se porovnaval vy?',c:['Nezajimam se','Odkud mate cislo?','Nemam cas','Uz jsem to resil'],ctx:'Zacatek hovoru, navazani kontaktu.'},
+  {n:'Duvod',s:'<strong>Co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?',c:['Jen jsem se dival','Vysoke vyuctovani','Konci smlouva','Kamarad doporucil'],ctx:'Zjistujeme proc zakaznik volal.'},
+  {n:'Duvera',s:'<strong>Jsme jeden z nejvetsich nezavislych srovnavacich energii v Cesku</strong> - od 2018 pod skupinou CSOB. Porovnavame nezavisle vsechny dodavatele.',c:['Proc bych veril?','Je to podvod?','Nic nepodepisu','Jsem u jine banky'],ctx:'Budujeme duveru, zakaznik muze byt skepticky.'},
+  {n:'Faktura',s:'<strong>Mate vyuctovani elektronicky nebo v papirove podobe?</strong> Otevrte si posledni vyuctovani - podivame se spolu.',c:['Nemam fakturu','Neni doma','Nemam cas','Proc ji potrebujete?'],ctx:'Navigujeme k fakture pro ziskani EAN a spotreby.'},
+  {n:'Preference',s:'<strong>Predpokladam velkeho stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?',c:['Nechci menit','Jsem spokojeny','Co z toho mate?','Jak dlouho smlouva?'],ctx:'Zjistujeme preference, vybirame dodavatele.'},
+  {n:'Uzavreni',s:'<strong>Vezmete si tuzku a papir.</strong> Napiste si: nova cena [X] Kc/MWh, rocni uspora [X] Kc. Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani. Ted to nastavime.',c:['Musim se poradit','Poslete email','Jeste rozmyslim','Je to zavazne?'],ctx:'Uzavreni - tuzka papir, cena, uzavreni.'}
 ];
 
 var KB = [
-  {id:'dokumenty',cat:'Procesy',t:'Dokumenty ke smlouve',link:'',tip:'',content:'POSLEDNI VYUCTOVANI:\n- Overeni: jmeno, prijmeni, adresa\n- Data: EAN/EIC, adresa OM, jistic, sazba, spotreba\n- Zakaznik nema: pozada dodavatele o opis\n\nSMLOUVA / DODATEK:\n- Urceni uvazku, vypovedi lhuta\n- Centropol: dodat VOP | Innogy: prvni+druhou stranu\n\nZMENA DODAVATELE:\n- Posledni vyuctovani + smlouva od soucasneho dodavatele\n- Zakaznik vypovedel sam: dodat akceptaci vypovedi'},
-  {id:'terminy',cat:'Procesy',t:'Terminy a vypovedi',link:'',tip:'',content:'HRANICNI TERMINY:\n- CEZ, Lama, EON, Centropol, DE, Innogy: 10 prac. dni pred podanim vypovedi\n- Yello, PRE: 17 pracovnich dni\n- MND: 12 pracovnich dni\n\nURGENTNI SMLOUVA - rizikova pokud mene nez 30 dni:\n- Proces Usetreno: ~15 dni | Partneri: ~10 dni | OTE: min 10 dni'},
-  {id:'mezidod',cat:'Procesy',t:'Mezidodavatel',link:'',tip:'',content:'Zakaznik podepsal smlouvu s dalsim dodavatelem - ceka v mezidobi.\n\nNA SMLOUVU uvedeme dodavatele ktereho budeme vypovedat!\n\nYello, MND: mohou vypovidat po zahajeni dodavky\nEON, PRE, PPAS, CEZ a dalsi: NE\n\nVYPOVIDA ZAKAZNIK: funguje u vsech partneru'},
-  {id:'aukce',cat:'Procesy',t:'Aukcni spolecnost',link:'',tip:'',content:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: Smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a EON vypovida aukci za klienty.\nZname: Terra Group, Simply Energy, Ceska aukce, D-test, A Tender'},
-  {id:'fve',cat:'Procesy',t:'Fotovoltaika FVE',link:'',tip:'',content:'Usetreno NEUZAVIRA smlouvu na vykup FVE.\nUzavirame beznou dodavku + info partnerovi o zajmu o vykup.\n\nOd 2018: zakaznik s FVE musi mit 2 elektromery a 2 EANy.\nZaloha musi byt 0 Kc, mesicni fakturace.\n\nKDO VYKUPUJE:\n- Centropol: ~800 Kc/MWh\n- Yello (skrz PRE), EON\n- PPAS se smlouvou: 950 Kc, bez: 450 Kc'},
-  {id:'dpi',cat:'Pojmy',t:'DPI - Dodavatel posledni instance',link:'',tip:'',content:'DPI nastupuje automaticky kdyz dodavatel nemuze dodavat.\nPo 6 mesicich hrozi neopravneny odber!\nPRE posila jednu vyzvu a ihned odpoji.\nResit OKAMZITE jako urgentni smlouvu.'},
-  {id:'odchylka',cat:'Pojmy',t:'Odchylka ve spotrebe',link:'',tip:'Vetsi dodavatele lepe ridi portfolio = nizsi odchylky = levnejsi cena. Silny argument pro CEZ, EON nebo PRE.',content:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK VYSVETLIT:\nPredstavte si ze si objednate 100 litru vody ale spotrebujete jen 80 - za tech 20 litru zaplatite navic. Dodavatele funguji stejne s elektrinou na burze.'},
-  {id:'tipy',cat:'Techniky',t:'Obchodni techniky',link:'',tip:'',content:'FRAMEWORK NA KAZDU NAMITKU:\n1. POCHOPENI: sundat obranu klienta\n2. ROZKLICOVANI: ukazat ze vite o cem mluvi\n3. RESENI: napojit na nabidku pres system vyberu\n4. MINI CLOSE: vratit klienta do flow\n\nNIKDY: nezahazovat vsechny karty najednou\nNIKDY: email jako prvni moznost\nVZDY: konci otazkou ktera drzi klienta v hovoru'}
+  {id:'dok',cat:'Procesy',t:'Dokumenty ke smlouve',link:'',tip:'',c:'POSLEDNI VYUCTOVANI: overeni jmena, adresy. Data: EAN/EIC, adresa OM, jistic, sazba, spotreba. Zakaznik nema: vyzada od dodavatele opis.\n\nSMLOUVA: urceni uvazku, vypovedi lhuta. Centropol: VOP. Innogy: prvni+druhou stranu.\n\nZMENA DODAVATELE: posledni vyuctovani + smlouva. Zakaznik vypovedel: dodat akceptaci.'},
+  {id:'ter',cat:'Procesy',t:'Terminy a vypovedi',link:'',tip:'',c:'TERMINY: CEZ/Lama/EON/Centropol/DE/Innogy: 10 prac. dni. Yello/PRE: 17 prac. dni. MND: 12 prac. dni.\n\nURGENTNI: rizikova pokud mene nez 30 dni. Usetreno ~15 dni, partneri ~10 dni, OTE min 10 dni.\n\nVYPOVED ZAKAZNIKEM: vygenerovat 30 dni pred zmenou. Podepsana na BO 5 dni pred. Predano partnerovi 3 dny pred.'},
+  {id:'mez',cat:'Procesy',t:'Mezidodavatel',link:'',tip:'',c:'NA SMLOUVU: dodavatele ktereho budeme VYPOVEDAT = kdo aktualne dodava!\n\nYello/MND: mohou vypovidat po zahajeni. EON/PRE/PPAS/CEZ a dalsi: NE.\n\nVYPOVIDA ZAKAZNIK: funguje u vsech.'},
+  {id:'auk',cat:'Procesy',t:'Aukcni spolecnost',link:'',tip:'',c:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a EON vypovida za klienty. Zname: Terra Group, Simply Energy, Ceska aukce, D-test, A Tender.'},
+  {id:'fve',cat:'Procesy',t:'Fotovoltaika FVE',link:'',tip:'',c:'Usetreno NEUZAVIRA smlouvu na vykup FVE. Uzavirame beznou dodavku + info partnerovi o zajmu o vykup.\n\nOd 2018: zakaznik musi mit 2 elektromery a 2 EANy. Zaloha 0 Kc, mesicni fakturace.\n\nVYKUP: Centropol ~800 Kc/MWh. Yello/EON. PPAS se smlouvou 950 Kc, bez 450 Kc.'},
+  {id:'dpi',cat:'Pojmy',t:'DPI - Dodavatel posledni instance',link:'',tip:'',c:'DPI nastupuje automaticky kdyz dodavatel nemuze dodavat. Po 6 mesicich hrozi neopravneny odber!\nPRE: jednu vyzvu a ihned odpoji. Resit OKAMZITE jako urgentni smlouvu.'},
+  {id:'odch',cat:'Pojmy',t:'Odchylka ve spotrebe',link:'',tip:'Vetsi dodavatele lepe ridi portfolio = nizsi odchylky = levnejsi cena. Pouzij to jako argument pro CEZ, EON nebo PRE.',c:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK ZAKAZNIKOVI: Predstavte si ze si objednate 100 litru vody ale spotrebujete 80 - za tech 20 litru zaplatite navic. Dodavatele funguji stejne s elektrinou na burze.'},
+  {id:'tip',cat:'Techniky',t:'Obchodni framework',link:'',tip:'',c:'FRAMEWORK NA KAZDU NAMITKU:\n1. POCHOPENI: sundat obranu klienta\n2. ROZKLICOVANI: ukaz ze vis o cem mluvis\n3. RESENI: napoj na system vyberu, ne na znacku\n4. MINI CLOSE: vrat do flow otazkou\n\nNIKDY email jako prvni moznost.\nVZDY konkretni uspora v Kc, ne procenta.\nVZDY konci otazkou ktera drzi klienta v hovoru.'}
 ];
 
 var DODAV = [
-  {id:'cez',n:'CEZ',link:'https://www.cez.cz/nextcez/cs/ceniky',tip:'CEZ je jednicka na trhu - od roku 2021 nosi oceneni Nejduveryhodnejsi znacka v kategorii dodavatelu energii. Pouzij to - zakaznik si hodnotu reputace ceni.',content:'PROFIL: Nejvetsi dodavatel v CR, 1,6 mil. zakazniku, ccastecne statni.\nPRODUKTY 2026: Elektrina D02 bez fixace: ~3 860 Kc/MWh s DPH. Dvouleta fixace: ~3 400 Kc/MWh. Fix plyn do 2026: 1 150 Kc/MWh.\nPRO KOHO: Zakaznici kteri chteji istotu velkeho dodavatele, FVE zakaznici.\nVYHODA: Letos zlevnil uz 5x. Nejvetsi sit, nejmensi riziko. Aplikace MUJ CEZ.'},
-  {id:'eon',n:'E.ON',link:'https://www.eon.cz/domacnosti/zakaznicka-pece/ceniky/',tip:'EON nabizi bonus elektrikare az 5 000 Kc rocne zdarma. Pro zakazniky kteri si ceni sluzeb - silny argument navic ktery jiny dodavatel nenabidne.',content:'PROFIL: 2. nejvetsi dodavatel, 1,2 mil. zakazniku, nemecka firma EON SE.\nPRODUKTY 2026: Bez fixace: ~3 933 Kc/MWh (snizeni o 18%). Komplet MAX PRO: 2025 = 3 503, 2026 = 3 318 Kc/MWh.\nPRO KOHO: Zakaznici v uzemi EGD (jizni Cechy, jizni Morava), ti kdo oceni servis.\nVYHODA: Bonus elektrikare/hodineho manezela. Portal Energie24.'},
-  {id:'pre',n:'PRE',link:'https://www.pre.cz/cs/domacnosti/',tip:'PRE je jediny dodavatel se svoji vlastni distribucni siti v Praze - jeden subjekt pro dodavku i distribuci. Pro Prazaky je to velka vyhoda.',content:'PROFIL: Prazska energetika, historicky dodavatel pro Prahu, vlastni distribucni sit.\nPRODUKTY: PRE PROUD KLASIK (bez fixace), FIX (1 rok), BASIC (2 roky bez fixace).\nPOZOR: PRE posila JEDNU vyzvu pri bezesmluvnim vztahu a ihned odpoji!\nPRO KOHO: Prazane, firmy v Praze.'},
-  {id:'mnd',n:'MND',link:'https://www.mnd.cz/',tip:'MND je jediny CR dodavatel s vlastni tezbu zemniho plynu na Morave - Plyn z prvni ruky. Silny argument pro zakazniky kteri oceni cesky transparentni pribeh.',content:'PROFIL: Moravske naftove doly, vlastni tezba plynu, rozsireni do elektriny.\nPRODUKTY: Plyn z prvni ruky (fix do zari 2026 nebo neurcita). Elektrina na neurCitou.\nPOZOR: Max uvazek soucasneho dodavatele 12 mesicu! Poznamka MND max 300 znaku!\nPRO KOHO: Zakaznici s plynem, domacnosti s FVE (solarni ucet - jen pro domacnosti, ne ICO).'},
-  {id:'innogy',n:'Innogy',link:'https://www.innogy.cz/ceniky/',tip:'Innogy je soucasti skupiny EON od roku 2021. Zakaznici casto nevedi ze Innogy = EON = silna evropska firma. Pouzij to pri budovani duvery.',content:'PROFIL: Soucast skupiny EON od 2021, puvodne RWE.\nPRODUKTY: Elektrina Standard, Plyn Standard (bez fixace).\nPOZOR: Mezidodavatel na Innogy NE! Dodat vzdy prvni+druhou stranu smlouvy.\nPRO KOHO: Dlouholeti zakaznici RWE/Innogy.'},
-  {id:'centropol',n:'Centropol',link:'https://www.centropol.cz/',tip:'Centropol nabizi velky vyber produktu a flexibilitu - velko online sjednani bez cekani. Silny argument pro zakazniky kteri oceni rychlost.',content:'PROFIL: Stredne velky dodavatel, velky vyber produktu, vykup FVE ~800 Kc/MWh.\nPRODUKTY: Bez zavazku (online), Fixne na 1 rok (online i fyzicky).\nPOZOR: Centropol - VZDY dodat veskere VOP! Mezidodavatel NE. Exportovat 10 prac. dni.\nPRO KOHO: Zakaznici kteri chteji jednoduche online sjednani nebo vykup FVE.'},
-  {id:'ppas',n:'PPAS',link:'https://www.ppas.cz/',tip:'PPAS nabizi jeden z nejvyssich vykupnich cen FVE (950 Kc/MWh se smlouvou). Pro zakazniky s FVE casto nejlepsi kombinace na trhu.',content:'PROFIL: Prazska plynarenska, historicky dodavatel plynu.\nFVE VYKUP: Se smlouvou na dodavku: 950 Kc/MWh! Bez smlouvy: 450 Kc/MWh.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! Mezidodavatel NE. Exportovat 17 prac. dni.\nPRO KOHO: Zakaznici s FVE kteri chteji nejvyssi vykupni cenu.'},
-  {id:'yello',n:'Yello',link:'https://www.yello.cz/cs/domacnost/',tip:'Yello je znacka skupiny PRE - cileni na online-first zakazniky. Prodavej jako moderniho dodavatele bez komplikaci - jednoduche, online, transparentni.',content:'PROFIL: Znacka skupiny PRE, zamereni na online sjednani.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! EIC 27ZG100 a distribuce PPD nelze. Exportovat 17 prac. dni.\nPRO KOHO: Mladsi zakaznici, online komunikace, mimo Prahu.'},
-  {id:'epet',n:'EPET',link:'https://epet.cz/',tip:'EPET je jediny dodavatel kde VZDY vypovida zakaznik sam. Upozorni zakaznika predem - ale ti kteri zvladnou si ceni transparentni ceny.',content:'PROFIL: Mensi nezavisly dodavatel, konkurencni ceny.\nPOZOR: EPET - VZDY zakaznik sam vypovida! Informuj predem. Zakaznik doda akceptaci.\nPRO KOHO: Zakaznici schopni zarizit vypoved sami, hledaji konkurencni cenu.'}
+  {id:'cez',n:'CEZ',link:'https://www.cez.cz/nextcez/cs/ceniky',tip:'CEZ je jednicka na trhu - od 2021 nosi oceneni Nejduveryhodnejsi znacka v kategorii dodavatelu energii. Zakaznik si hodnotu reputace ceni - pouzij to.',c:'PROFIL: Nejvetsi dodavatel v CR, 1,6 mil. zakazniku, castecne statni.\nPRODUKTY 2026: Elektrina D02 bez fixace ~3 860 Kc/MWh. Dvouleta fixace ~3 400 Kc/MWh. Fix plyn do 2026: 1 150 Kc/MWh.\nPRO KOHO: Ti kdo chteji istotu velkeho dodavatele, FVE zakaznici.\nVYHODA: Letos zlevnil uz 5x. Nejvetsi sit, nejmensi riziko.'},
+  {id:'eon',n:'E.ON',link:'https://www.eon.cz/domacnosti/zakaznicka-pece/ceniky/',tip:'EON nabizi bonus elektrikare az 5 000 Kc rocne zdarma. Pro zakazniky co si ceni sluzeb - silny argument ktery jiny dodavatel nenabidne.',c:'PROFIL: 2. nejvetsi, 1,2 mil. zakazniku, nemecka firma EON SE.\nPRODUKTY 2026: Bez fixace ~3 933 Kc/MWh (snizeni o 18%). Komplet MAX PRO: 2026 = 3 318 Kc/MWh.\nPRO KOHO: Zakaznici v uzemi EGD (jizni Cechy, jizni Morava), ti co oceni servis.\nVYHODA: Bonus elektrikare/hodineho manezela. Portal Energie24.'},
+  {id:'pre',n:'PRE',link:'https://www.pre.cz/cs/domacnosti/',tip:'PRE je jediny dodavatel se vlastni distribucni siti v Praze - jeden subjekt pro dodavku i distribuci. Pro Prazaky velka vyhoda.',c:'PROFIL: Prazska energetika, historicky dodavatel pro Prahu, vlastni distribucni sit.\nPOZOR: PRE posila JEDNU vyzvu pri bezesmluvnim vztahu a ihned odpoji!\nPRO KOHO: Prazane, firmy v Praze.'},
+  {id:'mnd',n:'MND',link:'https://www.mnd.cz/',tip:'MND je jediny CR dodavatel s vlastni tezbu plynu - Plyn z prvni ruky. Silny argument pro zakazniky co oceni cesky transparentni pribeh.',c:'PROFIL: Moravske naftove doly, vlastni tezba plynu.\nPOZOR: Max uvazek soucasneho dodavatele 12 mesicu! Poznamka MND max 300 znaku! Solarni ucet jen pro domacnosti, ne ICO.\nPRO KOHO: Zakaznici s plynem, domacnosti s FVE.'},
+  {id:'inn',n:'Innogy',link:'https://www.innogy.cz/ceniky/',tip:'Innogy je soucasti skupiny EON od 2021. Zakaznici casto nevedi ze Innogy = EON = silna evropska firma. Pouzij to pri budovani duvery.',c:'PROFIL: Soucast skupiny EON od 2021, puvodne RWE.\nPOZOR: Mezidodavatel na Innogy NE. Dodat vzdy prvni+druhou stranu smlouvy.\nPRO KOHO: Dlouholeti zakaznici RWE/Innogy.'},
+  {id:'cen',n:'Centropol',link:'https://www.centropol.cz/',tip:'Centropol nabizi velky vyber produktu a rychle online sjednani bez cekani. Silny argument pro zakazniky co oceni jednoduchost a rychlost.',c:'PROFIL: Stredne velky dodavatel, vykup FVE ~800 Kc/MWh.\nPOZOR: Centropol - VZDY dodat veskere VOP! Mezidodavatel NE. Export 10 prac. dni.\nPRO KOHO: Ti co hledaji jednoduche online sjednani nebo vykup FVE.'},
+  {id:'ppa',n:'PPAS',link:'https://www.ppas.cz/',tip:'PPAS nabizi jeden z nejvyssich vykupnich cen FVE (950 Kc/MWh se smlouvou). Pro zakazniky s FVE casto nejlepsi kombinace na trhu.',c:'PROFIL: Prazska plynarenska, historicky dodavatel plynu.\nFVE VYKUP: Se smlouvou 950 Kc/MWh! Bez smlouvy 450 Kc/MWh.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! Mezidodavatel NE. Export 17 prac. dni.'},
+  {id:'yel',n:'Yello',link:'https://www.yello.cz/cs/domacnost/',tip:'Yello je znacka skupiny PRE - pro online-first zakazniky. Prodavej jako moderniho dodavatele bez komplikaci - jednoduche, online, transparentni.',c:'PROFIL: Znacka skupiny PRE, online sjednani.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! EIC 27ZG100 a distribuce PPD nelze. Export 17 prac. dni.\nPRO KOHO: Mladsi zakaznici, mimo Prahu.'},
+  {id:'epe',n:'EPET',link:'https://epet.cz/',tip:'EPET je jediny dodavatel kde VZDY vypovida zakaznik sam. Upozorni zakaznika predem - ale ti co zvladnou si ceni transparentni ceny.',c:'PROFIL: Mensi nezavisly dodavatel, konkurencni ceny.\nPOZOR: EPET - VZDY zakaznik sam vypovida! Informuj predem a pozadej akceptaci.\nPRO KOHO: Zakaznici schopni zarizit vypoved sami.'}
 ];
 
 var curPhase = 0;
-var curKbId = null;
-var curKbType = null;
-var clients = JSON.parse(localStorage.getItem('sc') || '[]');
-var activeId = localStorage.getItem('sca') || null;
-var phrases = JSON.parse(localStorage.getItem('sph') || '[]');
+var drawerTab = 0;
+var kbOpenId = null;
+var kbOpenType = null;
+var clients = JSON.parse(localStorage.getItem('sc2') || '[]');
+var activeId = localStorage.getItem('sc2a') || null;
+var phrases = JSON.parse(localStorage.getItem('sc2p') || '[]');
 
-function gw() { return localStorage.getItem('swu') || WU; }
+function gw() { return localStorage.getItem('sc2w') || WU; }
+function sc() { localStorage.setItem('sc2', JSON.stringify(clients)); localStorage.setItem('sc2a', activeId || ''); }
 
 function init() {
-  document.getElementById('startBtn').onclick = function() {
-    var v = document.getElementById('apiInp').value.trim() || WU;
-    localStorage.setItem('swu', v);
-    showApp();
+  document.getElementById('setupBtn').onclick = function() {
+    var v = document.getElementById('setupInp').value.trim() || WU;
+    localStorage.setItem('sc2w', v); start();
   };
-  document.getElementById('apiInp').onkeydown = function(e) { if (e.key === 'Enter') document.getElementById('startBtn').click(); };
-  document.getElementById('changeBtn').onclick = function() {
-    document.getElementById('apiScreen').style.display = 'flex';
-    document.getElementById('appRoot').style.display = 'none';
+  document.getElementById('setupInp').onkeydown = function(e) { if (e.key === 'Enter') document.getElementById('setupBtn').click(); };
+  document.getElementById('changeUrlBtn').onclick = function() {
+    document.getElementById('setup').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
   };
-  document.getElementById('newBtn').onclick = openModal;
+  document.getElementById('newClientBtn').onclick = openModal;
   document.getElementById('modalNo').onclick = closeModal;
   document.getElementById('modalYes').onclick = confirmModal;
-  document.getElementById('modalOv').onclick = function(e) { if (e.target === this) closeModal(); };
-  document.getElementById('clientInp').onkeydown = function(e) { if (e.key === 'Enter') confirmModal(); };
-  document.getElementById('tab0').onclick = function() { switchTab(0); };
-  document.getElementById('tab1').onclick = function() { switchTab(1); };
-  document.getElementById('tab2').onclick = function() { switchTab(2); };
-  document.getElementById('tab3').onclick = function() { switchTab(3); };
-  document.getElementById('kbBackBtn').onclick = closeKb;
-  document.getElementById('kbAskBtn').onclick = askKb;
-  document.getElementById('sendBtn').onclick = sendMsg;
-  document.getElementById('ibox').onkeydown = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } };
-  document.getElementById('ibox').oninput = function() { resize(this); };
+  document.getElementById('modalBg').onclick = function(e) { if (e.target === this) closeModal(); };
+  document.getElementById('modalInp').onkeydown = function(e) { if (e.key === 'Enter') confirmModal(); };
   document.getElementById('stSel').onchange = function() { saveStatus(this.value); };
   document.getElementById('notesBtn').onclick = toggleNotes;
-  document.getElementById('notesSaveBtn').onclick = saveNotes;
+  document.getElementById('notesSave').onclick = saveNotes;
   document.getElementById('summaryBtn').onclick = doSummary;
-  document.getElementById('phraseAddBtn').onclick = addPhrase;
-  document.getElementById('phraseInp').onkeydown = function(e) { if (e.key === 'Enter') addPhrase(); };
+  document.getElementById('drawerBtn').onclick = function() { openDrawer(drawerTab); };
+  document.getElementById('drawerClose').onclick = closeDrawer;
+  document.getElementById('overlay').onclick = closeDrawer;
+  document.getElementById('dtab0').onclick = function() { openDrawer(0); };
+  document.getElementById('dtab1').onclick = function() { openDrawer(1); };
+  document.getElementById('dtab2').onclick = function() { openDrawer(2); };
+  document.getElementById('sendBtn').onclick = sendMsg;
+  document.getElementById('ibox').onkeydown = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } };
+  document.getElementById('ibox').oninput = function() { rsz(this); };
 
   document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('copy-btn')) {
-      var t = e.target.getAttribute('data-copy');
+    if (e.target.classList.contains('cpbtn')) {
+      var t = e.target.getAttribute('data-c');
       navigator.clipboard.writeText(t).then(function() {
-        e.target.textContent = 'Kopirovano';
-        e.target.classList.add('ok');
+        e.target.textContent = 'Kopirovano'; e.target.classList.add('ok');
         setTimeout(function() { e.target.textContent = 'Kopirovat'; e.target.classList.remove('ok'); }, 2000);
       });
     }
-    if (e.target.classList.contains('phrase-use')) fillInput(e.target.getAttribute('data-p'));
-    if (e.target.classList.contains('phrase-del')) {
-      var i = parseInt(e.target.getAttribute('data-i'));
-      phrases.splice(i, 1);
-      localStorage.setItem('sph', JSON.stringify(phrases));
-      renderPhrases();
+    if (e.target.classList.contains('p-use')) fillInput(e.target.getAttribute('data-p'));
+    if (e.target.classList.contains('p-del')) {
+      phrases.splice(parseInt(e.target.getAttribute('data-i')), 1);
+      localStorage.setItem('sc2p', JSON.stringify(phrases));
+      renderDrawer();
     }
   });
 
-  if (localStorage.getItem('swu')) {
-    showApp();
-  } else {
-    localStorage.setItem('swu', WU);
-    showApp();
-  }
+  if (localStorage.getItem('sc2w')) start();
+  else { localStorage.setItem('sc2w', WU); start(); }
 }
 
-function showApp() {
-  document.getElementById('apiScreen').style.display = 'none';
-  document.getElementById('appRoot').style.display = 'flex';
-  renderPhases();
-  renderClients();
-  renderKb();
-  renderDodav();
-  renderPhrases();
-  renderChips();
+function start() {
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  renderPhases(); renderClients(); renderChips();
   setPhase(0);
   if (activeId && clients.find(function(c) { return c.id === activeId; })) selectClient(activeId);
 }
 
 function renderPhases() {
-  var bar = document.getElementById('phaseBar');
-  bar.innerHTML = PHASES.map(function(p, i) {
-    return '<button class="pstep' + (i === 0 ? ' on' : '') + '" data-i="' + i + '">' + p.n + '</button>';
+  var el = document.getElementById('phases');
+  el.style.display = 'flex'; el.style.gap = '4px';
+  el.innerHTML = PHASES.map(function(p, i) {
+    return '<button class="ph' + (i === 0 ? ' on' : '') + '" data-i="' + i + '">' + p.n + '</button>';
   }).join('');
-  bar.querySelectorAll('.pstep').forEach(function(b) {
+  el.querySelectorAll('.ph').forEach(function(b) {
     b.onclick = function() { setPhase(parseInt(this.getAttribute('data-i'))); };
   });
 }
 
 function setPhase(i) {
   curPhase = i;
-  document.querySelectorAll('.pstep').forEach(function(b, j) { b.classList.toggle('on', j === i); });
-  document.getElementById('scriptPanel').classList.add('vis');
+  document.querySelectorAll('.ph').forEach(function(b, j) { b.classList.toggle('on', j === i); });
+  document.getElementById('scriptHint').classList.add('vis');
   document.getElementById('scriptTxt').innerHTML = PHASES[i].s;
   renderChips();
 }
 
 function renderChips() {
-  var bar = document.getElementById('chipsBar');
+  var bar = document.getElementById('chips');
   bar.innerHTML = PHASES[curPhase].c.map(function(c) {
     return '<span class="chip" data-t="' + c.replace(/"/g, '&quot;') + '">' + c + '</span>';
   }).join('');
@@ -424,109 +478,112 @@ function renderChips() {
   });
 }
 
-function switchTab(n) {
-  [0,1,2,3].forEach(function(i) {
-    document.getElementById('tab' + i).classList.toggle('on', i === n);
-    document.getElementById('p' + i).classList.toggle('on', i === n);
-  });
+function openDrawer(tab) {
+  drawerTab = tab;
+  [0,1,2].forEach(function(i) { document.getElementById('dtab' + i).classList.toggle('on', i === tab); });
+  kbOpenId = null; kbOpenType = null;
+  renderDrawer();
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('vis');
 }
 
-function renderKb() {
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('vis');
+}
+
+function renderDrawer() {
+  var el = document.getElementById('drawerContent');
+  if (kbOpenId) { renderKbDetail(el); return; }
+  if (drawerTab === 0) renderKbList(el);
+  else if (drawerTab === 1) renderDodList(el);
+  else renderPhrases(el);
+}
+
+function renderKbList(el) {
   var cats = [];
   KB.forEach(function(k) { if (cats.indexOf(k.cat) < 0) cats.push(k.cat); });
-  document.getElementById('kbList').innerHTML = cats.map(function(cat) {
-    return '<div class="kb-sec"><div class="kb-sec-t">' + cat + '</div>' +
+  el.innerHTML = cats.map(function(cat) {
+    return '<div class="kb-cat">' + cat + '</div>' +
       KB.filter(function(k) { return k.cat === cat; }).map(function(k) {
-        return '<div class="kb-item" data-id="' + k.id + '" data-tp="kb">' + k.t + '</div>';
-      }).join('') + '</div>';
+        return '<div class="kb-row" data-id="' + k.id + '" data-tp="kb">' + k.t + '</div>';
+      }).join('');
   }).join('');
-  document.getElementById('kbList').querySelectorAll('.kb-item').forEach(function(el) {
-    el.onclick = function() { openKb(this.getAttribute('data-id'), 'kb'); };
+  el.querySelectorAll('.kb-row').forEach(function(r) {
+    r.onclick = function() { kbOpenId = this.getAttribute('data-id'); kbOpenType = 'kb'; renderDrawer(); };
   });
 }
 
-function renderDodav() {
-  document.getElementById('dodList').innerHTML = '<div class="kb-sec"><div class="kb-sec-t">Dodavatele</div>' +
+function renderDodList(el) {
+  el.innerHTML = '<div class="kb-cat">Dodavatele</div>' +
     DODAV.map(function(d) {
-      return '<div class="kb-item" data-id="' + d.id + '" data-tp="dod">' + d.n + '</div>';
-    }).join('') + '</div>';
-  document.getElementById('dodList').querySelectorAll('.kb-item').forEach(function(el) {
-    el.onclick = function() { openKb(this.getAttribute('data-id'), 'dod'); };
+      return '<div class="kb-row" data-id="' + d.id + '">' + d.n + '</div>';
+    }).join('');
+  el.querySelectorAll('.kb-row').forEach(function(r) {
+    r.onclick = function() { kbOpenId = this.getAttribute('data-id'); kbOpenType = 'dod'; renderDrawer(); };
   });
 }
 
-function openKb(id, tp) {
-  var item = tp === 'dod' ? DODAV.find(function(d) { return d.id === id; }) : KB.find(function(k) { return k.id === id; });
+function renderKbDetail(el) {
+  var item = kbOpenType === 'dod' ? DODAV.find(function(d) { return d.id === kbOpenId; }) : KB.find(function(k) { return k.id === kbOpenId; });
   if (!item) return;
-  curKbId = id; curKbType = tp;
-  document.getElementById('kbTitle').textContent = item.n || item.t;
-  document.getElementById('kbContent').textContent = item.content;
-  var lk = document.getElementById('kbLink');
-  if (item.link) { lk.href = item.link; lk.textContent = 'Cenik'; } else { lk.textContent = ''; }
-  var tipEl = document.getElementById('kbTip');
-  if (item.tip) { document.getElementById('kbTipTxt').textContent = item.tip; tipEl.style.display = 'block'; } else { tipEl.style.display = 'none'; }
-  document.getElementById('kbDetail').classList.add('vis');
-  document.getElementById('chatScroll').style.display = 'none';
+  var title = item.n || item.t;
+  var link = item.link ? '<a class="kb-detail-link" href="' + item.link + '" target="_blank">Cenik &rarr;</a>' : '';
+  var tip = item.tip ? '<div class="kb-detail-tip"><strong>PRODEJNI TIP</strong>' + esc(item.tip) + '</div>' : '';
+  var askBtn = '<button class="kb-ask-btn" id="kbAskInner">Zeptat se AI na toto</button>';
+  el.innerHTML = '<div class="kb-detail-view vis">' +
+    '<button class="kb-back" id="kbBackBtn">&#8592; Zpet</button>' +
+    '<div style="display:flex;align-items:center;gap:10px;"><div class="kb-detail-title">' + esc(title) + '</div>' + link + '</div>' +
+    '<div class="kb-detail-content">' + esc(item.c) + '</div>' +
+    tip + askBtn + '</div>';
+  document.getElementById('kbBackBtn').onclick = function() { kbOpenId = null; kbOpenType = null; renderDrawer(); };
+  document.getElementById('kbAskInner').onclick = function() {
+    closeDrawer(); fillInput('Vysvetli a porad mi jak prodat: ' + title);
+  };
 }
 
-function closeKb() {
-  curKbId = null; curKbType = null;
-  document.getElementById('kbDetail').classList.remove('vis');
-  document.getElementById('chatScroll').style.display = 'flex';
+function renderPhrases(el) {
+  if (!phrases.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--tx3);padding:8px;">Zadne fraze. Pridej prvni!</div>' + addPhraseHtml();
+  } else {
+    el.innerHTML = phrases.map(function(p, i) {
+      return '<div class="phrase-item"><span>' + esc(p) + '</span>' +
+        '<button class="p-use" data-p="' + p.replace(/"/g,'&quot;') + '">Pouzit</button>' +
+        '<button class="p-del" data-i="' + i + '">x</button></div>';
+    }).join('') + addPhraseHtml();
+  }
+  document.getElementById('phraseAddBtn').onclick = addPhrase;
+  document.getElementById('phraseInp').onkeydown = function(e) { if (e.key === 'Enter') addPhrase(); };
 }
 
-function askKb() {
-  var item = curKbType === 'dod' ? DODAV.find(function(d) { return d.id === curKbId; }) : KB.find(function(k) { return k.id === curKbId; });
-  if (!item) return;
-  closeKb(); switchTab(0);
-  fillInput('Vysvetli: ' + (item.n || item.t));
-}
-
-function renderPhrases() {
-  var el = document.getElementById('phrasesList');
-  if (!phrases.length) { el.innerHTML = '<div style="font-size:12px;color:var(--tx3);">Zadne fraze. Pridej prvni!</div>'; return; }
-  el.innerHTML = phrases.map(function(p, i) {
-    return '<div class="phrase-item"><span>' + esc(p) + '</span>' +
-      '<button class="phrase-use" data-p="' + p.replace(/"/g,'&quot;') + '">Pouzit</button>' +
-      '<button class="phrase-del" data-i="' + i + '">x</button></div>';
-  }).join('');
+function addPhraseHtml() {
+  return '<div class="add-phrase"><input type="text" id="phraseInp" placeholder="Pridat frazi..." /><button id="phraseAddBtn">+ Pridat</button></div>';
 }
 
 function addPhrase() {
   var inp = document.getElementById('phraseInp');
-  var v = inp.value.trim();
-  if (!v) return;
-  phrases.push(v);
-  localStorage.setItem('sph', JSON.stringify(phrases));
-  inp.value = '';
-  renderPhrases();
+  var v = inp.value.trim(); if (!v) return;
+  phrases.push(v); localStorage.setItem('sc2p', JSON.stringify(phrases));
+  inp.value = ''; renderDrawer();
 }
 
-function sc() {
-  localStorage.setItem('sc', JSON.stringify(clients));
-  localStorage.setItem('sca', activeId || '');
-}
-
-function getInits(name) {
-  return name.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toUpperCase().slice(0,2) || '?';
-}
-
-function statusClass(s) { return {z:'sl-z',r:'sl-r',u:'sl-u',n:'sl-n'}[s] || ''; }
-function statusLabel(s) { return {z:'Zajem',r:'Rozmysli',u:'Uzavreno',n:'Nezajem'}[s] || ''; }
+function getInits(n) { return n.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toUpperCase().slice(0,2) || '?'; }
+function stCls(s) { return {z:'s-z',r:'s-r',u:'s-u',n:'s-n'}[s] || ''; }
+function stLbl(s) { return {z:'Zajem',r:'Rozmysli',u:'Uzavreno',n:'Nezajem'}[s] || ''; }
 
 function renderClients() {
   var el = document.getElementById('clientsList');
-  if (!clients.length) { el.innerHTML = '<div style="font-size:12px;color:var(--tx3);padding:8px 12px;">Zadni klienti</div>'; return; }
+  if (!clients.length) { el.innerHTML = '<div style="font-size:12px;color:var(--tx3);padding:8px 6px;">Zadni klienti</div>'; return; }
   el.innerHTML = clients.map(function(c) {
-    var sl = statusLabel(c.status);
+    var sl = stLbl(c.status);
     return '<div class="ci' + (c.id === activeId ? ' on' : '') + '" data-id="' + c.id + '">' +
       '<div class="ci-av">' + getInits(c.name) + '</div>' +
-      '<div style="flex:1;min-width:0;">' +
+      '<div class="ci-info">' +
         '<div class="ci-name">' + esc(c.name) + '</div>' +
-        (sl ? '<span class="sb-lbl ' + statusClass(c.status) + '">' + sl + '</span>' : '') +
+        (sl ? '<div class="ci-status ' + stCls(c.status) + '">' + sl + '</div>' : '') +
       '</div>' +
       '<button class="ci-del" data-del="' + c.id + '">x</button>' +
-      '</div>';
+    '</div>';
   }).join('');
   el.querySelectorAll('.ci').forEach(function(el) {
     el.onclick = function(e) {
@@ -543,13 +600,12 @@ function selectClient(id) {
   activeId = id; sc(); renderClients();
   var c = clients.find(function(x) { return x.id === id; });
   if (!c) return;
-  document.getElementById('topName').textContent = c.name;
+  document.getElementById('tbName').textContent = c.name;
   var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
-  document.getElementById('topSub').textContent = n ? (n + ' zprav') : 'Zadej namitku';
+  document.getElementById('tbSub').textContent = n ? (n + ' zprav i ' + stLbl(c.status)) : 'Zadej prvni namitku';
   document.getElementById('stSel').value = c.status || '';
   document.getElementById('notesInp').value = c.notes || '';
-  closeKb();
-  document.getElementById('notesPanel').classList.remove('vis');
+  document.getElementById('notesBar').classList.remove('vis');
   document.getElementById('notesBtn').classList.remove('on');
   renderChat();
 }
@@ -558,23 +614,22 @@ function saveStatus(v) {
   var c = clients.find(function(x) { return x.id === activeId; });
   if (!c) return;
   c.status = v; sc(); renderClients();
+  document.getElementById('tbSub').textContent = c.history.filter(function(h) { return h.role === 'user'; }).length + ' zprav i ' + stLbl(v);
 }
 
 function toggleNotes() {
-  var p = document.getElementById('notesPanel');
-  var b = document.getElementById('notesBtn');
-  var vis = p.classList.contains('vis');
-  p.classList.toggle('vis', !vis);
-  b.classList.toggle('on', !vis);
-  if (!vis) document.getElementById('notesInp').focus();
+  var bar = document.getElementById('notesBar');
+  var btn = document.getElementById('notesBtn');
+  var v = bar.classList.contains('vis');
+  bar.classList.toggle('vis', !v); btn.classList.toggle('on', !v);
+  if (!v) document.getElementById('notesInp').focus();
 }
 
 function saveNotes() {
   var c = clients.find(function(x) { return x.id === activeId; });
   if (!c) return;
-  c.notes = document.getElementById('notesInp').value;
-  sc();
-  document.getElementById('notesPanel').classList.remove('vis');
+  c.notes = document.getElementById('notesInp').value; sc();
+  document.getElementById('notesBar').classList.remove('vis');
   document.getElementById('notesBtn').classList.remove('on');
 }
 
@@ -584,89 +639,84 @@ function delClient(id) {
   if (activeId === id) activeId = clients.length ? clients[0].id : null;
   sc(); renderClients();
   if (activeId) selectClient(activeId);
-  else { document.getElementById('topName').textContent = 'Vyberte klienta'; renderChat(); }
+  else { document.getElementById('tbName').textContent = 'Vyberte klienta'; renderChat(); }
 }
 
 function openModal() {
-  document.getElementById('modalOv').classList.add('on');
-  document.getElementById('clientInp').value = '';
-  setTimeout(function() { document.getElementById('clientInp').focus(); }, 50);
+  document.getElementById('modalBg').classList.add('on');
+  document.getElementById('modalInp').value = '';
+  setTimeout(function() { document.getElementById('modalInp').focus(); }, 50);
 }
-function closeModal() { document.getElementById('modalOv').classList.remove('on'); }
+function closeModal() { document.getElementById('modalBg').classList.remove('on'); }
 function confirmModal() {
-  var name = document.getElementById('clientInp').value.trim();
+  var name = document.getElementById('modalInp').value.trim();
   if (!name) return;
   var id = 'c' + Date.now();
-  clients.push({id:id, name:name, history:[], status:'', notes:''});
+  clients.push({id:id,name:name,history:[],status:'',notes:''});
   sc(); closeModal(); renderClients(); selectClient(id);
 }
 
 function renderChat() {
   var c = clients.find(function(x) { return x.id === activeId; });
-  var area = document.getElementById('chatScroll');
+  var area = document.getElementById('chat');
   area.style.display = 'flex';
   if (!c || !c.history.length) {
-    area.innerHTML = '<div class="empty-state"><div class="empty-icon">&#9889;</div><div class="empty-title">Chat je prazdny</div><div class="empty-sub">Zadej namitku nebo dotaz.</div></div>';
+    area.innerHTML = '<div class="empty"><div class="empty-ico">&#9889;</div><div class="empty-t">Chat je prazdny</div><div class="empty-s">Zadej namitku klienta nebo dotaz pouzij zkratky nize.</div></div>';
     return;
   }
   area.innerHTML = c.history.map(function(m) {
-    if (m.role === 'user') return '<div class="msg-user"><div><div class="msg-lbl">NAMITKA / DOTAZ</div><div class="msg-bubble">' + esc(m.content) + '</div></div></div>';
+    if (m.role === 'user') return '<div class="msg-u"><div><div class="msg-lbl">NAMITKA / DOTAZ</div><div class="msg-bbl">' + esc(m.content) + '</div></div></div>';
     return renderAI(m.content);
   }).join('');
   area.scrollTop = area.scrollHeight;
 }
 
 function renderAI(d) {
-  if (d.type === 'loading') return '<div class="loading-msg"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>';
-  if (d.type === 'error') return '<div class="ai-wrap"><div class="ai-analysis" style="border-left-color:var(--rd)"><strong>CHYBA</strong>' + esc(d.text) + '</div></div>';
-  if (d.type === 'summary') return '<div class="summary-msg"><strong>SHRNUTI HOVORU</strong>' + esc(d.text) + '</div>';
+  if (d.type === 'loading') return '<div class="loading"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  if (d.type === 'error') return '<div class="err-card">' + esc(d.text) + '</div>';
+  if (d.type === 'summary') return '<div class="summary"><strong>SHRNUTI HOVORU</strong>' + esc(d.text) + '</div>';
   if (d.type === 'info') {
-    var tip = d.customer_tip ? '<div class="rcard-tip">Zakaznikovi: ' + esc(d.customer_tip) + '</div>' : '';
-    return '<div class="ai-wrap"><div class="rcard"><div class="rcard-head"><span class="stag tag-i">ODPOVED</span>' + cb(d.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(d.text) + '</div>' + tip + '</div></div></div>';
+    var ctip = d.customer_tip ? '<div class="info-ctip"><strong>JAK TO RICT ZAKAZNIKOVI</strong>' + esc(d.customer_tip) + '</div>' : '';
+    return '<div class="ai-wrap"><div class="info-card"><div class="info-top"><span class="badge badge-i">ODPOVED</span>' + cpbtn(d.text) + '</div><div class="info-body"><div class="info-txt">' + esc(d.text) + '</div>' + ctip + '</div></div></div>';
   }
-  var tm = {'POCHOPENI + ROZKLICOVANI':'tag-e','RESENI + MINI CLOSE':'tag-c'};
-  var an = d.analysis ? '<div class="ai-analysis"><strong>SITUACE</strong>' + esc(d.analysis) + '</div>' : '';
+  var bm = {'POCHOPENI + ROZKLICOVANI':'badge-p','RESENI + MINI CLOSE':'badge-r'};
+  var an = d.analysis ? '<div class="situation"><span class="situation-lbl">SITUACE</span>' + esc(d.analysis) + '</div>' : '';
   var cards = (d.responses || []).map(function(r) {
-    return '<div class="rcard"><div class="rcard-head"><span class="stag ' + (tm[r.style] || 'tag-i') + '">' + esc(r.style) + '</span>' + cb(r.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
+    return '<div class="rcard"><div class="rcard-top"><span class="badge ' + (bm[r.style] || 'badge-i') + '">' + esc(r.style) + '</span>' + cpbtn(r.text) + '</div><div class="rcard-body"><div class="rcard-txt">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
   }).join('');
   return '<div class="ai-wrap">' + an + cards + '</div>';
 }
 
-function cb(text) {
-  return '<button class="copy-btn" data-copy="' + text.replace(/"/g,'&quot;') + '">Kopirovat</button>';
-}
-
-function fillInput(t) { var b = document.getElementById('ibox'); b.value = t; b.focus(); resize(b); }
-function resize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
+function cpbtn(t) { return '<button class="cpbtn" data-c="' + t.replace(/"/g,'&quot;') + '">Kopirovat</button>'; }
+function fillInput(t) { var b = document.getElementById('ibox'); b.value = t; b.focus(); rsz(b); }
+function rsz(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
 
 function buildPrompt(pi, hist) {
   var ph = PHASES[pi];
   var h = hist.slice(-3).filter(function(x) { return x.role === 'user'; }).map(function(x) { return x.content; }).join(', ');
-  var km = {0:['tipy'],1:['tipy'],2:['tipy'],3:['dokumenty','tipy'],4:['dokumenty','tipy'],5:['tipy','mezidod','aukce']};
-  var ri = km[pi] || ['tipy'];
-  var kb = KB.filter(function(k) { return ri.indexOf(k.id) >= 0; }).map(function(k) { return k.t + ': ' + k.content.slice(0,150); }).join(' | ');
-  var dv = DODAV.map(function(d) { return d.n + ': ' + d.content.slice(0,100); }).join(' | ');
-
+  var km = {0:['tip'],1:['tip'],2:['tip'],3:['dok','tip'],4:['dok','tip'],5:['tip','mez','auk']};
+  var ri = km[pi] || ['tip'];
+  var kb = KB.filter(function(k) { return ri.indexOf(k.id) >= 0; }).map(function(k) { return k.t + ': ' + k.c.slice(0,150); }).join(' | ');
+  var dv = DODAV.map(function(d) { return d.n + ': ' + d.c.slice(0,100); }).join(' | ');
   var L = [
-    'Jsi senior obchodnik s 15 lety zkusenosti v energetice v CR. Prodavas po telefonu pro Usetreno.cz.',
+    'Jsi senior obchodnik s 15 lety zkusenosti v energetice CR. Prodavas po telefonu pro Usetreno.cz.',
     'Styl: stucny, sebevdomy, prirozeny, zamereny na reseni problemu zakaznika - ne na vlastnosti produktu.',
-    'Mluvis jako zkuseny clovek ktery vi co dela - ne jako robot.',
-    'Faze: ' + ph.n + '. ' + ph.ctx,
+    'Mluvis jako zkuseny clovek ktery vi co dela - ne jako robot ani jako encyklopedie.',
+    'Faze hovoru: ' + ph.n + '. ' + ph.ctx,
     'Predchozi namitky: ' + (h || 'zadne'),
-    '',
     'Znalosti: ' + kb,
     'Dodavatele: ' + dv,
     '',
     'PRODEJNI FILOZOFIE:',
     'Nejedeme nabizet - vedeme klienta k rozhodnuti. Klient ma pocit ze se sam rozhoduje.',
-    'Nikdy email jako prvni moznost. Aktivne vedeme hovor, neodkladame.',
-    'Vzdy mluvime o konkretni uspore v Kc - ne v procentech.',
+    'Nikdy email jako prvni moznost. Aktivne vedeme hovor.',
+    'Vzdy konkretni uspora v Kc - ne procenta.',
     '',
-    'FRAMEWORK NA KAZDU NAMITKU - vzdy v tomto poradi:',
+    'FRAMEWORK NA NAMITKU:',
     '1. POCHOPENI: sundat obranu. Klient musi citit ze ho chapeme.',
     '   Priklad: Rozumim vam perfektne, tohle mi rika hodne lidi co si prosli Bohemia Energy.',
-    '2. ROZKLICOVANI: ukaz ze vis o cem mluvis, stav se expertem, vem kontrolu.',
-    '   Priklad: Tam byl problem ze to byly mensi spolecnosti bez zajistench nakupu - kdyz sly ceny nahoru, nestaly to.',
+    '2. ROZKLICOVANI: ukaz ze vis o cem mluvis, stav se expertem.',
+    '   Priklad: Tam byl problem ze to byly mensi spolecnosti bez zajistench nakupu energii - kdyz sly ceny nahoru, nestaly to.',
     '3. RESENI: napoj na nabidku pres SYSTEM VYBERU - ne pres konkretni znacku.',
     '   Priklad: Prave proto my vybirame jen velke stabilni spolecnosti s historii a zajistenymi nakupy dopredu.',
     '4. MINI CLOSE: vrat klienta do flow otazkou na souhlas.',
@@ -674,13 +724,13 @@ function buildPrompt(pi, hist) {
     '',
     'UZAVRENI:',
     'Tuzka a papir: Vezmete si tuzku a papir, at to mate prehledne.',
-    'Cena: Napiste si: nova cena za MWh je [X] a rocni uspora [X] korun.',
-    'Close: Nemusite nikam chodit - novy dodavatel za vas zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Ted to spolu nastavime.',
+    'Cena: Napiste si novou cenu a rocni usporu v Kc.',
+    'Close: Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Ted to nastavime.',
     '',
     'FORMAT pro NAMITKU KLIENTA:',
-    '{"type":"objection","analysis":"1 veta co klient skutecne mysli","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 prirozene vety cesky","next":""},{"style":"RESENI + MINI CLOSE","text":"2 prirozene vety cesky","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
+    '{"type":"objection","analysis":"1 veta co klient skutecne mysli","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 prirozene vety cesky - pochopeni a rozklicovani","next":""},{"style":"RESENI + MINI CLOSE","text":"2 prirozene vety cesky - reseni pres system vyberu a mini close","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
     '',
-    'FORMAT pro DOTAZ OBCHODNIKA:',
+    'FORMAT pro DOTAZ OBCHODNIKA (pojmy, procesy, dodavatele, jak prodat):',
     '{"type":"info","text":"prakticka odpoved jako od zkuseneho kolegy","customer_tip":"presna veta jak to rict zakaznikovi primo v hovoru"}',
     '',
     'KRITICKY: Odpovez POUZE cisty JSON. Zadny text pred { ani po }. Zadne backticks. Zadne markdown.'
@@ -697,20 +747,16 @@ async function doSummary() {
   renderChat();
   var ht = c.history.filter(function(h) { return h.role === 'user'; }).map(function(h) { return h.content; }).join(', ');
   try {
-    var r = await fetch(gw(), {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,
-        system:'Shrnuj hovory obchodniku stucne v cestine. JSON: {"type":"summary","text":"shrnuti max 4 vety - co klient rikal, stav, doporuceny dalsi krok"}. Bez markdown.',
-        messages:[{role:'user',content:'Shrnuti hovoru. Namitky: ' + ht}]})
-    });
+    var r = await fetch(gw(), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-5',max_tokens:300,
+      system:'Jsi asistent. Shrnuj hovory stucne v cestine. Odpovez POUZE JSON: {"type":"summary","text":"shrnuti max 4 vety - co klient rikal, aktualni stav, doporuceny dalsi krok"}. Zadne backticks.',
+      messages:[{role:'user',content:'Shrnuti hovoru. Namitky: ' + ht}]
+    })});
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
-    var parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { parsed = {type:'summary',text:raw}; }
-    c.history[c.history.length-1] = {role:'ai', content:parsed};
-  } catch(e) {
-    c.history[c.history.length-1] = {role:'ai', content:{type:'error',text:'Chyba: ' + e.message}};
-  }
+    var parsed; try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'summary',text:raw}; }
+    c.history[c.history.length-1] = {role:'ai',content:parsed};
+  } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
   sc(); renderChat();
 }
@@ -720,35 +766,30 @@ async function sendMsg() {
   var box = document.getElementById('ibox');
   var text = box.value.trim(); if (!text) return;
   var c = clients.find(function(x) { return x.id === activeId; });
-  box.value = ''; resize(box);
+  box.value = ''; rsz(box);
   document.getElementById('sendBtn').disabled = true;
-  c.history.push({role:'user', content:text});
-  c.history.push({role:'ai', content:{type:'loading'}});
+  c.history.push({role:'user',content:text});
+  c.history.push({role:'ai',content:{type:'loading'}});
   sc(); renderChat();
   try {
-    var r = await fetch(gw(), {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:500,
-        system: buildPrompt(curPhase, c.history.slice(0,-2)),
-        messages:[{role:'user',content:text}]})
-    });
-    if (!r.ok) { var e2 = await r.json(); throw new Error(e2.error ? e2.error.message : 'HTTP ' + r.status); }
+    var r = await fetch(gw(), {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-5',max_tokens:500,
+      system:buildPrompt(curPhase, c.history.slice(0,-2)),
+      messages:[{role:'user',content:text}]
+    })});
+    if (!r.ok) { var e2=await r.json(); throw new Error(e2.error?e2.error.message:'HTTP '+r.status); }
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
-    var parsed;
-    try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'info',text:raw}; }
-    c.history[c.history.length-1] = {role:'ai', content:parsed};
-  } catch(e) {
-    c.history[c.history.length-1] = {role:'ai', content:{type:'error',text:'Chyba: ' + e.message}};
-  }
+    var parsed; try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'info',text:raw}; }
+    c.history[c.history.length-1] = {role:'ai',content:parsed};
+  } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
-  document.getElementById('topSub').textContent = c.history.filter(function(h) { return h.role === 'user'; }).length + ' zprav';
+  var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
+  document.getElementById('tbSub').textContent = n + ' zprav' + (c.status ? ' i ' + stLbl(c.status) : '');
   sc(); renderChat();
 }
 
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 init();
 </script>
