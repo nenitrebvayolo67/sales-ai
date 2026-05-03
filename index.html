@@ -676,7 +676,7 @@ function buildPrompt(pi, hist) {
     'FORMAT pro DOTAZ OBCHODNIKA:',
     '{"type":"info","text":"odpoved pro obchodnika prakticka","customer_tip":"presne jak to rict zakaznikovi v hovoru"}',
     '',
-    'Pouze cisty JSON bez markdown bez backticks.'
+    'DULEZITE: Odpovez POUZE cisty JSON. Zadny text pred ani po. Zadne ```json. Zadne vysvetleni. Jen { ... }.'
   ];
   return L.join('\n');
 }
@@ -729,7 +729,7 @@ async function sendMsg() {
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
     var parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { parsed = {type:'info',text:raw}; }
+    try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'info',text:raw}; }
     c.history[c.history.length-1] = {role:'ai', content:parsed};
   } catch(e) {
     c.history[c.history.length-1] = {role:'ai', content:{type:'error',text:'Chyba: ' + e.message}};
