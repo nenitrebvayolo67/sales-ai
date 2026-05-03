@@ -21,13 +21,13 @@ body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--te
 .api-btn:hover{opacity:.85;}
 .api-note{font-size:11px;color:var(--text3);margin-top:10px;line-height:1.5;}
 .app{display:flex;flex:1;overflow:hidden;}
-.sidebar{width:235px;min-width:235px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.sidebar{width:240px;min-width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;}
 .sidebar-top{padding:14px 12px 10px;border-bottom:1px solid var(--border);}
 .brand{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.12em;display:flex;align-items:center;gap:6px;margin-bottom:10px;}
 .new-btn{width:100%;padding:7px 12px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;display:flex;align-items:center;gap:7px;}
 .new-btn:hover{background:rgba(124,106,247,.22);}
 .stabs{display:flex;border-bottom:1px solid var(--border);}
-.stab{flex:1;padding:7px 4px;font-size:11px;text-align:center;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.stab{flex:1;padding:7px 2px;font-size:10px;text-align:center;cursor:pointer;color:var(--text3);border:none;background:transparent;font-family:'Sora',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;}
 .stab.on{color:var(--accent);border-bottom-color:var(--accent);}
 .spanel{display:none;flex:1;overflow-y:auto;flex-direction:column;}
 .spanel.on{display:flex;}
@@ -41,39 +41,60 @@ body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--te
 .ci.on .ci-av{background:var(--accentd);color:var(--accent);border-color:var(--accentb);}
 .ci-name{font-size:12.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
 .ci.on .ci-name{color:var(--text);font-weight:500;}
-.ci-del{width:22px;height:22px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--text3);cursor:pointer;border-radius:4px;font-size:18px;line-height:1;flex-shrink:0;padding:0;}
+.ci-del{width:22px;height:22px;display:none;align-items:center;justify-content:center;background:transparent;border:none;color:var(--text3);cursor:pointer;border-radius:4px;font-size:16px;line-height:1;flex-shrink:0;padding:0;}
 .ci:hover .ci-del{display:flex;}
 .ci-del:hover{color:var(--red);background:var(--redd);}
+.status-badge{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:500;white-space:nowrap;}
+.s-zajem{background:rgba(62,207,142,0.15);color:var(--green);}
+.s-rozmysli{background:rgba(245,166,35,0.15);color:var(--amber);}
+.s-uzavreno{background:rgba(96,165,250,0.15);color:var(--blue);}
+.s-nezajem{background:rgba(240,96,96,0.15);color:var(--red);}
+.s-none{background:var(--bg3);color:var(--text3);}
 .kb-sec{padding:8px 8px 2px;}
 .kb-sec-title{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:4px 4px 6px;}
 .kb-item{padding:6px 10px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;font-size:12px;color:var(--text2);}
 .kb-item:hover{background:var(--bg3);color:var(--text);}
 .kb-item.on{background:var(--greend);color:var(--green);}
 .sidebar-bot{padding:10px;border-top:1px solid var(--border);}
-.side-btn{width:100%;padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;}
+.side-btn{width:100%;padding:6px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;margin-bottom:4px;}
 .side-btn:hover{border-color:var(--borderh);color:var(--text2);}
 .main{flex:1;display:flex;flex-direction:column;min-width:0;}
-.topbar{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--bg);flex-shrink:0;}
+.topbar{padding:10px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--bg);flex-shrink:0;}
 .top-info{flex:1;min-width:0;}
 .top-name{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .top-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px;}
-.phase-bar{display:flex;gap:4px;padding:10px 18px 8px;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+.top-actions{display:flex;gap:6px;flex-shrink:0;}
+.top-action-btn{padding:5px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
+.top-action-btn:hover{border-color:var(--borderh);color:var(--text2);}
+.top-action-btn.active{background:var(--accentd);border-color:var(--accentb);color:var(--accent);}
+.status-select{padding:5px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text2);font-family:'Sora',sans-serif;font-size:11px;cursor:pointer;outline:none;}
+.phase-bar{display:flex;gap:4px;padding:8px 18px;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
 .phase-bar::-webkit-scrollbar{height:0;}
-.pstep{padding:5px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;}
+.pstep{padding:4px 10px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;}
 .pstep:hover{border-color:var(--borderh);color:var(--text2);}
 .pstep.on{background:var(--accentd);border-color:var(--accentb);color:var(--accent);font-weight:500;}
-.script-panel{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 18px;flex-shrink:0;display:none;}
+.script-panel{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 18px;flex-shrink:0;display:none;}
 .script-panel.vis{display:block;}
-.script-label{font-size:10px;font-weight:500;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:6px;}
-.script-text{font-size:12.5px;color:var(--text2);line-height:1.65;}
+.script-label{font-size:10px;font-weight:500;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px;}
+.script-text{font-size:12px;color:var(--text2);line-height:1.6;}
 .script-text strong{color:var(--accent);font-weight:500;}
+.notes-panel{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 18px;flex-shrink:0;display:none;}
+.notes-panel.vis{display:flex;gap:8px;align-items:flex-start;}
+.notes-label{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;white-space:nowrap;}
+.notes-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:6px 10px;color:var(--text);font-family:'Sora',sans-serif;font-size:12px;resize:none;outline:none;min-height:36px;max-height:80px;}
+.notes-input:focus{border-color:var(--accentb);}
+.notes-save{padding:6px 12px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-size:11px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
 .kb-detail{flex:1;overflow-y:auto;padding:18px;display:none;flex-direction:column;gap:10px;}
 .kb-detail.vis{display:flex;}
 .kb-dhead{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
 .kb-back{padding:5px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;}
 .kb-back:hover{border-color:var(--borderh);color:var(--text2);}
 .kb-dtitle{font-size:15px;font-weight:600;}
+.kb-dlink{font-size:11px;color:var(--accent);text-decoration:none;margin-left:auto;}
+.kb-dlink:hover{text-decoration:underline;}
 .kb-dcontent{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;font-size:12.5px;line-height:1.75;color:var(--text2);white-space:pre-wrap;}
+.kb-tip{background:rgba(62,207,142,0.08);border:1px solid rgba(62,207,142,0.2);border-radius:var(--r);padding:10px 14px;font-size:12.5px;color:var(--green);line-height:1.6;}
+.kb-tip strong{display:block;margin-bottom:4px;font-size:10px;letter-spacing:.08em;font-family:'DM Mono',monospace;}
 .kb-ask{padding:8px 14px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-size:12px;font-family:'Sora',sans-serif;cursor:pointer;align-self:flex-start;}
 .chat-scroll{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
 .chat-scroll::-webkit-scrollbar{width:3px;}
@@ -108,7 +129,7 @@ body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--te
 .ld:nth-child(2){animation-delay:.2s;}.ld:nth-child(3){animation-delay:.4s;}
 @keyframes ld{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1.1)}}
 .input-area{border-top:1px solid var(--border);padding:10px 18px 13px;background:var(--bg);flex-shrink:0;}
-.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;}
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
 .chip{padding:3px 10px;font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;color:var(--text3);cursor:pointer;font-family:'DM Mono',monospace;}
 .chip:hover{background:var(--bg2);border-color:var(--borderh);color:var(--text2);}
 .input-row{display:flex;gap:8px;align-items:flex-end;}
@@ -121,7 +142,7 @@ textarea#ibox::placeholder{color:var(--text3);}
 .send-btn:disabled{opacity:.35;cursor:not-allowed;}
 .modal-ov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;}
 .modal-ov.on{display:flex;}
-.mbox{background:var(--bg2);border:1px solid var(--borderh);border-radius:var(--rl);padding:22px 26px;width:320px;max-width:95vw;}
+.mbox{background:var(--bg2);border:1px solid var(--borderh);border-radius:var(--rl);padding:22px 26px;width:340px;max-width:95vw;}
 .mbox h3{font-size:15px;font-weight:600;margin-bottom:6px;}
 .mbox p{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;}
 .minput{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'Sora',sans-serif;font-size:13px;outline:none;margin-bottom:12px;}
@@ -130,29 +151,41 @@ textarea#ibox::placeholder{color:var(--text3);}
 .btn-no{padding:7px 14px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text3);font-family:'Sora',sans-serif;font-size:13px;cursor:pointer;}
 .btn-no:hover{border-color:var(--borderh);color:var(--text2);}
 .btn-yes{padding:7px 14px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.summary-msg{background:var(--bg2);border:1px solid rgba(62,207,142,.2);border-left:3px solid var(--green);border-radius:var(--r);padding:12px 14px;font-size:12.5px;color:var(--text2);line-height:1.7;max-width:92%;}
+.summary-msg strong{color:var(--green);font-size:10px;display:block;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.08em;}
+.phrases-list{display:flex;flex-direction:column;gap:4px;padding:8px 0;}
+.phrase-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:var(--r);background:var(--bg3);font-size:12.5px;color:var(--text2);}
+.phrase-item button{margin-left:auto;padding:2px 8px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:10px;cursor:pointer;font-family:'DM Mono',monospace;}
+.phrase-item button:hover{border-color:var(--accent);color:var(--accent);}
+.add-phrase{display:flex;gap:6px;margin-top:6px;}
+.add-phrase input{flex:1;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'Sora',sans-serif;font-size:12px;outline:none;}
+.add-phrase input:focus{border-color:var(--accentb);}
+.add-phrase button{padding:7px 12px;background:var(--accentd);border:1px solid var(--accentb);border-radius:var(--r);color:var(--accent);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;}
 </style>
 </head>
 <body>
 <div id="apiScreen">
   <div class="api-card">
     <div class="api-logo"><span class="bdot"></span>USETRENO SALES AI</div>
-    <h2>Nastaveni pripojeni</h2>
+    <h2>&#9889; Nastaveni</h2>
     <p>Vloz URL Cloudflare Workeru:</p>
     <input class="api-input" type="text" id="apiKeyInput" placeholder="https://dark-dream-de7c.nepouzitejucet.workers.dev" autocomplete="off" />
-    <button class="api-btn" id="startBtn">Spustit asistenta</button>
-    <div class="api-note">URL se ulozi jen v tomto prohlizeci.</div>
+    <button class="api-btn" id="startBtn">Spustit asistenta &#8594;</button>
+    <div class="api-note">URL se ulozi v prohlizeci. Kazdy kolega ji zada jednou.</div>
   </div>
 </div>
 
 <div class="app" id="appRoot" style="display:none;">
   <div class="sidebar">
     <div class="sidebar-top">
-      <div class="brand"><span class="bdot"></span>SALES AI</div>
+      <div class="brand"><span class="bdot"></span>&#9889; SALES AI</div>
       <button class="new-btn" id="newClientBtn"><span>+</span><span>Novy klient</span></button>
     </div>
     <div class="stabs">
-      <button class="stab on" id="tabClients">Klienti</button>
-      <button class="stab" id="tabKb">Znalosti</button>
+      <button class="stab on" id="tab0">&#128101; Klienti</button>
+      <button class="stab" id="tab1">&#128218; Znalosti</button>
+      <button class="stab" id="tab2">&#9889; Dodav.</button>
+      <button class="stab" id="tab3">&#128172; Fraze</button>
     </div>
     <div class="spanel on" id="panel-clients">
       <div class="sec-label">Aktivni klienti</div>
@@ -160,6 +193,19 @@ textarea#ibox::placeholder{color:var(--text3);}
     </div>
     <div class="spanel" id="panel-kb">
       <div id="kbList"></div>
+    </div>
+    <div class="spanel" id="panel-dodavatele">
+      <div id="dodavList"></div>
+    </div>
+    <div class="spanel" id="panel-fraze">
+      <div style="padding:10px 10px 4px;">
+        <div class="sec-label">Osvedcene fraze tymu</div>
+        <div class="phrases-list" id="phrasesList"></div>
+        <div class="add-phrase">
+          <input type="text" id="phraseInput" placeholder="Pridat frazi..." />
+          <button id="phraseAddBtn">+ Pridat</button>
+        </div>
+      </div>
     </div>
     <div class="sidebar-bot">
       <button class="side-btn" id="changeKeyBtn"><span>&#128273;</span><span>Zmenit URL</span></button>
@@ -169,39 +215,58 @@ textarea#ibox::placeholder{color:var(--text3);}
   <div class="main">
     <div class="topbar">
       <div class="top-info">
-        <div class="top-name" id="topName">Vyberte klienta</div>
+        <div class="top-name" id="topName">&#128101; Vyberte klienta</div>
         <div class="top-sub" id="topSub">vyberte klienta ze seznamu vlevo</div>
       </div>
+      <div class="top-actions">
+        <select class="status-select" id="statusSelect">
+          <option value="">-- stav --</option>
+          <option value="zajem">&#128994; Zajem</option>
+          <option value="rozmysli">&#128993; Rozmysli</option>
+          <option value="uzavreno">&#128309; Uzavreno</option>
+          <option value="nezajem">&#128308; Nezajem</option>
+        </select>
+        <button class="top-action-btn" id="notesToggle">&#128221; Poznamky</button>
+        <button class="top-action-btn" id="summaryBtn">&#128196; Shrnutí</button>
+      </div>
+    </div>
+
+    <div class="notes-panel" id="notesPanel">
+      <div class="notes-label">&#128221; POZNAMKY</div>
+      <textarea class="notes-input" id="notesInput" placeholder="Poznamky k tomuto klientovi..."></textarea>
+      <button class="notes-save" id="notesSave">Ulozit</button>
     </div>
 
     <div class="phase-bar" id="phaseBar"></div>
     <div class="script-panel" id="scriptPanel">
-      <div class="script-label">SKRIPT</div>
+      <div class="script-label">&#128172; SKRIPT</div>
       <div class="script-text" id="scriptText"></div>
     </div>
 
     <div class="kb-detail" id="kbDetail">
       <div class="kb-dhead">
-        <button class="kb-back" id="kbBackBtn">zpet</button>
+        <button class="kb-back" id="kbBackBtn">&#8592; Zpet</button>
         <div class="kb-dtitle" id="kbTitle"></div>
+        <a class="kb-dlink" id="kbLink" href="#" target="_blank"></a>
       </div>
       <div class="kb-dcontent" id="kbContent"></div>
-      <button class="kb-ask" id="kbAskBtn">Zeptat se AI na tento proces</button>
+      <div class="kb-tip" id="kbTip" style="display:none;"><strong>&#128161; PRODEJNI TIP</strong><span id="kbTipText"></span></div>
+      <button class="kb-ask" id="kbAskBtn">&#129302; Zeptat se AI na toto</button>
     </div>
 
     <div class="chat-scroll" id="chatScroll">
       <div class="empty-state">
         <div class="empty-icon">&#9889;</div>
-        <div class="empty-title">Pripraveno</div>
-        <div class="empty-sub">Vyber klienta a zadej namitku.</div>
+        <div class="empty-title">Pripraveno na hovor</div>
+        <div class="empty-sub">Vyber klienta a zadej namitku klienta nebo svuj dotaz.</div>
       </div>
     </div>
 
     <div class="input-area">
       <div class="chips" id="chipsBar"></div>
       <div class="input-row">
-        <textarea id="ibox" placeholder="Zadej namitku klienta..." rows="1"></textarea>
-        <button class="send-btn" id="sendBtn">Odeslat</button>
+        <textarea id="ibox" placeholder="Zadej namitku klienta nebo svuj dotaz..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn">Odeslat &#8594;</button>
       </div>
     </div>
   </div>
@@ -209,7 +274,7 @@ textarea#ibox::placeholder{color:var(--text3);}
 
 <div class="modal-ov" id="modalOv">
   <div class="mbox">
-    <h3>Novy klient</h3>
+    <h3>&#128101; Novy klient</h3>
     <p>Zadej jmeno nebo firmu.</p>
     <input class="minput" type="text" id="clientNameInput" placeholder="Jan Novak..." />
     <div class="macts">
@@ -223,29 +288,43 @@ textarea#ibox::placeholder{color:var(--text3);}
 var WORKER_URL = 'https://dark-dream-de7c.nepouzitejucet.workers.dev';
 
 var PHASES = [
-  {name:'Uvod', script:'<strong>Dobry den, u telefonu [vase jmeno] z portalu Usetreno.cz.</strong> Slysime se dobre? Volam na zaklade kalkulace, kterou jste si delal na nasem portalu. Predpokladam, ze jste se porovnaval vy, je to tak?', chips:['Nezajimam se o to','Odkud mate moje cislo?','Nemam cas','Volal jste mi minule'], context:'Zacatek hovoru, navazani kontaktu.'},
-  {name:'Duvod zajmu', script:'<strong>Zeptam se jen - co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?', chips:['Jen jsem se dival','Prislo mi vysoke vyuctovani','Konci mi smlouva','Kamarad mi to doporucil'], context:'Zjistujeme proc zakaznik volal.'},
-  {name:'Duvera', script:'<strong>Jsme jeden z nejvetsich nezavislych srovnavaku energii v Cesku</strong> - od roku 2018 pod skupinou CSOB. Porovnavame nezavisle a zdarma vsechny dodavatele.', chips:['Proc bych vam mel verit?','To je nejaky podvod?','Ja nic nepodepisu','CSOB? Ja jsem u jine banky'], context:'Budujeme duveru, zakaznik muze byt skepticky.'},
-  {name:'Faktura', script:'<strong>Mate vyuctovani spis elektronicky nebo v papirove podobe?</strong> Super, tak vas poprosim - otevrte si posledni vyuctovani a podivame se na to spolu.', chips:['Fakturu nemam po ruce','Nemam ji doma','Nemam cas to hledat','Proc ji potrebujete?'], context:'Navigujeme zakaznika k fakture pro ziskani udaju.'},
-  {name:'Preference', script:'<strong>Predpokladam, ze budeme vybirat velkeho a stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?', chips:['Nechci nic menit','Jsem spokojeny','Co z toho budete mit vy?','Jak dlouho by smlouva byla?'], context:'Zjistujeme preference a rekapitulujeme.'},
-  {name:'Uzavreni', script:'<strong>Takze kdyz to shrnu</strong> - najdeme vam velkeho a stabilniho dodavatele, s garantovanou cenou a co nejvetsi usporou. Sedi to takhle?', chips:['Musim se poradit s manzelemmanzelkou','Poslete mi to emailem','Jeste si to rozmyslim','Je to zavazne?'], context:'Uzaviraci faze, prekonani poslednich namitek.'}
+  {name:'&#128222; Uvod', script:'<strong>Dobry den, u telefonu [vase jmeno] z portalu Usetreno.cz.</strong> Slysime se dobre? Volam na zaklade kalkulace, kterou jste si delal na nasem portalu.', chips:['Nezajimam se o to','Odkud mate moje cislo?','Nemam cas','Uz jsem to resil'], ctx:'Zacatek hovoru, navazani kontaktu.'},
+  {name:'&#10067; Duvod', script:'<strong>Zeptam se jen - co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?', chips:['Jen jsem se dival','Vysoke vyuctovani','Konci mi smlouva','Kamarad doporucil'], ctx:'Zjistujeme proc zakaznik volal.'},
+  {name:'&#128081; Duvera', script:'<strong>Jsme jeden z nejvetsich nezavislych srovnavaku energii v Cesku</strong> - od roku 2018 pod skupinou CSOB. Nezavisle a zdarma porovnavame vsechny dodavatele.', chips:['Proc bych vam mel verit?','To je podvod?','Ja nic nepodepisu','CSOB? Jsem u jine banky'], ctx:'Budujeme duveru.'},
+  {name:'&#128196; Faktura', script:'<strong>Mate vyuctovani spis elektronicky nebo v papirove podobe?</strong> Super, tak vas poprosim - otevrte si posledni vyuctovani a podivame se na to spolu.', chips:['Fakturu nemam po ruce','Nemam ji doma','Nemam cas hledat','Proc ji potrebujete?'], ctx:'Navigujeme zakaznika k fakture.'},
+  {name:'&#9881; Preference', script:'<strong>Predpokladam velkeho a stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?', chips:['Nechci nic menit','Jsem spokojeny','Co z toho mate vy?','Jak dlouho smlouva?'], ctx:'Zjistujeme preference.'},
+  {name:'&#129306; Uzavreni', script:'<strong>Takze kdyz to shrnu</strong> - velky stabilni dodavatel, garantovana cena, co nejvetsi uspora. Sedi to? Nejlepe vychazi dodavatel [X] - a hned vysvetlim proc.', chips:['Musim se poradit','Poslete mi to emailem','Jeste si rozmyslim','Je to zavazne?'], ctx:'Uzaviraci faze.'}
 ];
 
 var KB = [
-  {id:'dokumenty',cat:'Procesy',title:'Dokumenty ke smlouve',content:'POSLEDNI VYUCTOVANI:\n- Overeni: jmeno, prijmeni / nazev firmy, adresa\n- Data: EAN/EIC, adresa OM, jistic, sazba, spotreba\n- Zakaznik nema: vyzada od dodavatele opis\n\nSMLOUVA / DODATEK:\n- Urceni uvazku, vypovedi lhuta\n- Centropol: dodat VOP | Innogy: prvni+druhou stranu\n\nZMENA DODAVATELE:\n- Posledni vyuctovani + smlouva od soucasneho dodavatele\n- Zakaznik vypovedel sam: dodat akceptaci vypovedi'},
-  {id:'terminy',cat:'Procesy',title:'Terminy a vypovedi',content:'HRANICNI TERMINY:\n- CEZ, Lama, E.ON, Centropol, DE, Innogy: 10 prac. dni pred podanim vypovedi\n- Yello, PRE: 17 pracovnich dni\n- MND: 12 pracovnich dni + poznamka pro MND\n\nURGENTNI SMLOUVA - rizikova pokud mene nez 30 dni pred terminem:\n- Proces Usetreno: ~15 dni | Partneri: ~10 dni | OTE: min 10 dni'},
-  {id:'mezidodavatel',cat:'Procesy',title:'Mezidodavatel',content:'Zakaznik podepsal smlouvu s dalsim dodavatelem - ceka v mezidobi.\n\nNA SMLOUVU uvedeme dodavatele ktereho budeme vypovedat = kdo aktualne dodava!\n\nYello, MND: mohou vypovidat po zahajeni dodavky\nE.ON, PRE, PPAS, CEZ a dalsi: NE\n\nVYPOVIDA ZAKAZNIK: funguje u vsech partneru'},
-  {id:'aukce',cat:'Procesy',title:'Aukce',content:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: Smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a E.ON vypovida aukci za klienty.\nDodat akceptaci vypovedi smlouvy s aukci.\n\nZname: Terra Group, Simply Energy, Ceska aukce, Energeticka kancelar, D-test, A Tender'},
-  {id:'fve',cat:'Procesy',title:'Fotovoltaika FVE',content:'Usetreno NEUZAVIRA smlouvu na vykup FVE.\nUzavirame smlouvu na beznou dodavku + informujeme partnera o zajmu o vykup.\n\nOd 2018: zakaznik s FVE musi mit 2 elektromery a 2 EANy.\nZaloha musi byt 0 Kc, mesicni fakturace.\n\nKDO POSKYTUJE VYKUP:\n- Centropol: ~800 Kc/MWh\n- Yello (skrz PRE), E.ON\n- PPAS se smlouvou: 950 Kc, bez: 450 Kc'},
-  {id:'dpi',cat:'Pojmy',title:'DPI - Dodavatel posledni instance',content:'Kdyz soucasny dodavatel nemuze dodavat, nastupuje DPI automaticky pres OTE za regulovane ceny.\n\nPo 6 mesicich hrozi neopravneny odber (cerny odber)!\nPRE posila pouze jednu vyzvu a ihned odpoji.\n\nResit okamzite jako urgentni smlouvu.'},
-  {id:'odchylka',cat:'Pojmy',title:'Co je odchylka',content:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK TO RICT ZAKAZNIKOVI:\nPredstavte si ze si objednate 100 litru vody ale spotrebujete jen 80 - za tech 20 litru zaplatite navic. Dodavatele fungují stejne s elektrinou na burze. Vetsi dodavatele lepe ridi portfolio = nizsi odchylky.'},
-  {id:'tipy',cat:'Tipy',title:'Osvedcene techniky',content:'OBECNE:\n- Mluv o konkretni uspore v Kc, ne procentech\n- Zakaznik kupuje klid, ne elektrinu\n- Nikdy nezlehcuj obavy - nejdriv potvrd, pak odpovez\n- Konci vzdy otazkou ktera drzi zakaznika v hovoru\n\nNEMAM CAS:\n- Nezahazuj vsechny karty hned\n- Jasne, nechci zdrzovat. Jen jsem zaznamenal vasi kalkulaci - co vas k tomu privedlo?\n\nPOSLETE EMAIL:\n- Email se neuzavira, emailem se odklada\n- Samozrejme poslu. Abych poslal relevantni nabidku, potrebuji jen par udaju...\n\nMUSIM SE PORADIT:\n- S kym se potrebujete poradit? Mohu byt pritomen te diskuzi?'}
+  {id:'dokumenty',cat:'&#128196; Procesy',title:'Dokumenty ke smlouve',link:'',tip:'',content:'POSLEDNI VYUCTOVANI:\n- Overeni: jmeno, prijmeni / nazev firmy, adresa\n- Data: EAN/EIC, adresa OM, jistic, sazba, spotreba\n- Zakaznik nema: vyzada od dodavatele opis\n\nSMLOUVA / DODATEK:\n- Urceni uvazku, vypovedi lhuta\n- Centropol: dodat VOP | Innogy: prvni+druhou stranu\n\nZMENA DODAVATELE:\n- Posledni vyuctovani + smlouva od soucasneho dodavatele\n- Zakaznik vypovedel sam: dodat akceptaci vypovedi'},
+  {id:'terminy',cat:'&#128196; Procesy',title:'Terminy a vypovedi',link:'',tip:'',content:'HRANICNI TERMINY:\n- CEZ, Lama, E.ON, Centropol, DE, Innogy: 10 prac. dni pred podanim vypovedi\n- Yello, PRE: 17 pracovnich dni\n- MND: 12 pracovnich dni + poznamka pro MND\n\nURGENTNI SMLOUVA - rizikova pokud mene nez 30 dni pred terminem:\n- Proces Usetreno: ~15 dni | Partneri: ~10 dni | OTE: min 10 dni\n\nVYPOVED ZAKAZNIKEM:\n- Vygenerovat: 30 dni pred zmenou\n- Podepsana na BO: 5 prac. dni pred zmenou ceny\n- Predano na partnera: 3 prac. dny pred zmenou ceny'},
+  {id:'mezidodavatel',cat:'&#128196; Procesy',title:'Mezidodavatel',link:'',tip:'',content:'Zakaznik podepsal smlouvu s dalsim dodavatelem - ceka v mezidobi.\n\nNA SMLOUVU uvedeme dodavatele ktereho budeme vypovedat = kdo aktualne dodava!\n\nYello, MND: mohou vypovidat po zahajeni dodavky\nE.ON, PRE, PPAS, CEZ a dalsi: NE\n\nVYPOVIDA ZAKAZNIK: funguje u vsech partneru\n\nPOZNAMKA V SOVE:\nOP: Mezidodavatel "jmeno" zakaznik vypovida sam k datu dd.mm.rrrr'},
+  {id:'aukce',cat:'&#128196; Procesy',title:'Aukcni spolecnost',link:'',tip:'',content:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: Smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a E.ON vypovida aukci za klienty.\nDodat akceptaci vypovedi smlouvy s aukcni spolecnosti.\n\nZname spolecnosti: Terra Group, Simply Energy, Ceska aukce, Energeticka kancelar, D-test, A Tender, eCentre'},
+  {id:'fve',cat:'&#128196; Procesy',title:'Fotovoltaika (FVE)',link:'',tip:'',content:'Usetreno NEUZAVIRA smlouvu na vykup FVE.\nUzavirame smlouvu na beznou dodavku + info partnerovi o zajmu o vykup.\n\nOd 2018: zakaznik s FVE musi mit 2 elektromery a 2 EANy.\nZaloha musi byt 0 Kc, mesicni fakturace.\n\nKDO POSKYTUJE VYKUP FVE:\n- Centropol: ~800 Kc/MWh\n- Yello Energy (skrz PRE), E.ON\n- PPAS se smlouvou na dodavku: 950 Kc, bez: 450 Kc'},
+  {id:'dpi',cat:'&#128201; Pojmy',title:'DPI - Dodavatel posledni instance',link:'',tip:'',content:'DPI nastupuje automaticky pres OTE kdyz dodavatel nemuze dodavat.\nCeny regulovane statne.\n\nPo 6 mesicich hrozi neopravneny odber (cerny odber)!\nPRE posila pouze jednu vyzvu a ihned odpoji.\n\nResit OKAMZITE jako urgentni smlouvu.\nSTITEK: "DPI" | POZNAMKA: OP: Urgent DPI od dd.mm.rrrr'},
+  {id:'odchylka',cat:'&#128201; Pojmy',title:'Odchylka ve spotrebe',link:'',tip:'Vetsi dodavatele lepe ridi portfolio = nizsi odchylky = levnejsi cena. Pouzij to jako argument pro CEZ, E.ON nebo PRE.',content:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK VYSVETLIT ZAKAZNIKOVI:\n"Predstavte si, ze si objednate 100 litru vody ale spotrebujete jen 80 - za tech 20 litru zaplatite navic. Dodavatele funguji stejne s elektrinou na burze."\n\nDodavatel kupuje energii dopredu na burze. Kdyz zakaznik spotrebuje vic nebo min nez ocekava = odchylka = dalsi naklady.'},
+  {id:'tipy',cat:'&#127919; Techniky',title:'Osvedcene obchodni techniky',link:'',tip:'',content:'PRINCIP: pochopeni -> rozklichovani -> reseni\nNikdy nezahazuj vsechny karty najednou!\n\nNEMAM CAS:\nSpravne: "Jasne, nechci zdrzovat. Jen jsem zaznamenal vasi kalkulaci - co vas k tomu privedlo?"\nSpatne: "Prumerna domacnost usetri az 6000 Kc rocne."\n\nPOSLETE EMAIL:\n"Samozrejme poslu. Abych poslal relevantni nabidku, potrebuji jen vasi aktualni spotreba - muzu se zeptat?"\n\nMUSIM SE PORADIT:\n"S kym se potrebujete poradit? Mohu byt pritomen te diskuzi?"\n\nZAKLADNI PRAVIDLA:\n- Mluv o konkretni uspore v Kc, ne procentech\n- Zakaznik kupuje klid, ne elektrinu - prodavej bezstarostnost\n- Vzdy konci otazkou ktera drzi zakaznika v hovoru\n- Nikdy nezlehcuj obavy - nejdriv potvrd, pak odpovez'}
+];
+
+var DODAVATELE = [
+  {id:'cez',name:'&#9889; CEZ',logo:'CEZ',link:'https://www.cez.cz/nextcez/cs/ceniky',conditions:'https://www.cez.cz/cs/podminky',tip:'CEZ je jednicka na trhu s vice nez 1,6 mil. zakazniku a od roku 2021 nese oceneni Nejduveryhodnejsi znacka v kategorii dodavatelu energii. Pouzij to - zakaznik si hodnotu reputace ceni.',content:'PROFIL:\n- Nejvetsi dodavatel energii v CR, pod statni kontrolou\n- 1,6 milionu zakazniku, distribucni uzemi CEZ Distribuce\n- Castecne statni spolecnost - zakaznici vnimaji jako stabilni a bezpecnou volbu\n\nPRODUKTY (2026):\n- Elektrina na dobu neurCitou: ~3 860 Kc/MWh s DPH (sazba D02)\n- Dvouleta fixace: ~3 400 Kc/MWh s DPH\n- Fix do konce roku 2026 na plyn: 1 150 Kc/MWh s DPH (jedna z nejnizsich cen na trhu)\n- Online tarify s jednorázovym bonusem (az 9 000 Kc pri sjednani elektrina+plyn)\n\nPRO KOHO SE HODI:\n- Zakaznici, kteri chteji istotu velkeho a zavedeho dodavatele\n- Ti, kdo topi elektrikou nebo plynem (velke usporny z zlevneni)\n- Zakaznici, kteri maji FVE (CEZ poskytuje vykup)\n\nVYHODY:\n- Letos zlevnil uz 5x - prumysl klesajicich cen\n- Nejvetsi distribucni sit, nejmensi riziko problemu\n- MUJ CEZ - kvalitni aplikace pro spravu'},
+  {id:'eon',name:'&#128293; E.ON',logo:'EON',link:'https://www.eon.cz/domacnosti/zakaznicka-pece/ceniky/',conditions:'https://www.eon.cz/domacnosti/zakaznicka-pece/obchodni-podminky/',tip:'E.ON nabizi bonus elektrikare nebo hodineho manezela az 5 000 Kc rocne zdarma. Pro zakazniky kteri si ceni sluzeb - to je silny argument navic ktery jiny dodavatel nenabidne.',content:'PROFIL:\n- 2. nejvetsi dodavatel, 1,2 milionu zakazniku domacnosti\n- Distribucni uzemi EG.D (jihoceskych, jihoMoravskych, vychoceskych distribuce)\n- Nemecka spolecnost (E.ON SE) - stabilni evropska firma\n\nPRODUKTY (2026):\n- Bez fixace: ~3 933 Kc/MWh s DPH (od 1.1.2025 snizeni o 18 %)\n- Komplet MAX PRO (klesajici cena): 2025 = 3 503 Kc/MWh, 2026 = 3 318 Kc/MWh\n- Online 2-leta fixace: velmi konkurenceschopna cena\n- Zelena elektrina: priplatek jen 34 Kc/MWh s DPH\n\nPRO KOHO SE HODI:\n- Zakaznici v distribucnim uzemi EG.D (jizni Cechy, jizni Morava)\n- Ti, kdo oceni bonus sluzeb (elektrikar, hodiny manezel)\n- Zakaznici citlivi na ekologii (zelena elektrina)\n\nVYHODY:\n- Portal Energie24 - sprava online nebo v mobilu\n- Unikatni bonus elektrikare / hodineho manezela\n- Jedna z nejnizsich cen pri fixaci'},
+  {id:'pre',name:'&#127963; PRE',logo:'PRE',link:'https://www.pre.cz/cs/domacnosti/',conditions:'https://www.pre.cz/cs/domacnosti/podpora/obchodni-podminky/',tip:'PRE je jediny dodavatel ktery ma svoji vlastni distribuci v Praze - to znamena jeden subjekt pro oboji a jedine jedno kontaktni misto pro vsechno. Pro Prazaky je to obrovska vyhoda.',content:'PROFIL:\n- Prazska energetika - historicky dodavatel pro Prahu\n- Vlastni distribucni sit v Praze (PREdistribuce)\n- Silna pozice u prazkych zakazniku\n\nPRODUKTY:\n- PRE PROUD KLASIK: bez fixace, pro stale zakazniky\n- PRE PROUD FIX: 1-leta fixace pro nove zakazniky\n- PRE PROUD BASIC: 2-leta smlouva bez fixace\n- YELLO energy: distribuce pres PRE (prenos pro Yello)\n\nPRO KOHO SE HODI:\n- Prazcane - PRE zna dobre svoji sit a zakazniky\n- Firmy a podnikatele v Praze\n- Zakaznici kteri chtejí jednoho dodavatele + distributora\n\nPOZOR:\n- Yello a PPAS plyn v Praze neprodavame\n- PRE posila JEDNU vyzvu pri bezesmluvnim vztahu a ihned odpoji (DPI riziko!)'},
+  {id:'mnd',name:'&#127981; MND',logo:'MND',link:'https://www.mnd.cz/',conditions:'https://www.mnd.cz/obchodni-podminky/',tip:'MND je jediny dodavatel ktery prima nabizi "Plyn z prvni ruky" - maji vlastni tezbu zemniho plynu na Morave. To je silny argument pro zakazniky kteri oceni cesky a transparentni pribeh.',content:'PROFIL:\n- Moravske naftove doly - jediny CR dodavatel s vlastni tezbu plynu\n- Silna pozice v plynu, rozsireni do elektřiny\n- Oblibeny u zakazniku, kteri oceni cesky pribeh\n\nPRODUKTY:\n- Plyn z prvni ruky: smlouva na dobu neurCitou\n- Fix do zari 2026: fixovana cena\n- Elektrina: smlouva na dobu neurCitou, fixovane varianty\n- Solarni ucet (jen domacnosti!): vykup z FVE\n\nDULEZITA PRAVIDLA:\n- Max uvazek u soucasneho dodavatele: 12 mesicu\n- Poznamka pro MND: MAX 300 znaku!\n- Solarni ucet MND: NELZE pro IČO\n- Smlouvy se automaticky predavaji do systemu MND\n- Nezasahujeme do stavu - aktualizuji se dle reportu\n\nPRO KOHO SE HODI:\n- Zakaznici s plynem jako primarnim zdrojem\n- Domacnosti s FVE (solarni ucet)\n- Ti kdo oceni "cesky" pribeh dodavatele'},
+  {id:'innogy',name:'&#127987; Innogy',logo:'Innogy',link:'https://www.innogy.cz/ceniky/',conditions:'https://www.innogy.cz/obchodni-podminky/',tip:'Innogy je soucasti nemecke skupiny E.ON (od 2021). Zakaznici casto nevedí ze Innogy = E.ON = silna evropska firma s garanci. Pouzij to pri budovani duvery.',content:'PROFIL:\n- Soucást skupiny E.ON (od 2021 prebrana nemeckou firmou)\n- Puvodni RWE / E.ON Energie\n- Silna pozice v plynu, distribuce plyn + elektrina\n\nPRODUKTY:\n- Elektrina Standard: produkt bez fixace\n- Plyn Standard: bez fixace, od 1.2.2026 zmena cen\n- Elektrina Energo Standard: pro vetsi spotreby\n- Postupne klesajici ceny pro nove i stávající zakazniky\n\nDULEZITA PRAVIDLA:\n- Centropol: dodat VOP | Innogy: prvni+druhou stranu sml.\n- Pozor na limite spotreby - nadlimitni pozadavky mohou byt odmitnuty\n- Mezidodavatel na Innogy: NE (nelze predavat)\n\nPRO KOHO SE HODI:\n- Zakaznici kteri jiz znaji znacku (dlouholeti zakaznici RWE)\n- Ti kdo oceni garantovanou cenu (verejny prislib)'},
+  {id:'centropol',name:'&#128293; Centropol',logo:'Centropol',link:'https://www.centropol.cz/',conditions:'https://www.centropol.cz/obchodni-podminky',tip:'Centropol nabizi velke mnozstvi produktu a flexibilitu - muzete sjednat hodne veci online a bez cekaní. Silny argument pro zakazniky, kteri ocení rychlost a jednoduchost.',content:'PROFIL:\n- Stredne velky dodavatel, silna pozice ve fixovanych produktech\n- Velky vyber produktu - online i fyzicke sjednani\n- Poskytuje vykup FVE (~800 Kc/MWh)\n\nPRODUKTY:\n- Bez zavazku pro zacatek (online)\n- Fixne na 1 rok (online i fyzicky)\n- Ruzne fixacni produkty dle distribucniho uzemi\n\nDULEZITA PRAVIDLA:\n- Centropol: VZDY dodat veskere VOP pri zmene dodavatele!\n- Mezidodavatel na Centropol: NE\n- Nelze prodat cenik elektřiny se slevou pokud ma zakaznik FVE\n- Exportovat smlouvu: 10 prac. dni pred podanim vypovedi\n\nPRO KOHO SE HODI:\n- Zakaznici kteri hledaji jednoduche online sjednani\n- Ti kdo chteji vykup FVE (800 Kc/MWh)\n- Zakaznici bez specifickych pozadavku na znacku'},
+  {id:'ppas',name:'&#127981; PPAS',logo:'PPAS',link:'https://www.ppas.cz/',conditions:'https://www.ppas.cz/obchodni-podminky',tip:'PPAS nabizi jeden z nejvyssich vykupnich cen FVE (950 Kc/MWh pokud ma klient i smlouvu na dodavku). Pro zakazniky s FVE je to casto nejlepsi kombinace na trhu.',content:'PROFIL:\n- Prazska plynarenska - historicky dodavatel plynu\n- Aktualni ceniky a fixovane produkty pro domacnosti\n- Silna pozice v plynu v Praze a okolí\n\nPRODUKTY:\n- Standardni cenik: smlouva na dobu neurCitou\n- Fixovane ceníky: pro nove zakazniky\n- Vanocni 24: specialni fixovana nabidka\n\nFVE VYKUP:\n- PPAS se smlouvou na dodavku: 950 Kc/MWh (nejlepsi na trhu!)\n- PPAS bez smlouvy na dodavku: 450 Kc/MWh\n\nDULEZITA PRAVIDLA:\n- Yello a PPAS plyn v Praze NEPRODAVAME\n- Mezidodavatel na PPAS: NE\n- Exportovat smlouvu: 17 prac. dni pred podanim vypovedi (jako PRE)\n\nPRO KOHO SE HODI:\n- Zakaznici s FVE kteri chteji nejvyssi vykupni cenu\n- Domacnosti mimo Prahu s plynem'},
+  {id:'yello',name:'&#127755; Yello',logo:'Yello',link:'https://www.yello.cz/cs/domacnost/',conditions:'https://www.yello.cz/cs/podminky-sluzeb/',tip:'Yello je "cool" znacka skupiny PRE - cilenı na mladsi a online-first zakazniky. Prodavej Yello jako moderniho dodavatele bez zbytecnych komplikaci - jednoduche, online, transparentni.',content:'PROFIL:\n- Znacka skupiny PRE (Prazska energetika)\n- Zamerenı na online sjednani a mladsí zakazniky\n- Distribuce probíha pres PRE sit\n\nPRODUKTY:\n- Online produkty pro domacnosti\n- Jednoduche sjednani bez papirovaní\n- Transparentní cenikovy system\n\nDULEZITA PRAVIDLA:\n- Yello a PPAS PLYN v Praze NEPRODAVAME!\n- EIC nelze obchodovat: 27ZG100 a distribuce PPD\n- Exportovat smlouvu: 17 prac. dni pred podanim vypovedi\n- Mezidodavatel: Yello MUZ vypovidat po zahajeni dodavky\n\nPRO KOHO SE HODI:\n- Mladsí zakaznici preferujici online komunikaci\n- Zakaznici mimo Prahu\n- Ti kdo ocení jednoduchost a transparentnost'},
+  {id:'epet',name:'&#128167; EPET',logo:'EPET',link:'https://epet.cz/',conditions:'https://epet.cz/obchodni-podminky',tip:'EPET je jediny dodavatel, kde VZDY vypovida zakaznik sam - ne novy dodavatel. Upozorni na to zakaznika predem at neni prekvapen. Ale zakaznici kteří vypovedi zvladnou oceni transparentni ceny.',content:'PROFIL:\n- Mensi nezavisly dodavatel energii\n- Konkurencni ceny, jednoduche produkty\n\nDULEZITA PRAVIDLA:\n- EPET: VZDY zakaznik sam vypovida! (novy dodavatel nevypovida)\n- Informuj zakaznika predem at neni prekvapen\n- Zakaznik musi podat vypoved sám a dodat akceptaci\n\nPRO KOHO SE HODI:\n- Zakaznici kteri jsou schopni si zarizit vypoved sami\n- Ti kdo hledaji konkurencni cenu bez velke znacky\n- Zakaznici kteri preferuji jednoduchost'}
 ];
 
 var currentPhase = 0;
 var activeKbId = null;
 var clients = JSON.parse(localStorage.getItem('sa_clients') || '[]');
 var activeId = localStorage.getItem('sa_activeId') || null;
+var phrases = JSON.parse(localStorage.getItem('sa_phrases') || '[]');
+var activeTab = 'clients';
 
 function getWorkerUrl() {
   return localStorage.getItem('sa_worker_url') || WORKER_URL;
@@ -258,37 +337,55 @@ function init() {
     localStorage.setItem('sa_worker_url', v);
     showApp();
   });
-
+  document.getElementById('apiKeyInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('startBtn').click();
+  });
   document.getElementById('changeKeyBtn').addEventListener('click', function() {
     document.getElementById('apiScreen').style.display = 'flex';
     document.getElementById('appRoot').style.display = 'none';
   });
-
   document.getElementById('newClientBtn').addEventListener('click', openModal);
   document.getElementById('modalCancel').addEventListener('click', closeModal);
   document.getElementById('modalConfirm').addEventListener('click', confirmModal);
-  document.getElementById('modalOv').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-  document.getElementById('clientNameInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') confirmModal();
-  });
-
-  document.getElementById('tabClients').addEventListener('click', function() { switchTab('clients'); });
-  document.getElementById('tabKb').addEventListener('click', function() { switchTab('kb'); });
+  document.getElementById('modalOv').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+  document.getElementById('clientNameInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') confirmModal(); });
+  document.getElementById('tab0').addEventListener('click', function() { switchTab('clients'); });
+  document.getElementById('tab1').addEventListener('click', function() { switchTab('kb'); });
+  document.getElementById('tab2').addEventListener('click', function() { switchTab('dodavatele'); });
+  document.getElementById('tab3').addEventListener('click', function() { switchTab('fraze'); });
   document.getElementById('kbBackBtn').addEventListener('click', closeKb);
   document.getElementById('kbAskBtn').addEventListener('click', askKb);
-
   document.getElementById('sendBtn').addEventListener('click', sendMsg);
-  document.getElementById('ibox').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
-  });
+  document.getElementById('ibox').addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
   document.getElementById('ibox').addEventListener('input', function() { autoResize(this); });
+  document.getElementById('statusSelect').addEventListener('change', function() { saveStatus(this.value); });
+  document.getElementById('notesToggle').addEventListener('click', toggleNotes);
+  document.getElementById('notesSave').addEventListener('click', saveNotes);
+  document.getElementById('summaryBtn').addEventListener('click', summarizeChat);
+  document.getElementById('phraseAddBtn').addEventListener('click', addPhrase);
+  document.getElementById('phraseInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') addPhrase(); });
 
-  var stored = localStorage.getItem('sa_worker_url');
-  if (stored) {
-    showApp();
-  }
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('copy-btn')) {
+      var text = e.target.getAttribute('data-copy');
+      navigator.clipboard.writeText(text).then(function() {
+        e.target.textContent = '✓ OK';
+        e.target.classList.add('ok');
+        setTimeout(function() { e.target.textContent = 'Kopirovat'; e.target.classList.remove('ok'); }, 2000);
+      });
+    }
+    if (e.target.classList.contains('phrase-use-btn')) {
+      fillInput(e.target.getAttribute('data-phrase'));
+    }
+    if (e.target.classList.contains('phrase-del-btn')) {
+      var idx = parseInt(e.target.getAttribute('data-idx'));
+      phrases.splice(idx, 1);
+      localStorage.setItem('sa_phrases', JSON.stringify(phrases));
+      renderPhrases();
+    }
+  });
+
+  if (localStorage.getItem('sa_worker_url')) showApp();
 }
 
 function showApp() {
@@ -297,31 +394,26 @@ function showApp() {
   renderPhaseBar();
   renderClients();
   renderKbList();
+  renderDodavList();
+  renderPhrases();
   renderChips();
   setPhase(0);
-  if (activeId && clients.find(function(c) { return c.id === activeId; })) {
-    selectClient(activeId);
-  }
+  if (activeId && clients.find(function(c) { return c.id === activeId; })) selectClient(activeId);
 }
 
 function renderPhaseBar() {
   var bar = document.getElementById('phaseBar');
-  var icons = ['Uvod','Duvod','Duvera','Faktura','Preference','Uzavreni'];
   bar.innerHTML = PHASES.map(function(p, i) {
     return '<button class="pstep' + (i === 0 ? ' on' : '') + '" data-phase="' + i + '">' + p.name + '</button>';
   }).join('');
   bar.querySelectorAll('.pstep').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      setPhase(parseInt(this.getAttribute('data-phase')));
-    });
+    btn.addEventListener('click', function() { setPhase(parseInt(this.getAttribute('data-phase'))); });
   });
 }
 
 function setPhase(i) {
   currentPhase = i;
-  document.querySelectorAll('.pstep').forEach(function(b, j) {
-    b.classList.toggle('on', j === i);
-  });
+  document.querySelectorAll('.pstep').forEach(function(b, j) { b.classList.toggle('on', j === i); });
   document.getElementById('scriptPanel').classList.add('vis');
   document.getElementById('scriptText').innerHTML = PHASES[i].script;
   renderChips();
@@ -329,22 +421,21 @@ function setPhase(i) {
 
 function renderChips() {
   var bar = document.getElementById('chipsBar');
-  var chips = PHASES[currentPhase].chips;
-  bar.innerHTML = chips.map(function(c) {
+  bar.innerHTML = PHASES[currentPhase].chips.map(function(c) {
     return '<span class="chip" data-text="' + c.replace(/"/g, '&quot;') + '">' + c + '</span>';
   }).join('');
   bar.querySelectorAll('.chip').forEach(function(chip) {
-    chip.addEventListener('click', function() {
-      fillInput(this.getAttribute('data-text'));
-    });
+    chip.addEventListener('click', function() { fillInput(this.getAttribute('data-text')); });
   });
 }
 
 function switchTab(tab) {
-  document.getElementById('tabClients').classList.toggle('on', tab === 'clients');
-  document.getElementById('tabKb').classList.toggle('on', tab === 'kb');
-  document.getElementById('panel-clients').classList.toggle('on', tab === 'clients');
-  document.getElementById('panel-kb').classList.toggle('on', tab === 'kb');
+  activeTab = tab;
+  var tabs = ['clients','kb','dodavatele','fraze'];
+  tabs.forEach(function(t, i) {
+    document.getElementById('tab' + i).classList.toggle('on', t === tab);
+    document.getElementById('panel-' + t).classList.toggle('on', t === tab);
+  });
 }
 
 function renderKbList() {
@@ -353,38 +444,73 @@ function renderKbList() {
   document.getElementById('kbList').innerHTML = cats.map(function(cat) {
     return '<div class="kb-sec"><div class="kb-sec-title">' + cat + '</div>' +
       KB.filter(function(k) { return k.cat === cat; }).map(function(k) {
-        return '<div class="kb-item' + (k.id === activeKbId ? ' on' : '') + '" data-id="' + k.id + '">' + k.title + '</div>';
+        return '<div class="kb-item' + (k.id === activeKbId ? ' on' : '') + '" data-id="' + k.id + '" data-type="kb">' + k.title + '</div>';
       }).join('') + '</div>';
   }).join('');
   document.getElementById('kbList').querySelectorAll('.kb-item').forEach(function(el) {
-    el.addEventListener('click', function() { openKb(this.getAttribute('data-id')); });
+    el.addEventListener('click', function() { openKb(this.getAttribute('data-id'), 'kb'); });
   });
 }
 
-function openKb(id) {
-  var kb = KB.find(function(k) { return k.id === id; });
-  if (!kb) return;
+function renderDodavList() {
+  document.getElementById('dodavList').innerHTML = '<div class="kb-sec"><div class="kb-sec-title">&#9889; Dodavatele</div>' +
+    DODAVATELE.map(function(d) {
+      return '<div class="kb-item" data-id="' + d.id + '" data-type="dodav">' + d.name + '</div>';
+    }).join('') + '</div>';
+  document.getElementById('dodavList').querySelectorAll('.kb-item').forEach(function(el) {
+    el.addEventListener('click', function() { openKb(this.getAttribute('data-id'), 'dodav'); });
+  });
+}
+
+function openKb(id, type) {
+  var item = type === 'dodav' ? DODAVATELE.find(function(d) { return d.id === id; }) : KB.find(function(k) { return k.id === id; });
+  if (!item) return;
   activeKbId = id;
-  renderKbList();
-  document.getElementById('kbTitle').textContent = kb.title;
-  document.getElementById('kbContent').textContent = kb.content;
+  if (type === 'kb') renderKbList(); else renderDodavList();
+  document.getElementById('kbTitle').textContent = item.name || item.title;
+  document.getElementById('kbContent').textContent = item.content;
+  var linkEl = document.getElementById('kbLink');
+  if (item.link) { linkEl.href = item.link; linkEl.textContent = '&#128279; Cenik'; } else { linkEl.textContent = ''; }
+  var tipEl = document.getElementById('kbTip');
+  var tipText = document.getElementById('kbTipText');
+  if (item.tip) { tipText.textContent = item.tip; tipEl.style.display = 'block'; } else { tipEl.style.display = 'none'; }
   document.getElementById('kbDetail').classList.add('vis');
   document.getElementById('chatScroll').style.display = 'none';
+  document.getElementById('notesPanel').classList.remove('vis');
 }
 
 function closeKb() {
   activeKbId = null;
-  renderKbList();
+  renderKbList(); renderDodavList();
   document.getElementById('kbDetail').classList.remove('vis');
   document.getElementById('chatScroll').style.display = 'flex';
 }
 
 function askKb() {
-  var kb = KB.find(function(k) { return k.id === activeKbId; });
-  if (!kb) return;
-  closeKb();
-  switchTab('clients');
-  fillInput('Vysvetli stucne: ' + kb.title);
+  var item = DODAVATELE.find(function(d) { return d.id === activeKbId; }) || KB.find(function(k) { return k.id === activeKbId; });
+  if (!item) return;
+  closeKb(); switchTab('clients');
+  fillInput('Vysvetli mi: ' + (item.name || item.title));
+}
+
+function renderPhrases() {
+  var el = document.getElementById('phrasesList');
+  if (!phrases.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 0;">Zadne fraze. Pridej prvni!"; </div>'; return; }
+  el.innerHTML = phrases.map(function(p, i) {
+    return '<div class="phrase-item"><span style="flex:1;">' + p + '</span>' +
+      '<button class="phrase-use-btn" data-phrase="' + p.replace(/"/g,'&quot;') + '">Pouzit</button>' +
+      '<button class="phrase-del-btn" data-idx="' + i + '">&#10005;</button></div>';
+  }).join('');
+}
+
+function addPhrase() {
+  var inp = document.getElementById('phraseInput');
+  var val = inp.value.trim();
+  if (!val) return;
+  phrases.push(val);
+  localStorage.setItem('sa_phrases', JSON.stringify(phrases));
+  inp.value = '';
+  renderPhrases();
 }
 
 function saveClients() {
@@ -396,57 +522,89 @@ function getInits(name) {
   return name.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2) || '?';
 }
 
+function getStatusClass(s) {
+  var map = {zajem:'s-zajem',rozmysli:'s-rozmysli',uzavreno:'s-uzavreno',nezajem:'s-nezajem'};
+  return map[s] || 's-none';
+}
+
+function getStatusLabel(s) {
+  var map = {zajem:'&#128994; Zajem',rozmysli:'&#128993; Rozmysli',uzavreno:'&#128309; Uzavreno',nezajem:'&#128308; Nezajem'};
+  return map[s] || '';
+}
+
 function renderClients() {
   var el = document.getElementById('clientsList');
-  if (!clients.length) {
-    el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 12px;">Zadni klienti</div>';
-    return;
-  }
+  if (!clients.length) { el.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:8px 12px;">Zadni klienti</div>'; return; }
   el.innerHTML = clients.map(function(c) {
+    var sl = getStatusLabel(c.status);
     return '<div class="ci' + (c.id === activeId ? ' on' : '') + '" data-id="' + c.id + '">' +
       '<div class="ci-av">' + getInits(c.name) + '</div>' +
-      '<span class="ci-name">' + esc(c.name) + '</span>' +
-      '<button class="ci-del" data-del="' + c.id + '" title="Smazat">x</button>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div class="ci-name">' + esc(c.name) + '</div>' +
+        (sl ? '<div class="status-badge ' + getStatusClass(c.status) + '">' + sl + '</div>' : '') +
+      '</div>' +
+      '<button class="ci-del" data-del="' + c.id + '" title="Smazat">&#10005;</button>' +
       '</div>';
   }).join('');
   el.querySelectorAll('.ci').forEach(function(el) {
     el.addEventListener('click', function(e) {
-      if (e.target.classList.contains('ci-del')) return;
+      if (e.target.classList.contains('ci-del') || e.target.closest('.ci-del')) return;
       selectClient(this.getAttribute('data-id'));
     });
   });
   el.querySelectorAll('.ci-del').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      delClient(this.getAttribute('data-del'));
-    });
+    btn.addEventListener('click', function(e) { e.stopPropagation(); delClient(this.getAttribute('data-del')); });
   });
 }
 
 function selectClient(id) {
-  activeId = id;
-  saveClients();
-  renderClients();
+  activeId = id; saveClients(); renderClients();
   var c = clients.find(function(x) { return x.id === id; });
   if (!c) return;
-  document.getElementById('topName').textContent = c.name;
+  document.getElementById('topName').textContent = '&#128101; ' + c.name;
   var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
   document.getElementById('topSub').textContent = n ? (n + ' zprav') : 'Zadej namitku';
+  document.getElementById('statusSelect').value = c.status || '';
+  document.getElementById('notesInput').value = c.notes || '';
   closeKb();
+  document.getElementById('notesPanel').classList.remove('vis');
+  document.getElementById('notesToggle').classList.remove('active');
   renderChat();
+}
+
+function saveStatus(val) {
+  var c = clients.find(function(x) { return x.id === activeId; });
+  if (!c) return;
+  c.status = val;
+  saveClients(); renderClients();
+}
+
+function toggleNotes() {
+  var panel = document.getElementById('notesPanel');
+  var btn = document.getElementById('notesToggle');
+  var vis = panel.classList.contains('vis');
+  panel.classList.toggle('vis', !vis);
+  btn.classList.toggle('active', !vis);
+  if (!vis) document.getElementById('notesInput').focus();
+}
+
+function saveNotes() {
+  var c = clients.find(function(x) { return x.id === activeId; });
+  if (!c) return;
+  c.notes = document.getElementById('notesInput').value;
+  saveClients();
+  document.getElementById('notesToggle').textContent = '&#128221; Poznamky ' + (c.notes ? '&#9679;' : '');
+  document.getElementById('notesPanel').classList.remove('vis');
+  document.getElementById('notesToggle').classList.remove('active');
 }
 
 function delClient(id) {
   if (!confirm('Smazat klienta a historii?')) return;
   clients = clients.filter(function(c) { return c.id !== id; });
   if (activeId === id) activeId = clients.length ? clients[0].id : null;
-  saveClients();
-  renderClients();
+  saveClients(); renderClients();
   if (activeId) selectClient(activeId);
-  else {
-    document.getElementById('topName').textContent = 'Vyberte klienta';
-    renderChat();
-  }
+  else { document.getElementById('topName').textContent = '&#128101; Vyberte klienta'; renderChat(); }
 }
 
 function openModal() {
@@ -454,18 +612,13 @@ function openModal() {
   document.getElementById('clientNameInput').value = '';
   setTimeout(function() { document.getElementById('clientNameInput').focus(); }, 50);
 }
-
 function closeModal() { document.getElementById('modalOv').classList.remove('on'); }
-
 function confirmModal() {
   var name = document.getElementById('clientNameInput').value.trim();
   if (!name) return;
   var id = 'c' + Date.now();
-  clients.push({id: id, name: name, history: []});
-  saveClients();
-  closeModal();
-  renderClients();
-  selectClient(id);
+  clients.push({id:id, name:name, history:[], status:'', notes:''});
+  saveClients(); closeModal(); renderClients(); selectClient(id);
 }
 
 function renderChat() {
@@ -477,9 +630,7 @@ function renderChat() {
     return;
   }
   area.innerHTML = c.history.map(function(msg) {
-    if (msg.role === 'user') {
-      return '<div class="msg-user"><div><div class="msg-lbl">NAMITKA / DOTAZ</div><div class="msg-user-bubble">' + esc(msg.content) + '</div></div></div>';
-    }
+    if (msg.role === 'user') return '<div class="msg-user"><div><div class="msg-lbl">NAMITKA / DOTAZ</div><div class="msg-user-bubble">' + esc(msg.content) + '</div></div></div>';
     return renderAI(msg.content);
   }).join('');
   area.scrollTop = area.scrollHeight;
@@ -487,16 +638,16 @@ function renderChat() {
 
 function renderAI(data) {
   if (data.type === 'loading') return '<div class="loading-msg"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>';
-  if (data.type === 'error') return '<div class="ai-wrap"><div class="ai-analysis" style="border-left-color:var(--red)"><strong>CHYBA</strong>' + esc(data.text) + '</div></div>';
+  if (data.type === 'error') return '<div class="ai-wrap"><div class="ai-analysis" style="border-left-color:var(--red)"><strong>&#128308; CHYBA</strong>' + esc(data.text) + '</div></div>';
+  if (data.type === 'summary') return '<div class="summary-msg"><strong>&#128196; SHRNUTI HOVORU</strong>' + esc(data.text) + '</div>';
   if (data.type === 'info') {
-    var tip = data.customer_tip ? '<div class="rcard-tip">Zakaznikovi: ' + esc(data.customer_tip) + '</div>' : '';
-    return '<div class="ai-wrap"><div class="rcard"><div class="rcard-head"><span class="stag tag-i">ODPOVED</span>' + copyBtn(data.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(data.text) + '</div>' + tip + '</div></div></div>';
+    var tip = data.customer_tip ? '<div class="rcard-tip">&#128100; Zakaznikovi: ' + esc(data.customer_tip) + '</div>' : '';
+    return '<div class="ai-wrap"><div class="rcard"><div class="rcard-head"><span class="stag tag-i">&#129302; ODPOVED</span>' + copyBtn(data.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(data.text) + '</div>' + tip + '</div></div></div>';
   }
-  var tagMap = {'EMPATICKY': 'tag-e', 'PRIMOCAREJSI': 'tag-c', 'EMPATICKY ': 'tag-e'};
-  var analysis = data.analysis ? '<div class="ai-analysis"><strong>SITUACE</strong>' + esc(data.analysis) + '</div>' : '';
+  var tagMap = {'EMPATICKY':'tag-e','PRIMOCAREJSI':'tag-c'};
+  var analysis = data.analysis ? '<div class="ai-analysis"><strong>&#128270; SITUACE</strong>' + esc(data.analysis) + '</div>' : '';
   var cards = (data.responses || []).map(function(r) {
-    var tag = tagMap[r.style] || 'tag-i';
-    return '<div class="rcard"><div class="rcard-head"><span class="stag ' + tag + '">' + esc(r.style || 'ODPOVED') + '</span>' + copyBtn(r.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
+    return '<div class="rcard"><div class="rcard-head"><span class="stag ' + (tagMap[r.style] || 'tag-i') + '">' + esc(r.style || 'ODPOVED') + '</span>' + copyBtn(r.text) + '</div><div class="rcard-body"><div class="rcard-text">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
   }).join('');
   return '<div class="ai-wrap">' + analysis + cards + '</div>';
 }
@@ -505,28 +656,10 @@ function copyBtn(text) {
   return '<button class="copy-btn" data-copy="' + text.replace(/"/g, '&quot;') + '">Kopirovat</button>';
 }
 
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('copy-btn')) {
-    var text = e.target.getAttribute('data-copy');
-    navigator.clipboard.writeText(text).then(function() {
-      e.target.textContent = 'Zkopirovat!';
-      e.target.classList.add('ok');
-      setTimeout(function() { e.target.textContent = 'Kopirovat'; e.target.classList.remove('ok'); }, 2000);
-    });
-  }
-});
-
 function fillInput(text) {
-  var b = document.getElementById('ibox');
-  b.value = text;
-  b.focus();
-  autoResize(b);
+  var b = document.getElementById('ibox'); b.value = text; b.focus(); autoResize(b);
 }
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
-}
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
 
 function buildPrompt(phaseIdx, histItems) {
   var phase = PHASES[phaseIdx];
@@ -534,74 +667,101 @@ function buildPrompt(phaseIdx, histItems) {
   var phaseKbMap = {0:['tipy'],1:['tipy'],2:['tipy'],3:['dokumenty','tipy'],4:['dokumenty','tipy'],5:['tipy','mezidodavatel','aukce']};
   var relevantIds = phaseKbMap[phaseIdx] || ['tipy'];
   var kbText = KB.filter(function(k) { return relevantIds.indexOf(k.id) !== -1; }).map(function(k) { return k.title + ': ' + k.content; }).join(' | ');
+  var dodavText = DODAVATELE.map(function(d) { return d.name + ': ' + d.content.slice(0, 200); }).join(' | ');
 
   return 'Jsi zkuseny obchodni kouc pro obchodniky Usetreno.cz (energie CR).\n' +
-    'Faze: ' + phase.name + '. ' + phase.context + '\n' +
+    'Faze hovoru: ' + phase.name.replace(/&#[0-9]+;/g, '') + '. ' + phase.ctx + '\n' +
     'Predchozi namitky: ' + (hist || 'zadne') + '\n\n' +
-    'Znalosti: ' + kbText + '\n\n' +
-    'STYL ODPOVEDI - dulezite:\n' +
+    'Znalosti o procesech: ' + kbText + '\n\n' +
+    'Informace o dodavatelich: ' + dodavText + '\n\n' +
+    'STYL - DULEZITE:\n' +
     'Odpovedi jako skutecny lidsky rozhovor po telefonu. Max 2 vety.\n' +
     'Princip: pochopeni -> rozklichovani -> reseni. Nikdy vsechno najednou.\n' +
     'Kazda odpoved konci otazkou ktera drzi zakaznika v hovoru.\n' +
-    'Zadna cisla dokud neziskas zajem zakaznika.\n\n' +
+    'Zadna cisla a statistiky dokud neziskas zajem zakaznika.\n\n' +
     'PRIKLADY:\n' +
-    'Namitka: Nemam cas, jsem v praci\n' +
+    'Namitka: Nemam cas jsem v praci\n' +
     'Spravne: Jasne, nechci zdrzovat. Jen jsem zaznamenal vasi kalkulaci - co vas k tomu privedlo?\n' +
     'Spatne: Prumerna domacnost usetri az 6000 Kc rocne.\n\n' +
     'Namitka: Zajimaly me ceny ale ted nemam cas\n' +
     'Spravne: Rozumim - v kolik koncite v praci? Zavolam potom.\n\n' +
-    'Pro NAMITKU: 2 odpovedi - mekka a primocarejsi. Obe konci otazkou.\n' +
-    'FORMAT: {"type":"objection","analysis":"1 veta","responses":[{"style":"EMPATICKY","text":"...","next":"..."},{"style":"PRIMOCAREJSI","text":"...","next":"..."}]}\n\n' +
-    'Pro DOTAZ OBCHODNIKA: jako zkuseny kolega.\n' +
-    'FORMAT: {"type":"info","text":"odpoved","customer_tip":"jak to rict zakaznikovi"}\n\n' +
-    'Pouze cisty JSON, bez markdown.';
+    'Pro NAMITKU KLIENTA: 2 odpovedi - mekka a primocarejsi. Obe konci otazkou.\n' +
+    'FORMAT namitka: {"type":"objection","analysis":"1 veta co zakaznik mysli","responses":[{"style":"EMPATICKY","text":"...","next":"..."},{"style":"PRIMOCAREJSI","text":"...","next":"..."}]}\n\n' +
+    'Pro DOTAZ OBCHODNIKA (otazka, pojmy, procesy, dodavatele): odpovez jako zkuseny kolega.\n' +
+    'FORMAT dotaz: {"type":"info","text":"odpoved","customer_tip":"jak to rict zakaznikovi - jen pokud relevantni"}\n\n' +
+    'Pouze cisty JSON, bez markdown, bez backticks.';
+}
+
+async function summarizeChat() {
+  if (!activeId) { alert('Nejprve vyber klienta.'); return; }
+  var c = clients.find(function(x) { return x.id === activeId; });
+  if (!c || c.history.filter(function(h) { return h.role === 'user'; }).length < 2) {
+    alert('Prilis malo zprav pro shrnuti. Zadej alespon 2 namitky.');
+    return;
+  }
+  document.getElementById('sendBtn').disabled = true;
+  c.history.push({role:'ai', content:{type:'loading'}});
+  renderChat();
+
+  var histText = c.history.filter(function(h) { return h.role === 'user'; }).map(function(h) { return h.content; }).join(', ');
+  try {
+    var resp = await fetch(getWorkerUrl(), {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        system: 'Jsi asistent pro obchodniky. Shrnuj hovory stucne a prakticky v cestine. Odpovez jako cisty JSON: {"type":"summary","text":"shrnuti hovoru v max 4 vetach - co klient rikal, jaky ma stav, doporuceny dalsi krok"}. Bez markdown.',
+        messages: [{role:'user', content:'Shrnuti hovoru s klientem. Namitky: ' + histText}]
+      })
+    });
+    var data = await resp.json();
+    var raw = data.content && data.content[0] ? data.content[0].text : '';
+    var parsed;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { parsed = {type:'summary', text:raw}; }
+    c.history[c.history.length-1] = {role:'ai', content:parsed};
+  } catch(e) {
+    c.history[c.history.length-1] = {role:'ai', content:{type:'error', text:'Chyba: ' + e.message}};
+  }
+  document.getElementById('sendBtn').disabled = false;
+  saveClients(); renderChat();
 }
 
 async function sendMsg() {
   if (!activeId) { alert('Nejprve vyber klienta.'); return; }
   var box = document.getElementById('ibox');
-  var text = box.value.trim();
-  if (!text) return;
+  var text = box.value.trim(); if (!text) return;
   var c = clients.find(function(x) { return x.id === activeId; });
-  box.value = '';
-  autoResize(box);
+  box.value = ''; autoResize(box);
   document.getElementById('sendBtn').disabled = true;
-  c.history.push({role: 'user', content: text});
-  c.history.push({role: 'ai', content: {type: 'loading'}});
-  saveClients();
-  renderChat();
+  c.history.push({role:'user', content:text});
+  c.history.push({role:'ai', content:{type:'loading'}});
+  saveClients(); renderChat();
 
   try {
-    var workerUrl = getWorkerUrl();
-    var resp = await fetch(workerUrl, {
+    var resp = await fetch(getWorkerUrl(), {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 400,
         system: buildPrompt(currentPhase, c.history.slice(0, -2)),
-        messages: [{role: 'user', content: text}]
+        messages: [{role:'user', content:text}]
       })
     });
-    if (!resp.ok) {
-      var err = await resp.json();
-      throw new Error(err.error ? err.error.message : 'HTTP ' + resp.status);
-    }
+    if (!resp.ok) { var err = await resp.json(); throw new Error(err.error ? err.error.message : 'HTTP ' + resp.status); }
     var data = await resp.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
     var parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
-    catch(e) { parsed = {type: 'info', text: raw}; }
-    c.history[c.history.length - 1] = {role: 'ai', content: parsed};
+    try { parsed = JSON.parse(raw.replace(/```json|```/g,'').trim()); } catch(e) { parsed = {type:'info', text:raw}; }
+    c.history[c.history.length-1] = {role:'ai', content:parsed};
   } catch(e) {
-    c.history[c.history.length - 1] = {role: 'ai', content: {type: 'error', text: 'Chyba: ' + e.message}};
+    c.history[c.history.length-1] = {role:'ai', content:{type:'error', text:'Chyba: ' + e.message}};
   }
 
   document.getElementById('sendBtn').disabled = false;
-  var n = c.history.filter(function(h) { return h.role === 'user'; }).length;
-  document.getElementById('topSub').textContent = n + ' zprav';
-  saveClients();
-  renderChat();
+  document.getElementById('topSub').textContent = c.history.filter(function(h) { return h.role === 'user'; }).length + ' zprav';
+  saveClients(); renderChat();
 }
 
 function esc(str) {
