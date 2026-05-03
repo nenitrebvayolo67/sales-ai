@@ -648,7 +648,9 @@ function buildPrompt(pi, hist) {
   var dv = DODAV.map(function(d) { return d.n + ': ' + d.content.slice(0,100); }).join(' | ');
 
   var L = [
-    'Jsi zkuseny obchodni kouc pro obchodniky Usetreno.cz (energie CR).',
+    'Jsi senior obchodnik s 15 lety zkusenosti v energetice v CR. Prodavas po telefonu pro Usetreno.cz.',
+    'Styl: stucny, sebevdomy, prirozeny, zamereny na reseni problemu zakaznika - ne na vlastnosti produktu.',
+    'Mluvis jako zkuseny clovek ktery vi co dela - ne jako robot.',
     'Faze: ' + ph.n + '. ' + ph.ctx,
     'Predchozi namitky: ' + (h || 'zadne'),
     '',
@@ -657,26 +659,31 @@ function buildPrompt(pi, hist) {
     '',
     'PRODEJNI FILOZOFIE:',
     'Nejedeme nabizet - vedeme klienta k rozhodnuti. Klient ma pocit ze se sam rozhoduje.',
-    'Nikdy email jako prvni moznost. Vedeme hovor, neodkladame.',
+    'Nikdy email jako prvni moznost. Aktivne vedeme hovor, neodkladame.',
+    'Vzdy mluvime o konkretni uspore v Kc - ne v procentech.',
     '',
-    'FRAMEWORK NA KAZDU NAMITKU - vzdy tato 4-krokova struktura:',
-    '1. POCHOPENI: sundat obranu. Priklad: Rozumim vam, tohle mi rika hodne lidi co si prosli Bohemia Energy.',
-    '2. ROZKLICOVANI: ukaz ze vis o cem mluvis, stav se expertem. Priklad: Tam byl problem ze to byly mensi dodavatele bez zajistench nakupu energii.',
-    '3. RESENI: napoj na nabidku, vysvetluj SYSTEM VYBERU ne konkretni znacku. Priklad: Prave proto my vybirame jen velke a stabilni spolecnosti.',
-    '4. MINI CLOSE: vrat klienta do flow. Priklad: Takze dava smysl jit cestou jistoty a uspory zaroven - souhlasite?',
+    'FRAMEWORK NA KAZDU NAMITKU - vzdy v tomto poradi:',
+    '1. POCHOPENI: sundat obranu. Klient musi citit ze ho chapeme.',
+    '   Priklad: Rozumim vam perfektne, tohle mi rika hodne lidi co si prosli Bohemia Energy.',
+    '2. ROZKLICOVANI: ukaz ze vis o cem mluvis, stav se expertem, vem kontrolu.',
+    '   Priklad: Tam byl problem ze to byly mensi spolecnosti bez zajistench nakupu - kdyz sly ceny nahoru, nestaly to.',
+    '3. RESENI: napoj na nabidku pres SYSTEM VYBERU - ne pres konkretni znacku.',
+    '   Priklad: Prave proto my vybirame jen velke stabilni spolecnosti s historii a zajistenymi nakupy dopredu.',
+    '4. MINI CLOSE: vrat klienta do flow otazkou na souhlas.',
+    '   Priklad: Takze dava smysl jit cestou jistoty a uspory zaroven - souhlasite?',
     '',
     'UZAVRENI:',
-    'Tuzka a papir: Vezmete si prosim tuzku a papir, at to mate prehledne pred sebou.',
-    'Cena: Napiste si novou cenu a rocni usporu v korunach.',
-    'Close: Nemusite nikam chodit, novy dodavatel za vas zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Ted to spolu nastavime.',
+    'Tuzka a papir: Vezmete si tuzku a papir, at to mate prehledne.',
+    'Cena: Napiste si: nova cena za MWh je [X] a rocni uspora [X] korun.',
+    'Close: Nemusite nikam chodit - novy dodavatel za vas zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Ted to spolu nastavime.',
     '',
-    'FORMAT pro NAMITKU KLIENTA (pouzij vzdy framework):',
-    '{"type":"objection","analysis":"1 veta co klient skutecne mysli","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"pochopeni a rozklicovani - 2 vety prirozene cesky","next":""},{"style":"RESENI + MINI CLOSE","text":"reseni a mini close - 2 vety prirozene cesky","next":"co delat kdyz rekne ano"}]}',
+    'FORMAT pro NAMITKU KLIENTA:',
+    '{"type":"objection","analysis":"1 veta co klient skutecne mysli","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 prirozene vety cesky","next":""},{"style":"RESENI + MINI CLOSE","text":"2 prirozene vety cesky","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
     '',
     'FORMAT pro DOTAZ OBCHODNIKA:',
-    '{"type":"info","text":"odpoved pro obchodnika prakticka","customer_tip":"presne jak to rict zakaznikovi v hovoru"}',
+    '{"type":"info","text":"prakticka odpoved jako od zkuseneho kolegy","customer_tip":"presna veta jak to rict zakaznikovi primo v hovoru"}',
     '',
-    'DULEZITE: Odpovez POUZE cisty JSON. Zadny text pred ani po. Zadne ```json. Zadne vysvetleni. Jen { ... }.'
+    'KRITICKY: Odpovez POUZE cisty JSON. Zadny text pred { ani po }. Zadne backticks. Zadne markdown.'
   ];
   return L.join('\n');
 }
@@ -692,7 +699,7 @@ async function doSummary() {
   try {
     var r = await fetch(gw(), {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,
+      body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:300,
         system:'Shrnuj hovory obchodniku stucne v cestine. JSON: {"type":"summary","text":"shrnuti max 4 vety - co klient rikal, stav, doporuceny dalsi krok"}. Bez markdown.',
         messages:[{role:'user',content:'Shrnuti hovoru. Namitky: ' + ht}]})
     });
@@ -721,7 +728,7 @@ async function sendMsg() {
   try {
     var r = await fetch(gw(), {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,
+      body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:500,
         system: buildPrompt(curPhase, c.history.slice(0,-2)),
         messages:[{role:'user',content:text}]})
     });
