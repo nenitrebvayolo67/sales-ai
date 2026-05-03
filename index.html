@@ -375,7 +375,12 @@ function init() {
     }
   });
 
-  if (localStorage.getItem('swu')) showApp();
+  if (localStorage.getItem('swu')) {
+    showApp();
+  } else {
+    localStorage.setItem('swu', WU);
+    showApp();
+  }
 }
 
 function showApp() {
