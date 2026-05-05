@@ -21,7 +21,7 @@
 body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
 
 /* SETUP */
-#setup{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;}
+#setup{position:fixed;inset:0;z-index:200;background:var(--bg);display:none;align-items:center;justify-content:center;}
 .setup-box{background:var(--bg2);border:1px solid var(--brd);border-radius:16px;padding:40px;width:420px;max-width:95vw;text-align:center;}
 .setup-logo{font-family:'DM Mono',monospace;font-size:11px;color:var(--ac);letter-spacing:.15em;margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:8px;}
 .sdot{width:6px;height:6px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px var(--ac);}
@@ -84,9 +84,9 @@ body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--tx
 .phase-bar{display:flex;gap:4px;padding:8px 20px;border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;align-items:center;}
 .phase-bar::-webkit-scrollbar{height:0;}
 .phase-lbl{font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;margin-right:6px;white-space:nowrap;}
-.ph{padding:4px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--brd);color:var(--tx3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;transition:all .15s;}
+.ph{padding:5px 13px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--brd);color:var(--tx3);background:transparent;font-family:'Sora',sans-serif;white-space:nowrap;transition:all .2s;}
 .ph:hover{border-color:var(--brdh);color:var(--tx2);}
-.ph.on{background:var(--acd);border-color:var(--acb);color:var(--ac);font-weight:500;}
+.ph.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600;box-shadow:0 2px 12px rgba(108,92,231,0.4);}
 
 /* NOTES PANEL */
 .notes-bar{border-bottom:1px solid var(--brd);padding:10px 20px;display:none;gap:10px;align-items:flex-start;flex-shrink:0;}
@@ -239,7 +239,7 @@ textarea#ibox::placeholder{color:var(--tx3);}
   </div>
 </div>
 
-<div class="app" id="app" style="display:none">
+<div class="app" id="app">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
@@ -275,8 +275,8 @@ textarea#ibox::placeholder{color:var(--tx3);}
 
     <!-- PHASE BAR -->
     <div class="phase-bar">
-      <div class="phase-lbl">FAZE</div>
-      <div id="phases"></div>
+      <div class="phase-lbl">FAZE HOVORU:</div>
+      <div id="phases" style="display:flex;gap:4px;align-items:center;"></div>
     </div>
 
     <!-- SCRIPT HINT -->
@@ -315,9 +315,10 @@ textarea#ibox::placeholder{color:var(--tx3);}
   </div>
   <div class="drawer-tabs">
     <button class="dtab on" id="dtab0">Znalosti</button>
-    <button class="dtab" id="dtab1">Dodavatele</button>
-    <button class="dtab" id="dtab2">Fraze</button>
-    <button class="dtab" id="dtab3">Citaty</button>
+    <button class="dtab" id="dtab1">Dodav.</button>
+    <button class="dtab" id="dtab2">Argumenty</button>
+    <button class="dtab" id="dtab3">Fraze</button>
+    <button class="dtab" id="dtab4">Citaty</button>
   </div>
   <div class="drawer-content" id="drawerContent"></div>
 </div>
@@ -339,12 +340,42 @@ textarea#ibox::placeholder{color:var(--tx3);}
 var WU = 'https://dark-dream-de7c.nepouzitejucet.workers.dev';
 
 var PHASES = [
-  {n:'Uvod',s:'<strong>Dobry den, u telefonu [jmeno] z Usetreno.cz.</strong> Volam na zaklade kalkulace z naseho portalu. Predpokladam ze jste se porovnaval vy?',c:['Nezajimam se','Odkud mate cislo?','Nemam cas','Uz jsem to resil'],ctx:'Zacatek hovoru, navazani kontaktu.'},
-  {n:'Duvod',s:'<strong>Co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?',c:['Jen jsem se dival','Vysoke vyuctovani','Konci smlouva','Kamarad doporucil'],ctx:'Zjistujeme proc zakaznik volal.'},
-  {n:'Duvera',s:'<strong>Jsme jeden z nejvetsich nezavislych srovnavacich energii v Cesku</strong> - od 2018 pod skupinou CSOB. Porovnavame nezavisle vsechny dodavatele.',c:['Proc bych veril?','Je to podvod?','Nic nepodepisu','Jsem u jine banky'],ctx:'Budujeme duveru, zakaznik muze byt skepticky.'},
-  {n:'Faktura',s:'<strong>Mate vyuctovani elektronicky nebo v papirove podobe?</strong> Otevrte si posledni vyuctovani - podivame se spolu.',c:['Nemam fakturu','Neni doma','Nemam cas','Proc ji potrebujete?'],ctx:'Navigujeme k fakture pro ziskani EAN a spotreby.'},
-  {n:'Preference',s:'<strong>Predpokladam velkeho stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?',c:['Nechci menit','Jsem spokojeny','Co z toho mate?','Jak dlouho smlouva?'],ctx:'Zjistujeme preference, vybirame dodavatele.'},
-  {n:'Uzavreni',s:'<strong>Vezmete si tuzku a papir.</strong> Napiste si: nova cena [X] Kc/MWh, rocni uspora [X] Kc. Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani. Ted to nastavime.',c:['Musim se poradit','Poslete email','Jeste rozmyslim','Je to zavazne?'],ctx:'Uzavreni - tuzka papir, cena, uzavreni.'}
+  {
+    n:'Uvod',
+    goal:'DOSTAT SE DAL - ne prodavat. Cil: zjistit ze volam spravnemu cloveku a prebudit zajem. Kratke odpovedi, posouvat dal.',
+    s:'<strong>Dobry den, u telefonu [jmeno] z Usetreno.cz.</strong> Volam na zaklade kalkulace z naseho portalu. Predpokladam ze jste se porovnaval vy?',
+    c:['Nezajimam se','Odkud mate cislo?','Nemam cas','Uz jsem to resil']
+  },
+  {
+    n:'Duvod',
+    goal:'ZJISTIT PAIN - co ho stve, proc to jeste neresil, kolik plati. Otazky vedou k dalsim otazkam.',
+    s:'<strong>Co vas k tomu privedlo?</strong> Bylo to vyssi vyuctovani, koncici fixace, nebo neco jineho?',
+    c:['Jen jsem se dival','Vysoke vyuctovani','Konci smlouva','Kamarad doporucil']
+  },
+  {
+    n:'Duvera',
+    goal:'BUDOVAT THREE 10s JISTOTU - klient musi verit produktu, mne i firme. Pouzij: od 2018 pod CSOB, nezavisly srovnavac, vsichni velci dodavatele.',
+    s:'<strong>Jsme jeden z nejvetsich nezavislych srovnavacich energii v Cesku</strong> - od 2018 pod skupinou CSOB. Nezavisle a zdarma porovnavame vsechny dodavatele.',
+    c:['Proc bych veril?','Je to podvod?','Nic nepodepisu','Jsem u jine banky']
+  },
+  {
+    n:'Faktura',
+    goal:'ZISKAT DATA - EAN, spotrebu, sazbu, aktualniho dodavatele. Naviguj klienta k fakture, vysvetluj proc ji potrebujes.',
+    s:'<strong>Mate vyuctovani elektronicky nebo v papirove podobe?</strong> Otevrte si posledni vyuctovani - podivame se spolu.',
+    c:['Nemam fakturu','Neni doma','Nemam cas','Proc ji potrebujete?']
+  },
+  {
+    n:'Preference',
+    goal:'POTVRDIT PREFERENCE a PREDSTAVIT RESENI. Potvrdit: velky stabilni dodavatel, garantovana cena, uspora. Zvladat namitky na konkretniho dodavatele.',
+    s:'<strong>Predpokladam velkeho stabilniho dodavatele</strong> s garantovanou cenou - je to tak? Mate u soucasneho dodavatele nejaky benefit?',
+    c:['Nechci menit','Jsem spokojeny','Co z toho mate?','Jak dlouho smlouva?']
+  },
+  {
+    n:'Uzavreni',
+    goal:'UZAVRIT - tuzka a papir, cena, uspora, assumption close. Klient uz ma info. Vest k ANO. Neptat se - vest. Zadne otazky.',
+    s:'<strong>Vezmete si tuzku a papir.</strong> Napiste si: nova cena [X] Kc/MWh, rocni uspora [X] Kc. Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo. Ted to nastavime.',
+    c:['Musim se poradit','Poslete email','Jeste rozmyslim','Je to zavazne?']
+  }
 ];
 
 var KB = [
@@ -371,6 +402,15 @@ var DODAV = [
   {id:'ppa',n:'PPAS',link:'https://www.ppas.cz/',tip:'PPAS je historicky prazsky plynorensky podnik - stabilita pres 100 let. Rekni: PPAS zasobuje Prahu plynem jiz vice nez 100 let. To je ta traditce a jistota ktera se jinde nenajde.',c:'PROFIL: Prazska plynarenska, historicky dodavatel plynu, stabilita 100+ let.\nPOZOR: Yello a PPAS PLYN v Praze - prodavame bez omezeni po cele CR! Mezidodavatel NE. Export 17 prac. dni.\nPRO KOHO: Zakaznici co oceni historickou znacku, Praha a okoli.\nINFO: 800 134 134 | callcetrum@ppas.cz'},
   {id:'yel',n:'Yello',link:'https://www.yello.cz/cs/domacnost/',tip:'Yello je moderni digitalni znacka PRE - vse online, bez papiru, bez fronty. Rekni: Yello je online znacka Prazske energetiky - sjednate vse z mobilu za 5 minut a maji za sebou 100 let tradice PRE.',c:'PROFIL: Digitalni znacka skupiny PRE. Prodavame po CELE CR bez omezeni.\nSILNE STRANKY: Vse online, rychle sjednani, za sebou maji stabilitu PRE.\nPOZOR: Export smlouvy 17 prac. dni pred podanim vypovedi.\nPRO KOHO: Mladsi zakaznici, online komunikace, kdekoliv v CR.\nINFO: 267 056 704 | yello@yello.cz'},
   {id:'epe',n:'EPET',link:'https://epet.cz/',tip:'EPET ma jedny z nejkonkurencnejsich cen na trhu. Rekni: EPET neinvestuje do reklamy ani pobocek - ty usetrene penize da primo do ceny pro zakaznika.',c:'PROFIL: Mensi nezavisly dodavatel, konkurencni ceny, bez pobocek.\nDULEZITE: EPET - VZDY zakaznik sam vypovida! Informuj predem. Zakaznik doda akceptaci.\nPRO KOHO: Zakaznici kteri chteji nejnizsi cenu a zvladnou si zarizit vypoved sami.\nINFO: epet.cz'}
+];
+
+var ARGS = [
+  {id:'zeptej',cat:'Otazky ktere otevrou',t:'Otazky na rozklichovani namitky',c:'KDYZ KLIENT VAHA NEBO ODMITTA:\n\n"Vadilo by vam se mnou sdilet, proc to ve vasich ocich aktualne nedava smysl?"\n\nPo odpovedi:\n"Jestli vam to nevadi - zeptam se jeste na jednu otazku. Co by to muselo mit nebo splnovat, abyste rekl na zmenu ano?"\n\nKdyz rekne ze nic:\n"Chapu - a co by to muselo splnovat, aby si to obhajilo duvod na zmenu?"\n\n---\n\nNAMITKA - Poslete mi to do emailu:\n"Vadilo by vam kdybych se zeptal na zaudnejsi otazku - nez to poslu?"\n"Uz jste nekdy dostal email, ktery byl lepsi nez konverzace?"\n\n---\n\nMISTO dotazu: Mate k tomu nejake otazky?\nPOUZIJ: "Bylo by to takhle podle vasich predstav?"'},
+  {id:'zmena',cat:'Filozoficke argumenty',t:'Argument: Zmena dodavatele neni zmena',c:'Lide si pod pojmem zmena predstavi: auta, bydleni, prace, prostredi.\nU zmeny dodavatele NIC z toho neplati.\nVse zustane pri starem. Stejny elektromet. Stejne vsechno.\nJedina zmena = na vyuctovani bude jine logo dodavatele.\n\nJAK RICT ZAKAZNIKOVI:\n"Vim co si pod slovem zmena predstavujete - auto, bydleni, prace. Tohle ale vubec neni takova zmena. Tato zmena vam jen zajisti ze z vasi penezenky bude odchazet mene penez za UPLNE stejnou sluzbu. Nic se menit nebude - jen logo na vyuctovani."\n\nFILOZOFIE:\nTato zmena = zmeni se jen to ze platite mene. Zadne uceni, zadna adaptace, zadny stres.'},
+  {id:'uspora',cat:'Matematika v prodeji',t:'Mala uspora - jak ji prodat',c:'ZASADA: Nikdy nerici usporu jako rocni castku. Vzdycky ji rozbij na kratsi obdobi.\n\nMATEMATIKA:\nUspora 800 Kc rocne: mesicne 67 Kc, tydne 15 Kc, denne 2 Kc\nUspora 3000 Kc rocne: mesicne 250 Kc, tydne 58 Kc, denne 8 Kc\n\nJAK POUZIT:\n"To je 67 Kc mesicne - jen za stejnou elektrinu. Dava to smysl, ne?"\n"To je 15 Kc tydne - jedno pivo zdarma kazdy tyden. Proc platit vic?"\n\nSROVNANI KTERE FUNGUJE:\n"Kdybyste mel moznost si zdarma vzit 800 Kc ze stolu - vzal byste si je, nebo je tam nechal?"\n"Tych 800 Kc znamena ze vas dodavatel vam rocne preplacel. Za stejnou elektrinu."\n\nDLOUHODOBY EFEKT:\n"Za 5 let jsou to jiz 4000 Kc ktere mohly zustat u vas."\n"To je mensi dovolena jednou za 10 let jen za zmenu dodavatele."'},
+  {id:'rozmyslet',cat:'Filozoficke argumenty',t:'Argument: Potrebuji si to rozmyslet',c:'POUZIJ KDYZ KLIENT NEMA DOST INFORMACI (faze Uvod nebo Duvod):\n\n"Jasne, musite si o tom popremyslet - vzdyt jsem vam jeste nedal dost informaci na to, abyste si o tom nemuseli premyslet."\n\nEFEKT: Sejmete z klienta tlak. Naznacite ze rozhovor pokracuje. Klient nema duvod se branit.\n\nPO TOM pokracuj:\n"Prave proto pojdme se na to podivat spolu - at mate vsechny informace na spravne rozhodnuti."'},
+  {id:'nechci',cat:'Namitky',t:'Namitka: Nechci nic menit',c:'POCHOPENI:\n"Chapu, ze zmeny mohou byt neprijemne. Spousta lidi ma stejny pocit."\n\nROZKLICOVANI:\n"Mohl bych se zeptat - co konkretne vas vede k tomu ze nechcete menit?"\n\nRESENI pres filozofii zmeny:\n"Vim co si pod slovem zmena predstavujete. Ale tady se meni jen logo na vyuctovani. Elektromer, fakturace, vse zustava. Pouze platite mene."\n\nMINI CLOSE:\n"Proc platit zbytecne vic za uplne stejnou sluzbu - dava to smysl, ne?"\n\nALTERNATIVA - pres ego klienta:\n"Chapu ze chcete mit jistotu. Proto se podivame co vam dava nejvetsi smysl - a rozhodnuti je na vas."'},
+  {id:'ton',cat:'Ton hlasu a pristup',t:'Ton hlasu - jak mluvit aby klient slysel',c:'ZASADA: Klidny, trpelivy, partnersky - ne bojovny.\n\nSPATNE vs SPRAVNE:\n\nSPATNE: "Ja vam to uz vysvetluju ale vy si porad myslite neco jineho..."\nSPRAVNE: "Uplne vam rozumim, spousta lidi ma stejny pocit. A prave proto vam chci ukazat proc je to jinak."\n\nSPATNE: "To neni pravda, zlevnovat se urcite nebude."\nSPRAVNE: "Je pravda ze se trh meni. Zaroven ale situace nehraje v prospech zlevneni - prave proto chci zajistit nejlepsi podminky ted."\n\nKLIC - delej z klienta chytreho rozhodovatele:\n"Chapu ze chcete mit jistotu. Proto se podivame co vam dava nejvetsi smysl." \n\nDAJ POCIT KONTROLY:\n"Rozumim ze zvazujete co je pro vas nejlepsi. Prave proto se podivame na moznosti at vite s cim pracujete."'}
 ];
 
 var QUOTES = [
@@ -449,6 +489,7 @@ function init() {
   document.getElementById('dtab1').onclick = function() { openDrawer(1); };
   document.getElementById('dtab2').onclick = function() { openDrawer(2); };
   document.getElementById('dtab3').onclick = function() { openDrawer(3); };
+  document.getElementById('dtab4').onclick = function() { openDrawer(4); };
   document.getElementById('sendBtn').onclick = sendMsg;
   document.getElementById('ibox').onkeydown = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } };
   document.getElementById('ibox').oninput = function() { rsz(this); };
@@ -502,7 +543,8 @@ function setPhase(i) {
 
 function renderChips() {
   var bar = document.getElementById('chips');
-  bar.innerHTML = PHASES[curPhase].c.map(function(c) {
+  var chips = PHASES[curPhase].c || [];
+  bar.innerHTML = chips.map(function(c) {
     return '<span class="chip" data-t="' + c.replace(/"/g, '&quot;') + '">' + c + '</span>';
   }).join('');
   bar.querySelectorAll('.chip').forEach(function(ch) {
@@ -512,7 +554,7 @@ function renderChips() {
 
 function openDrawer(tab) {
   drawerTab = tab;
-  [0,1,2,3].forEach(function(i) { document.getElementById('dtab' + i).classList.toggle('on', i === tab); });
+  [0,1,2,3,4].forEach(function(i) { document.getElementById('dtab' + i).classList.toggle('on', i === tab); });
   kbOpenId = null; kbOpenType = null;
   renderDrawer();
   document.getElementById('drawer').classList.add('open');
@@ -529,8 +571,23 @@ function renderDrawer() {
   if (kbOpenId) { renderKbDetail(el); return; }
   if (drawerTab === 0) renderKbList(el);
   else if (drawerTab === 1) renderDodList(el);
-  else if (drawerTab === 2) renderPhrases(el);
+  else if (drawerTab === 2) renderArgList(el);
+  else if (drawerTab === 3) renderPhrases(el);
   else renderQuotes(el);
+}
+
+function renderArgList(el) {
+  var cats = [];
+  ARGS.forEach(function(a) { if (cats.indexOf(a.cat) < 0) cats.push(a.cat); });
+  el.innerHTML = cats.map(function(cat) {
+    return '<div class="kb-cat">' + cat + '</div>' +
+      ARGS.filter(function(a) { return a.cat === cat; }).map(function(a) {
+        return '<div class="kb-row" data-id="' + a.id + '" data-tp="arg">' + a.t + '</div>';
+      }).join('');
+  }).join('');
+  el.querySelectorAll('.kb-row').forEach(function(r) {
+    r.onclick = function() { kbOpenId = this.getAttribute('data-id'); kbOpenType = 'arg'; renderDrawer(); };
+  });
 }
 
 function renderKbList(el) {
@@ -558,7 +615,10 @@ function renderDodList(el) {
 }
 
 function renderKbDetail(el) {
-  var item = kbOpenType === 'dod' ? DODAV.find(function(d) { return d.id === kbOpenId; }) : KB.find(function(k) { return k.id === kbOpenId; });
+  var item;
+  if (kbOpenType === 'dod') item = DODAV.find(function(d) { return d.id === kbOpenId; });
+  else if (kbOpenType === 'arg') item = ARGS.find(function(a) { return a.id === kbOpenId; });
+  else item = KB.find(function(k) { return k.id === kbOpenId; });
   if (!item) return;
   var title = item.n || item.t;
   var link = item.link ? '<a class="kb-detail-link" href="' + item.link + '" target="_blank">Cenik &rarr;</a>' : '';
@@ -726,9 +786,29 @@ function renderAI(d) {
     var ctip = d.customer_tip ? '<div class="info-ctip"><strong>JAK TO RICT ZAKAZNIKOVI</strong>' + esc(d.customer_tip) + '</div>' : '';
     return '<div class="ai-wrap"><div class="info-card"><div class="info-top"><span class="badge badge-i">ODPOVED</span>' + cpbtn(d.text) + '</div><div class="info-body"><div class="info-txt">' + esc(d.text) + '</div>' + ctip + '</div></div></div>';
   }
-  var bm = {'POCHOPENI + ROZKLICOVANI':'badge-p','RESENI + MINI CLOSE':'badge-r'};
   var an = d.analysis ? '<div class="situation"><span class="situation-lbl">SITUACE</span>' + esc(d.analysis) + '</div>' : '';
   var cards = (d.responses || []).map(function(r) {
+    if (r.style === 'FLOW') {
+      var lines = r.text.split('\n').filter(function(l) { return l.trim(); });
+      var flowHtml = lines.map(function(line) {
+        var isClose = line.indexOf('CLOSE') >= 0 || line.indexOf('OTAZKA') >= 0;
+        var isPochop = line.indexOf('POCHOPENI') >= 0;
+        var isReframe = line.indexOf('REFRAME') >= 0;
+        var color = isPochop ? 'var(--gn)' : isReframe ? 'var(--am)' : isClose ? 'var(--ac)' : 'var(--tx2)';
+        var parts = line.split(':');
+        var label = parts[0] ? parts[0].trim() : '';
+        var text = parts.slice(1).join(':').trim();
+        if (text) {
+          return '<div style="margin-bottom:10px;padding:10px 12px;border-radius:8px;background:var(--bg4);border-left:2px solid ' + color + ';">' +
+            '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.08em;color:' + color + ';margin-bottom:4px;">' + esc(label) + '</div>' +
+            '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);">' + esc(text) + '</div>' +
+            '</div>';
+        }
+        return '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);margin-bottom:8px;">' + esc(line) + '</div>';
+      }).join('');
+      return '<div class="rcard"><div class="rcard-top"><span class="badge badge-p">INSTANT REBUTTAL</span>' + cpbtn(r.text.replace(/\n/g,' | ')) + '</div><div class="rcard-body">' + flowHtml + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
+    }
+    var bm = {'POCHOPENI + ROZKLICOVANI':'badge-p','RESENI + MINI CLOSE':'badge-r'};
     return '<div class="rcard"><div class="rcard-top"><span class="badge ' + (bm[r.style] || 'badge-i') + '">' + esc(r.style) + '</span>' + cpbtn(r.text) + '</div><div class="rcard-body"><div class="rcard-txt">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
   }).join('');
   return '<div class="ai-wrap">' + an + cards + '</div>';
@@ -745,65 +825,57 @@ function buildPrompt(pi, hist) {
   var ri = km[pi] || ['tip'];
   var kb = KB.filter(function(k) { return ri.indexOf(k.id) >= 0; }).map(function(k) { return k.t + ': ' + k.c.slice(0,150); }).join(' | ');
   var dv = DODAV.map(function(d) { return d.n + ': ' + d.c.slice(0,100); }).join(' | ');
+  var argsText = ARGS.map(function(a) { return a.t + ': ' + a.c.slice(0,150); }).join(' | ');
   var L = [
     'Jsi senior obchodnik s 15 lety zkusenosti v energetice CR. Prodavas po telefonu pro Usetreno.cz.',
-    'Pouzivas Straight Line prodejni metodu. Tady je tvuj kompletni framework:',
+    'Styl: stucny, sebevdomy, prirozeny. Mluvis jako zkuseny clovek - ne jako robot.',
     '',
-    'FRAME - ty vedes konverzaci, klient mluvi ale ty ridis flow. Nikdy se nenechas stahnou do kecani o nicem.',
-    'Tvoje mentalni nastaveni pred kazdy hovorem: Nepresvedcuju ho. Pomaham mu udelat spravne rozhodnuti.',
-    '',
-    'PRVNI 4 SEKUNDY: Sharp (strucny), Energy (lehke nadseni), Expert (vis co delas).',
-    'Vibe ne skript: Dobry den, tady [jmeno], volam ohledne vasi kalkulace energii - vezmu to rychle a prakticky, jo?',
-    '',
-    'INTELLIGENCE - bez toho jsi mrtvy. Zjistuj: co ma ted, co ho stve, proc to jeste neresil, kolik plati.',
-    'Otazky: Co vas na tom nejvic stve? Proc jste to zatim neresil? Kolik vas to ted stoji mesicne?',
-    '',
-    'PAIN + FUTURE:',
-    'Pain: Takze ted zbytatecne preplacite X mesicne... a nic se nemeni, jo?',
-    'Future: Kdyby se tohle odstranilo a mel jste to levnejsi bez starosti, to uz dava smysl, ne?',
-    'Lide kupuji aby se zbavili bolesti nebo aby se citili lip.',
-    '',
-    'THREE 10s - klient musi mit 10/10 v:',
-    '1. PRODUKT - tohle realne dava smysl',
-    '2. TY - tomuhle cloveku verim',
-    '3. FIRMA - nebude to scam / pruser',
-    'Kdyz klient rika namitku - NIKDY to neber doslova. Je to signal ze nema jednu z tech 10. Tvuj job: najit co chybi a doplnit jistotu.',
-    '',
-    'LOOPING - tvuj hlavni skill:',
-    'Spatne: tlacit na uzavreni.',
-    'Spravne: vratit se, vysvetlit, znovu zavrit.',
-    'Priklad: Klient: Poslete mi to do mailu. Ty: Jasne, poslu - jen at vam poslu presne co dava smysl... co vas na tom zatim nejvic brzdi?',
-    'Tim: neodmitas, vratis kontrolu, jdes zpet do prodeje.',
-    '',
-    'TONALITA = 50 % uspechu. Pouzivej:',
-    'Absolutni jistota: Tohle je ted pro vas nejlepsi reseni.',
-    'Reasonable man: Dava to smysl, ne?',
-    'Uprimnost: Reknu vam to na rovinu...',
-    'Scarcity: Uprimne... tohle neni uplne bezna nabidka.',
-    '',
-    'CLOSE - neptas se, vedes:',
-    'SPATNE: Chcete do toho jit?',
-    'SPRAVNE: Udelame to takhle - nastavime vam to od dalsiho obdobi, jo?',
-    'Assumption close - beres jako hotovou vec.',
-    '',
-    'Faze hovoru: ' + ph.n + '. ' + ph.ctx,
+    'AKTUALNI FAZE: ' + ph.n + '. CIL: ' + (ph.goal || ''),
     'Predchozi namitky: ' + (h || 'zadne'),
+    '',
     'Znalosti: ' + kb,
+    'Top argumenty a techniky: ' + argsText,
     'Dodavatele: ' + dv,
     '',
-    'UZAVRENI - presny postup:',
-    'Tuzka a papir: Vezmete si tuzku a papir, at to mate prehledne pred sebou.',
-    'Cena: Napiste si novou cenu a rocni usporu v Kc.',
-    'Close: Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Udelame to takhle - nastavime vam to od dalsiho obdobi, jo?',
+    'DULEZITE - RESPONDUJES JINAK DLE FAZE:',
+    'UVOD: jen navazovat kontakt, dostat se dal. Zadne prodavani.',
+    'DUVOD: zjistovat pain, ptat se. Odpovedi vedou k dalsim otazkam.',
+    'DUVERA: budovat Three 10s jistotu - produkt, ty, firma.',
+    'FAKTURA: pomoc s navigaci k fakture.',
+    'PREFERENCE: potvrdit preference, zvladat namitky na dodavatele.',
+    'UZAVRENI: assumption close, tuzka papir. Neptat se - vest k ANO.',
     '',
-    'FORMAT pro NAMITKU KLIENTA - pouzij Straight Line framework:',
-    '{"type":"objection","analysis":"co klientovi skutecne chybi - ktera ze 3 desitek (produkt/ty/firma) neni na 10","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 vety - sundat obranu, ukazat ze vis o cem mluvis, loop zpet do prodeje","next":""},{"style":"RESENI + CLOSE","text":"2 vety - doplnit chybejici jistotu, assumption close","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
+    'FORMAT ODPOVEDI NA NAMITKU - vzdy 3 kroky jako plynuly flow:',
+    'Krok 1 POCHOPENI: 1 veta ktera sundate obranu. Klient musi citit ze ho chapeme.',
+    'Krok 2 REFRAME: 1 veta ktera preformuluje situaci ve prospech prodeje.',
+    'Krok 3 CLOSE OTAZKA: 1 otazka ktera vrati klienta do flow nebo vede k ANO.',
+    '',
+    'PRIKLAD - namitka: poslete mi to do mailu',
+    'Pochopeni: Jasne, chapu ze si to chcete projit v klidu...',
+    'Reframe: ...jen vetsinou kdyz to poslu, lide se k tomu uz nevriii...',
+    'Close otazka: co byste potreboval slyset ted, abyste se mohl rozhodnout rovnou?',
+    '',
+    'PRIKLAD - namitka: nechci Centropol / nechci fixovat',
+    'Pochopeni: Rozumim, to je uplne v poradku...',
+    'Reframe: ...vetsina lidi kteri to nejdrive odmitli, pozdeji rikali ze by to vzali zpet kdyz videli ceny...',
+    'Close otazka: co konkretne vam na Centropolu nedava smysl - at se na to podivame?',
+    '',
+    'PRIKLAD - namitka: musim se poradit s manzelkou',
+    'Pochopeni: Jasne, to dava smysl...',
+    'Reframe: ...otazka je jestli ona bude mit problem s tim ze budete platit mene...',
+    'Close otazka: co si myslite ze by ona rekla kdyby vedela o te uspore?',
+    '',
+    'VYUZIVEJ SITUACI NA TRHU kde pomaha uzavrit:',
+    'Katar zastavil tezbu, Evropa ma zasobniky z 30%, ceny porostou. Kdo nezafixuje ted, podepise v lete za vic.',
+    '',
+    'FORMAT pro NAMITKU KLIENTA:',
+    '{"type":"objection","analysis":"co klientovi chybi ze Three 10s","responses":[{"style":"FLOW","text":"POCHOPENI: [1 veta]\nREFRAME: [1 veta]\nCLOSE OTAZKA: [1 otazka]","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
     '',
     'FORMAT pro DOTAZ OBCHODNIKA:',
-    '{"type":"info","text":"prakticka odpoved jako od zkuseneho straight line obchodnika","customer_tip":"presna veta s tonalitou jak to rict zakaznikovi primo v hovoru"}',
+    '{"type":"info","text":"prakticka odpoved jako od zkuseneho kolegy","customer_tip":"presna veta jak to rict zakaznikovi v hovoru"}',
     '',
-    'KRITICKY: Odpovez POUZE cisty JSON. Zadny text pred { ani po }. Zadne backticks.'
-];
+    'KRITICKY: Pouze cisty JSON. Zadny text pred { ani po }. Zadne backticks.'
+  ];
   return L.join('\n');
 }
 
