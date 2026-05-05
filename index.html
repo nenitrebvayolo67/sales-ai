@@ -808,55 +808,58 @@ function renderAI(d) {
 
 function renderFlowCard(r) {
   var text = r.text || '';
-  // Parse POCHOPENI / REFRAME / CLOSE OTAZKA from text
   var steps = [];
-  var lines = text.split('\n');
-  var currentStep = null;
-  var currentText = [];
 
-  lines.forEach(function(line) {
+  // Split by known keywords - handle both \n and literal 
+
+  var normalized = text.replace(/\\n/g, '
+');
+  var parts = normalized.split(/
+/);
+
+  var cur = null;
+  parts.forEach(function(line) {
     line = line.trim();
     if (!line) return;
-    var isPoch = /^POCHOPENI/i.test(line);
-    var isRef = /^REFRAME/i.test(line);
-    var isClose = /^CLOSE/i.test(line);
-    if (isPoch || isRef || isClose) {
-      if (currentStep) steps.push({label: currentStep.label, color: currentStep.color, text: currentText.join(' ').trim()});
-      currentStep = {
-        label: isPoch ? 'POCHOPENI' : isRef ? 'REFRAME' : 'CLOSE OTAZKA',
-        color: isPoch ? 'var(--gn)' : isRef ? 'var(--am)' : 'var(--ac)'
-      };
-      // Get text after the colon
-      var colonIdx = line.indexOf(':');
-      if (colonIdx >= 0) currentText = [line.slice(colonIdx+1).trim()];
-      else currentText = [];
+    var up = line.toUpperCase();
+    if (up.indexOf('POCHOPENI') === 0) {
+      if (cur) steps.push(cur);
+      cur = {label:'POCHOPENI', color:'#00b894', text: line.replace(/^POCHOPENI\s*:\s*/i,'')};
+    } else if (up.indexOf('REFRAME') === 0) {
+      if (cur) steps.push(cur);
+      cur = {label:'REFRAME', color:'#fdcb6e', text: line.replace(/^REFRAME\s*:\s*/i,'')};
+    } else if (up.indexOf('CLOSE') === 0) {
+      if (cur) steps.push(cur);
+      cur = {label:'CLOSE OTAZKA', color:'#6c5ce7', text: line.replace(/^CLOSE\s*OTAZKA\s*:\s*/i,'').replace(/^CLOSE\s*:\s*/i,'')};
     } else {
-      if (currentStep) currentText.push(line);
+      if (cur) cur.text += ' ' + line;
+      else cur = {label:'', color:'var(--tx2)', text: line};
     }
   });
-  if (currentStep && currentText.length) steps.push({label: currentStep.label, color: currentStep.color, text: currentText.join(' ').trim()});
+  if (cur) steps.push(cur);
 
   var inner = '';
   if (steps.length >= 2) {
     inner = steps.map(function(s) {
-      return '<div style="margin-bottom:10px;padding:10px 14px;border-radius:8px;background:var(--bg);border-left:3px solid ' + s.color + ';">' +
-        '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.1em;color:' + s.color + ';font-weight:600;margin-bottom:5px;">' + s.label + '</div>' +
-        '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);">' + esc(s.text) + '</div>' +
+      var dot = s.label ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + s.color + ';margin-right:8px;"></span>' : '';
+      return '<div style="margin-bottom:10px;padding:12px 14px;border-radius:10px;background:var(--bg);border-left:3px solid ' + s.color + ';">' +
+        (s.label ? '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.1em;color:' + s.color + ';font-weight:700;margin-bottom:6px;">' + dot + s.label + '</div>' : '') +
+        '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);">' + esc(s.text) + '</div>' +
         '</div>';
     }).join('');
   } else {
-    inner = '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);white-space:pre-line;">' + esc(text) + '</div>';
+    // No structure found - display as plain text
+    inner = '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);">' + esc(text.replace(/\\n/g, ' | ')) + '</div>';
   }
 
-  var nextHtml = r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '';
-  var badge = r.style === 'FLOW' ? 'INSTANT REBUTTAL' : (r.style || 'ODPOVED');
-  var badgeCls = 'badge-p';
+  var nextHtml = r.next ? '<div style="margin-top:8px;font-size:11px;color:var(--ac);font-family:DM Mono,monospace;padding-top:8px;border-top:1px solid var(--brd);">DALSI KROK: ' + esc(r.next) + '</div>' : '';
 
   return '<div class="rcard" style="margin-bottom:8px;">' +
-    '<div class="rcard-top"><span class="badge ' + badgeCls + '">' + esc(badge) + '</span>' + cpbtn(text) + '</div>' +
+    '<div class="rcard-top"><span class="badge badge-p">INSTANT REBUTTAL</span>' + cpbtn(text) + '</div>' +
     '<div class="rcard-body">' + inner + nextHtml + '</div>' +
     '</div>';
 }
+
 
 function cpbtn(t) { return '<button class="cpbtn" data-c="' + t.replace(/"/g,'&quot;') + '">Kopirovat</button>'; }
 function fillInput(t) { var b = document.getElementById('ibox'); b.value = t; b.focus(); rsz(b); }
