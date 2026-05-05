@@ -946,7 +946,7 @@ function buildPrompt(pi, hist) {
     'FORMAT pro DOTAZ OBCHODNIKA:',
     '{"type":"info","text":"prakticka odpoved jako od zkuseneho kolegy","customer_tip":"presna veta jak to rict zakaznikovi v hovoru"}',
     '',
-    'KRITICKY: Pouze cisty JSON. Zadny text pred { ani po }. Zadne backticks.'
+    'ABSOLUTNE KRITICKY: Tvoje odpoved musi zacinat PRESNE znakem { a koncit znakem }. Zadny text pred. Zadne uvozovky na zacatku. Zadne backticks. Zadna vysvetleni. POUZE { ... }.'
   ];
   return L.join('\n');
 }
@@ -967,7 +967,7 @@ async function doSummary() {
     })});
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
-    var parsed; try { var bt=String.fromCharCode(96); var cl=raw.split(bt+'json').join('').split(bt).join('').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); var je=cl.lastIndexOf('}'); if(je>=0)cl=cl.slice(0,je+1); parsed=JSON.parse(cl); } catch(e) { parsed={type:'summary',text:raw}; }
+    var parsed; try { var cl=raw; var ji=cl.indexOf('{'); if(ji>=0)cl=cl.slice(ji); var je=cl.lastIndexOf('}'); if(je>=0)cl=cl.slice(0,je+1); parsed=JSON.parse(cl); } catch(e) { parsed={type:'summary',text:raw}; }
     c.history[c.history.length-1] = {role:'ai',content:parsed};
   } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
@@ -995,10 +995,9 @@ async function sendMsg() {
     var raw = data.content && data.content[0] ? data.content[0].text : '';
     var parsed;
     try {
-      var bt = String.fromCharCode(96);
-      var cl = raw.split(bt + 'json').join('').split(bt).join('').trim();
+      var cl = raw;
       var ji = cl.indexOf('{');
-      if (ji > 0) cl = cl.slice(ji);
+      if (ji >= 0) cl = cl.slice(ji);
       var je = cl.lastIndexOf('}');
       if (je >= 0) cl = cl.slice(0, je+1);
       parsed = JSON.parse(cl);
