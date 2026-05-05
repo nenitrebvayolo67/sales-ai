@@ -329,6 +329,7 @@ textarea#ibox::placeholder{color:var(--tx3);}
     <button class="dtab on" id="dtab0">Znalosti</button>
     <button class="dtab" id="dtab1">Dodavatele</button>
     <button class="dtab" id="dtab2">Fraze</button>
+    <button class="dtab" id="dtab3">Citaty</button>
   </div>
   <div class="drawer-content" id="drawerContent"></div>
 </div>
@@ -359,27 +360,69 @@ var PHASES = [
 ];
 
 var KB = [
-  {id:'dok',cat:'Procesy',t:'Dokumenty ke smlouve',link:'',tip:'',c:'POSLEDNI VYUCTOVANI: overeni jmena, adresy. Data: EAN/EIC, adresa OM, jistic, sazba, spotreba. Zakaznik nema: vyzada od dodavatele opis.\n\nSMLOUVA: urceni uvazku, vypovedi lhuta. Centropol: VOP. Innogy: prvni+druhou stranu.\n\nZMENA DODAVATELE: posledni vyuctovani + smlouva. Zakaznik vypovedel: dodat akceptaci.'},
-  {id:'ter',cat:'Procesy',t:'Terminy a vypovedi',link:'',tip:'',c:'TERMINY: CEZ/Lama/EON/Centropol/DE/Innogy: 10 prac. dni. Yello/PRE: 17 prac. dni. MND: 12 prac. dni.\n\nURGENTNI: rizikova pokud mene nez 30 dni. Usetreno ~15 dni, partneri ~10 dni, OTE min 10 dni.\n\nVYPOVED ZAKAZNIKEM: vygenerovat 30 dni pred zmenou. Podepsana na BO 5 dni pred. Predano partnerovi 3 dny pred.'},
-  {id:'mez',cat:'Procesy',t:'Mezidodavatel',link:'',tip:'',c:'NA SMLOUVU: dodavatele ktereho budeme VYPOVEDAT = kdo aktualne dodava!\n\nYello/MND: mohou vypovidat po zahajeni. EON/PRE/PPAS/CEZ a dalsi: NE.\n\nVYPOVIDA ZAKAZNIK: funguje u vsech.'},
-  {id:'auk',cat:'Procesy',t:'Aukcni spolecnost',link:'',tip:'',c:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\n\nDULEZITE: smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\n\nMND a EON vypovida za klienty. Zname: Terra Group, Simply Energy, Ceska aukce, D-test, A Tender.'},
-  {id:'fve',cat:'Procesy',t:'Fotovoltaika FVE',link:'',tip:'',c:'Usetreno NEUZAVIRA smlouvu na vykup FVE. Uzavirame beznou dodavku + info partnerovi o zajmu o vykup.\n\nOd 2018: zakaznik musi mit 2 elektromery a 2 EANy. Zaloha 0 Kc, mesicni fakturace.\n\nVYKUP: Centropol ~800 Kc/MWh. Yello/EON. PPAS se smlouvou 950 Kc, bez 450 Kc.'},
-  {id:'dpi',cat:'Pojmy',t:'DPI - Dodavatel posledni instance',link:'',tip:'',c:'DPI nastupuje automaticky kdyz dodavatel nemuze dodavat. Po 6 mesicich hrozi neopravneny odber!\nPRE: jednu vyzvu a ihned odpoji. Resit OKAMZITE jako urgentni smlouvu.'},
-  {id:'odch',cat:'Pojmy',t:'Odchylka ve spotrebe',link:'',tip:'Vetsi dodavatele lepe ridi portfolio = nizsi odchylky = levnejsi cena. Pouzij to jako argument pro CEZ, EON nebo PRE.',c:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK ZAKAZNIKOVI: Predstavte si ze si objednate 100 litru vody ale spotrebujete 80 - za tech 20 litru zaplatite navic. Dodavatele funguji stejne s elektrinou na burze.'},
-  {id:'tip',cat:'Techniky',t:'Obchodni framework',link:'',tip:'',c:'FRAMEWORK NA KAZDU NAMITKU:\n1. POCHOPENI: sundat obranu klienta\n2. ROZKLICOVANI: ukaz ze vis o cem mluvis\n3. RESENI: napoj na system vyberu, ne na znacku\n4. MINI CLOSE: vrat do flow otazkou\n\nNIKDY email jako prvni moznost.\nVZDY konkretni uspora v Kc, ne procenta.\nVZDY konci otazkou ktera drzi klienta v hovoru.'}
+  {id:'dok',cat:'Procesy',t:'Dokumenty ke smlouve',link:'',tip:'',c:'STANDARDNI ZMENA DODAVATELE:\nPosledni vyuctovani (kompletni) + smlouva/dodatek od soucasneho dodavatele.\nZakaznik vypovedel sam: dodat akceptaci vypovedi.\n\nPODNIKATEL / ICO:\nVZDY faktura + smlouva. Bez smlouvy = klient musi vypovidat SAM a dodat AKCEPTACI vypovedi.\nSVJ a vice podpisu: generovat POUZE PRE nebo CEZ - rucni podpis, posila na info@usetreno.cz.\n\nKLIENT BEZ FAKTURY (jeste neni rok u dodavatele):\nFaktura: staci sama o sobe, nic dalsiho nepotrebujeme.\nBEZ FAKTURY: dolozi UVITACI DOPIS + SMLOUVA od aktualniho dodavatele.\nVYJIMKA - smlouva na dobu neurcita bez faktury: misto uvitaciho dopisu staci ROZPIS ZALOH + smlouva.\n\nCENTROPOL: vzdy dodat veskere VOP. INNOGY: prvni + druhou stranu smlouvy.'},
+  {id:'ter',cat:'Procesy',t:'Terminy a vypovedi',link:'',tip:'',c:'HRANICNI TERMINY PRO EXPORT:\nCEZ, Lama, EON, Centropol, DE, Innogy: 10 prac. dni pred podanim vypovedi.\nYello, PRE: 17 prac. dni pred podanim vypovedi.\nMND: 12 prac. dni pred podanim vypovedi.\n\nVYPOVEDNI LHUTY:\nDoba urcita: 20 denni vypovedni lhuta.\nDoba neurcita: 3 mesice vypovedni lhuta.\nSPOT: 1 mesic vypovedni lhuta.\n\nURGENTNI SMLOUVA - rizikova pokud mene nez 30 dni:\nUsetreno ~15 dni, partneri ~10 dni, OTE min 10 dni.\n\nVYPOVED ZAKAZNIKEM: vygenerovat 30 dni pred zmenou. Podepsana na BO 5 dni pred. Predano partnerovi 3 dny pred.'},
+  {id:'mez',cat:'Procesy',t:'Mezidodavatel',link:'',tip:'',c:'NA SMLOUVU uvadime dodavatele ktereho budeme VYPOVEDAT = kdo aktualne dodava!\n\nYello a MND: mohou vypovidat po zahajeni dodavky.\nEON, PRE, PPAS, CEZ a dalsi: NE.\n\nVYPOVIDA ZAKAZNIK: funguje u vsech.\nPOZNAMKA v Sove: OP: Mezidodavatel [jmeno] zakaznik vypovida sam k datu dd.mm.rrrr'},
+  {id:'auk',cat:'Procesy',t:'Aukcni spolecnost',link:'',tip:'',c:'Aukcni spolecnost = zprostredkovatel s plnou moci za zakaznika.\nDULEZITE: smlouvu lze zrusit nejpozdeji 15 dni po zahajeni dodavky!\nMND a EON vypovida za klienty.\nZname: Terra Group, Simply Energy, Ceska aukce, D-test, A Tender.'},
+  {id:'fve',cat:'Procesy',t:'Fotovoltaika FVE',link:'',tip:'',c:'DULEZITE: NESJEDNAVAME vykup z FVE u zadneho dodavatele!\n\nJEDINA VYJIMKA - MND SOLARNI UCET:\nPoplatek: 60 Kc/mesic.\nPrve 2 MWh: klient dostane 1 000 Kc/MWh.\nKazda dalsi MWh (2+): 500 Kc/MWh.\nPriklad: 3 MWh = 1000+1000+500 = 2 500 Kc minus 60 Kc/mes poplatek.\nSolarni ucet MND: pouze pro DOMACNOSTI, NE pro ICO!\n\nNa FVE zakaznikovi vzdy sdelime: budeme resit beznou dodavku, vykup si doresi sam s dodavatelem.'},
+  {id:'dpi',cat:'Pojmy',t:'DPI - Dodavatel posledni instance',link:'',tip:'',c:'DPI nastupuje automaticky kdyz dodavatel nemuze dodavat. Regulovane ceny OTE.\nPo 6 mesicich hrozi neopravneny odber!\nPRE: jednu vyzvu a IHNED odpoji!\nResit OKAMZITE jako urgentni smlouvu.'},
+  {id:'odch',cat:'Pojmy',t:'Odchylka ve spotrebe',link:'',tip:'Vetsi dodavatele lepe ridi portfolio = nizsi odchylky = levnejsi cena pro klienta. Silny argument pro CEZ, EON nebo PRE.',c:'Odchylka = rozdil mezi predpokladanou a skutecnou spotrebou.\n\nJAK ZAKAZNIKOVI: Predstavte si ze si objednate 100 litru vody ale spotrebujete 80 - za tech 20 litru zaplatite navic. Dodavatele funguji stejne s elektrinou na burze. Vetsi dodavatele to lepsi ridi.'},
+  {id:'trh',cat:'Argumenty',t:'Proc resit DNES - situace na trhu',link:'',tip:'',c:'TIP PRO VAS: Pane/pani, situace z minuleho tydne zmenila pravidla hry. To co platilo pred 14 dny uz neplati. Moje prace je zajistit abyste na tenhle globalni konflikt nedoplatili z vlastni kapsy.\n\n--- ARGUMENT 1: EVROPA PRISLA O POJISTKU ---\nDotad jsme se uklidnovali ze rusky plyn nahradime plynem z Kataru.\nJenze Katar ted kvuli valce s Iranem zastavil tezbu.\nEvropa ma zasobniky naplnene jen z 30% a nema cim doplnit.\nPokud nezafixujete ted, riskujete ze v lete budete podepisovat smlouvy za dvojnasobne ceny.\n\n--- ARGUMENT 2: TRH NEREAGUJE NA SPEKULACE ALE NA REALITU ---\nTohle neni jen straseni v novinach.\nTankery s plynem fyzicky stoji pred prilivem a nemohou projet.\nDodavatele v CR uz ty burzovni skoky zacinaji promitat do novych ceniku.\nMate doslova dny nez ty nejlevnejsi tarify zmizi.\n\n--- ARGUMENT 3: EFEKT SNEHOVE KOULE ---\nValka v Iranu zdrazuje ropu.\nRopa zdrazuje dopravu a plyn zdrazuje vyrobu elektriny.\nJe to reteazova reakce.\nTed mate posledni sanci si urvat cenu z doby pred timto tydnem.\n\n--- ARGUMENT 4: STAT VAS NEOCHRANI ---\nVlada sice zrusila poplatky za POZE, ale to vam usetri par stovek.\nPokud plyn na burze kvuli Iranu zdrazi o 50%, vase faktura vyleti o tisice.\nJedina skutecna ochrana je fixace u stabilniho dodavatele prave ted.'},,
+  {id:'7bod',cat:'Argumenty',t:'7 bodu prodeje',link:'',tip:'',c:'Definice prodeje: Presvedcit nekoho o necem.\n\n1. NADSENI: Vychazi z vnitrniho nadseni. Mas svuj cil. Pohyb, usmev (je zadarmo), energie, pozitivni mysleni.\n\n2. ZAUJETI ZKZ - 4 faktory: Image, Priroznenost, Vseobecny prehled, Dobra nalada.\n\n3. ICE BREAK: Otevreni krabicky a zjisteni potreb. Souhlas -> Cervene tlacitko -> Vztah -> Duvera.\nCervene tlacitko je cervene protoze je od srdce - uprimne.\n\n4. PREZENTACE - 5 bodu: Kratka, Strucna, Vystizna, Individualni, PRAVDIVA.\n\n5. PRODEJ CENY: Cena se vzdy prodava, nikdy se neoznamuje. Cena je vzdy mala a to co za ni zakaznik ziska je obrovske.\n\n6. UZAVRENI - vzdy za zakaznika: Maximalizace, Sugesce, Reference, F.O.L. - fear of lost = strach ze ztraty.\n\n7. UZAMCENI: Zamezeni odstoupeni od koupeni. Vracime namitky ktere jeste nevyvstaly. Kontroluji zda klient vse pochopil a uklidnim svuj prodej. Jsem si 100% jisty ze klient rozumi.'},
+  {id:'kontakt',cat:'Kontakty',t:'Infolinky dodavatelu',link:'',tip:'',c:'=== DODAVATELE ===\n\nCEZ\nInfolinka: 800 810 820\nEmail: cez@cez.cz\nPobocky: Praha, Brno, Ostrava, Plzen, HK, Usti n.L., Ceske Budejovice\n\nINNOGY\nInfolinka: 800 113 355\nEmail: info@innogy.cz\nPobocky: Praha, Brno, Ostrava, Plzen, HK, Olomouc, Liberec\n\nPRAZSKA PLYNARENSKA (PPAS)\nInfolinka: 800 134 134\nEmail: callcetrum@ppas.cz\nPobocky: Praha\n\nCENTROPOL\nInfolinka: 478 575 555\nEmail: obchod@centropol.cz\nPobocky: Praha, C. Budejovice, Plzen, Usti n.L., HK\n\nEON\nInfolinka: 800 77 33 22\nEmail: info@eon.cz\nPobocky: Brno, C. Budejovice, Jihlava, Zlin, Olomouc, Trebic\n\nYELLO\nInfolinka: 267 056 704\nEmail: yello@yello.cz\nPobocky: Praha\n\nMND\nInfolinka: 800 400 500\nEmail: mnd@mnd.cz\nPobocky: Hodonin, Brno, Praha\n\nPRE\nInfolinka: 800 55 00 55\nEmail: pre@pre.cz\nPobocky: Praha\n\nLAMA ENERGY\nInfolinka: 840 111 310\nEmail: zakaznik@lamaenergy.cz\nPobocky: Ostrava, Olomouc, Praha\n\nEP ENERGY\nInfolinka: 232 005 200\nEmail: info@epenergy.cz\nPobocky: Praha, Brno\n\nSPP\nInfolinka: 800 789 789\nEmail: info@spp.cz\nPobocky: Praha, Brno\n\n=== DISTRIBUCE ===\n\nCEZ Distribuce\nInfolinka: 800 850 860\nEmail: info@cezdistribuce.cz\n\nPRE Distribuce\nInfolinka: 800 550 066\nEmail: info@predistribuce.cz\n\nEGD (EON Distribuce)\nInfolinka: 800 22 55 77\nEmail: info@egd.cz\n\nPPAS Distribuce\nInfolinka: 267 175 222\nEmail: info@ppdistribuce.cz\n\nGasnet\nInfolinka: 555 901 010\nEmail: info@gasnet.cz'},,
+  {id:'tip',cat:'Techniky',t:'Straight Line + obchodni framework',link:'',tip:'',c:'STRAIGHT LINE: Vedes klienta od OPEN k CLOSE po prime linii.\nFrame: Ty vedes, klient mluvi, ale ty ridis flow.\nMentalni nastaveni: Nepresvedcuju ho. Pomaham mu udelat spravne rozhodnuti.\n\nTHREE 10s - klient musi mit 10/10 v:\n1. PRODUKT - tohle realne dava smysl\n2. TY - tomuhle cloveku verim\n3. FIRMA - nebude to scam\nNamitka = signal ze jedna z 10 neni splnena. Najdi kterou a doplnit jistotu.\n\nLOOPING: Nevracis zpet -> vysvetlis -> zpet na close.\nPriklad: Poslete mi to do mailu -> Jasne poslu, jen at poslu presne co dava smysl... co vas na tom zatim brzdi?\n\nTONALITA:\nAbsolutni jistota: Tohle je ted pro vas nejlepsi reseni.\nReasonable man: Dava to smysl, ne?\nUprimnost: Reknu vam to na rovinu...\n\nCLOSE - neptas se, vedes:\nSPATNE: Chcete do toho jit?\nSPRAVNE: Udelame to takhle - nastavime vam to od dalsiho obdobi, jo?'}
+];
+var DODAV = [
+  {id:'cez',n:'CEZ',link:'https://www.cez.cz/nextcez/cs/ceniky',tip:'CEZ je statni firma - to je nejsilnejsi argument. Rekni: Pane/pani, CEZ je z 70% ve vlastnictvi statu - tahle firma neskrachuje. A letos jiz 5x zlevnil. To je ta jistota o ktere mluvime.',c:'PROFIL: Nejvetsi dodavatel, 1,6 mil. zakazniku, z 70% statni. Nejspolehlivejsi znacka v energetice.\nPRODUKTY 2025/2026: Fix elektrina 2 roky ~3 400 Kc/MWh. Bez fixace ~3 860 Kc/MWh. Fix plyn ~1 150 Kc/MWh.\nSILNE STRANKY: Statni firma = neskrachuje. Nejvetsi distribucni sit. Letos 5x zlevnil. Aplikace MUJ CEZ.\nSLABE STRANKY: Ceny ne vzdy nejlepsi na trhu. Horsi zakaznicka podpora.\nPRO KOHO: Klienti co chteji istotu, starsi zakaznici, ti co se boji po Bohemia Energy.\nINFO: 800 810 820 | cez@cez.cz'},
+  {id:'eon',n:'E.ON',link:'https://www.eon.cz/domacnosti/zakaznicka-pece/ceniky/',tip:'EON ma unikatni bonus elektrikare - az 5 000 Kc rocne ZDARMA. Rekni: Pane/pani, kdyz potrebujete zavolat elektrikare, u EON ho dostanete zdarma. To zadny jiny dodavatel nenabidne.',c:'PROFIL: 2. nejvetsi, 1,2 mil. zakazniku, nemecka firma EON SE - evropska stabilita.\nPRODUKTY: Komplet MAX PRO 2026 = 3 318 Kc/MWh. Bez fixace 3 933 Kc/MWh. Zelena elektrina +34 Kc/MWh.\nSILNE STRANKY: Bonus elektrikare/hodineho manezela az 5 000 Kc/rok. Nemecka stabilita. Portal Energie24.\nSLABE STRANKY: Pouze distribucni uzemi EGD (jizni Cechy, jizni Morava).\nPRO KOHO: Zakaznici kteri oceni servis a bonusy. Domacnosti v uzemi EGD.\nINFO: 800 77 33 22 | info@eon.cz'},
+  {id:'pre',n:'PRE',link:'https://www.pre.cz/cs/domacnosti/',tip:'PRE ma vlastni distribucni sit v Praze - jeden dodavatel pro vsechno. Rekni: U PRE mate jednoho partnera pro dodavku i distribuci. Kdyz neco nejde, jeden telefon vyresi vse.',c:'PROFIL: Prazska energetika. Vlastni distribucni sit v Praze. Prodavame po CELE CR bez vyjimek.\nPRODUKTY: PRE PROUD KLASIK (bez fixace), PRE PROUD FIX (1 rok), PRE PROUD BASIC (2 roky).\nSILNE STRANKY: Vlastni distribuce v Praze = jeden kontakt pro vse. Historicky stabilni. Pro Prazaky idealni.\nPOZOR: PRE posila JEDNU vyzvu pri bezesmluvnim vztahu a IHNED odpoji!\nPRO KOHO: Prazane, firmy v Praze, klienti co chteji jednoduchost.\nINFO: 800 55 00 55 | pre@pre.cz'},
+  {id:'mnd',n:'MND',link:'https://www.mnd.cz/',tip:'MND ma vlastni tezbu plynu - Plyn z prvni ruky. Rekni: MND jako jediny dodavatel v CR tezi vlastni plyn na Morave. Neni zavisly na dovozu. To je ta realny rozdil ktery pocitite na cene.',c:'PROFIL: Moravske naftove doly, jediny CR dodavatel s vlastni tezbu plynu. Silna pozice v plynu.\nMND SOLARNI UCET (jedina FVE moznost):\n- Poplatek: 60 Kc/mesic\n- Prvni 2 MWh: 1 000 Kc/MWh\n- Kazda dalsi MWh: 500 Kc/MWh\n- Priklad: 3 MWh = 2 500 Kc minus poplatek 60 Kc/mes\n- POUZE pro domacnosti, NE pro ICO!\nPOZOR: Max uvazek 12 mesicu. Poznamka pro MND max 300 znaku!\nPRO KOHO: Zakaznici s plynem, domacnosti s FVE.\nINFO: 800 400 500 | mnd@mnd.cz'},
+  {id:'inn',n:'Innogy',link:'https://www.innogy.cz/ceniky/',tip:'Innogy je soucasti skupiny EON od 2021 - evropska firma s jistotou. Rekni: Innogy dnes patri pod EON, jednu z nejvetsich energetickych skupin v Evrope. To je ta zadruhova bezpecnost.',c:'PROFIL: Soucast skupiny EON od 2021, puvodne RWE. Silna pozice v plynu.\nPOZOR: Mezidodavatel na Innogy NE. Dodat vzdy prvni+druhou stranu smlouvy.\nPRO KOHO: Dlouholeti zakaznici RWE/Innogy kteri znaji znacku.\nINFO: 800 113 355 | info@innogy.cz'},
+  {id:'cen',n:'Centropol',link:'https://www.centropol.cz/',tip:'Centropol ma nejrychlejsi sjednani na trhu - vse online do 5 minut. Rekni: U Centropolu to cele vyridime ted hned - zadne papiry, zadne cekani.',c:'PROFIL: Stredne velky dodavatel, velky vyber produktu, rychle online sjednani. Vykup FVE ~800 Kc/MWh (ale NESJEDNAVAME).\nPOZOR: Vzdy dodat VESKERE VOP! Mezidodavatel NE. Export 10 prac. dni.\nPRO KOHO: Klienti co chteji rychlost a jednoduchost. Online sjednani.\nINFO: 478 575 555 | obchod@centropol.cz'},
+  {id:'ppa',n:'PPAS',link:'https://www.ppas.cz/',tip:'PPAS je historicky prazsky plynorensky podnik - stabilita pres 100 let. Rekni: PPAS zasobuje Prahu plynem jiz vice nez 100 let. To je ta traditce a jistota ktera se jinde nenajde.',c:'PROFIL: Prazska plynarenska, historicky dodavatel plynu, stabilita 100+ let.\nPOZOR: Yello a PPAS PLYN v Praze - prodavame bez omezeni po cele CR! Mezidodavatel NE. Export 17 prac. dni.\nPRO KOHO: Zakaznici co oceni historickou znacku, Praha a okoli.\nINFO: 800 134 134 | callcetrum@ppas.cz'},
+  {id:'yel',n:'Yello',link:'https://www.yello.cz/cs/domacnost/',tip:'Yello je moderni digitalni znacka PRE - vse online, bez papiru, bez fronty. Rekni: Yello je online znacka Prazske energetiky - sjednate vse z mobilu za 5 minut a maji za sebou 100 let tradice PRE.',c:'PROFIL: Digitalni znacka skupiny PRE. Prodavame po CELE CR bez omezeni.\nSILNE STRANKY: Vse online, rychle sjednani, za sebou maji stabilitu PRE.\nPOZOR: Export smlouvy 17 prac. dni pred podanim vypovedi.\nPRO KOHO: Mladsi zakaznici, online komunikace, kdekoliv v CR.\nINFO: 267 056 704 | yello@yello.cz'},
+  {id:'epe',n:'EPET',link:'https://epet.cz/',tip:'EPET ma jedny z nejkonkurencnejsich cen na trhu. Rekni: EPET neinvestuje do reklamy ani pobocek - ty usetrene penize da primo do ceny pro zakaznika.',c:'PROFIL: Mensi nezavisly dodavatel, konkurencni ceny, bez pobocek.\nDULEZITE: EPET - VZDY zakaznik sam vypovida! Informuj predem. Zakaznik doda akceptaci.\nPRO KOHO: Zakaznici kteri chteji nejnizsi cenu a zvladnou si zarizit vypoved sami.\nINFO: epet.cz'}
 ];
 
-var DODAV = [
-  {id:'cez',n:'CEZ',link:'https://www.cez.cz/nextcez/cs/ceniky',tip:'CEZ je jednicka na trhu - od 2021 nosi oceneni Nejduveryhodnejsi znacka v kategorii dodavatelu energii. Zakaznik si hodnotu reputace ceni - pouzij to.',c:'PROFIL: Nejvetsi dodavatel v CR, 1,6 mil. zakazniku, castecne statni.\nPRODUKTY 2026: Elektrina D02 bez fixace ~3 860 Kc/MWh. Dvouleta fixace ~3 400 Kc/MWh. Fix plyn do 2026: 1 150 Kc/MWh.\nPRO KOHO: Ti kdo chteji istotu velkeho dodavatele, FVE zakaznici.\nVYHODA: Letos zlevnil uz 5x. Nejvetsi sit, nejmensi riziko.'},
-  {id:'eon',n:'E.ON',link:'https://www.eon.cz/domacnosti/zakaznicka-pece/ceniky/',tip:'EON nabizi bonus elektrikare az 5 000 Kc rocne zdarma. Pro zakazniky co si ceni sluzeb - silny argument ktery jiny dodavatel nenabidne.',c:'PROFIL: 2. nejvetsi, 1,2 mil. zakazniku, nemecka firma EON SE.\nPRODUKTY 2026: Bez fixace ~3 933 Kc/MWh (snizeni o 18%). Komplet MAX PRO: 2026 = 3 318 Kc/MWh.\nPRO KOHO: Zakaznici v uzemi EGD (jizni Cechy, jizni Morava), ti co oceni servis.\nVYHODA: Bonus elektrikare/hodineho manezela. Portal Energie24.'},
-  {id:'pre',n:'PRE',link:'https://www.pre.cz/cs/domacnosti/',tip:'PRE je jediny dodavatel se vlastni distribucni siti v Praze - jeden subjekt pro dodavku i distribuci. Pro Prazaky velka vyhoda.',c:'PROFIL: Prazska energetika, historicky dodavatel pro Prahu, vlastni distribucni sit.\nPOZOR: PRE posila JEDNU vyzvu pri bezesmluvnim vztahu a ihned odpoji!\nPRO KOHO: Prazane, firmy v Praze.'},
-  {id:'mnd',n:'MND',link:'https://www.mnd.cz/',tip:'MND je jediny CR dodavatel s vlastni tezbu plynu - Plyn z prvni ruky. Silny argument pro zakazniky co oceni cesky transparentni pribeh.',c:'PROFIL: Moravske naftove doly, vlastni tezba plynu.\nPOZOR: Max uvazek soucasneho dodavatele 12 mesicu! Poznamka MND max 300 znaku! Solarni ucet jen pro domacnosti, ne ICO.\nPRO KOHO: Zakaznici s plynem, domacnosti s FVE.'},
-  {id:'inn',n:'Innogy',link:'https://www.innogy.cz/ceniky/',tip:'Innogy je soucasti skupiny EON od 2021. Zakaznici casto nevedi ze Innogy = EON = silna evropska firma. Pouzij to pri budovani duvery.',c:'PROFIL: Soucast skupiny EON od 2021, puvodne RWE.\nPOZOR: Mezidodavatel na Innogy NE. Dodat vzdy prvni+druhou stranu smlouvy.\nPRO KOHO: Dlouholeti zakaznici RWE/Innogy.'},
-  {id:'cen',n:'Centropol',link:'https://www.centropol.cz/',tip:'Centropol nabizi velky vyber produktu a rychle online sjednani bez cekani. Silny argument pro zakazniky co oceni jednoduchost a rychlost.',c:'PROFIL: Stredne velky dodavatel, vykup FVE ~800 Kc/MWh.\nPOZOR: Centropol - VZDY dodat veskere VOP! Mezidodavatel NE. Export 10 prac. dni.\nPRO KOHO: Ti co hledaji jednoduche online sjednani nebo vykup FVE.'},
-  {id:'ppa',n:'PPAS',link:'https://www.ppas.cz/',tip:'PPAS nabizi jeden z nejvyssich vykupnich cen FVE (950 Kc/MWh se smlouvou). Pro zakazniky s FVE casto nejlepsi kombinace na trhu.',c:'PROFIL: Prazska plynarenska, historicky dodavatel plynu.\nFVE VYKUP: Se smlouvou 950 Kc/MWh! Bez smlouvy 450 Kc/MWh.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! Mezidodavatel NE. Export 17 prac. dni.'},
-  {id:'yel',n:'Yello',link:'https://www.yello.cz/cs/domacnost/',tip:'Yello je znacka skupiny PRE - pro online-first zakazniky. Prodavej jako moderniho dodavatele bez komplikaci - jednoduche, online, transparentni.',c:'PROFIL: Znacka skupiny PRE, online sjednani.\nPOZOR: Yello a PPAS PLYN v Praze NEPRODAVAME! EIC 27ZG100 a distribuce PPD nelze. Export 17 prac. dni.\nPRO KOHO: Mladsi zakaznici, mimo Prahu.'},
-  {id:'epe',n:'EPET',link:'https://epet.cz/',tip:'EPET je jediny dodavatel kde VZDY vypovida zakaznik sam. Upozorni zakaznika predem - ale ti co zvladnou si ceni transparentni ceny.',c:'PROFIL: Mensi nezavisly dodavatel, konkurencni ceny.\nPOZOR: EPET - VZDY zakaznik sam vypovida! Informuj predem a pozadej akceptaci.\nPRO KOHO: Zakaznici schopni zarizit vypoved sami.'}
+var QUOTES = [
+  "Neprodavas produkt. Prodavas rozhodnuti zmenit zivot.",
+  "Klient nekupuje logiku. Kupuje pocit jistoty.",
+  "Namitka neni odmitnuti. Je to zacatek skutecneho prodeje.",
+  "Ten, kdo klada spravne otazky, ridi cely obchod.",
+  "Uzavreni neni tlak. Je to vedeni k rozhodnuti.",
+  "Pokud klient vaii, chybi mu jistota - ne informace.",
+  "Emice otvira dvere. Logika je jen zavira za tebou.",
+  "Kdyz veris tomu co rikas, klient to citi driv nez to pochopi.",
+  "Kontrolu v hovoru neziskas silou, ale smerem.",
+  "Klient nepotrebuje vic moznosti. Potrebuje jasno.",
+  "Kazdy uspesny obchod zacina duverou, ne prezentaci.",
+  "Tvuj hlas je nastroj. Pouzivej ho jako zbran i jako uklidneni.",
+  "Velke penize nejsou v lepsim produktu. Jsou v lepsim vedeni klienta.",
+  "Kdyz se nestaras o klienta ty, postara se o nej konkurence.",
+  "90% prodeje je presvedceni, jen 10% je presvedcovani.",
+  "Nezavodis cenou. Zavodis vztahem.",
+  "Neudelej prodej. Udelej klienta.",
+  "Duvera prodava vic nez jakykoliv argument.",
+  "Nejlepsi obchodnici nepresvedcuji - vedou.",
+  "Tvuj postoj rozhoduje vic nez postoj klienta.",
+  "Kdyz te klient nema rad, neposliucha. Kdyz ti veri, kupuje.",
+  "Transparentnost je nejsilnejsi prodejni nastroj.",
+  "Bud ridis svuj den, nebo ridi den tebe.",
+  "Kazdy pad te uci, jak priste vyhrat.",
+  "Ver si - jsi na pul cesty.",
+  "Zacni. Zbytek prijde.",
+  "Fokus nad vymluvami.",
+  "Nadseni prodava vic nez perfektni argument.",
+  "Cena se vysvetluje jednou. Spatna kvalita porad.",
+  "Motivace neni trvala. Proto ji potrebujes kazdy den.",
+  "Neprodavas vsem - prodavas tem, kteri jsou pripraveni slyset.",
+  "Kazdi nej te priblizuje k dalssimu ano.",
+  "Uzavirej. Neodkladej.",
+  "Nejsilnejsi obchodnici nejsou ti nejhlasitejsi, ale ti nejklidnejsi.",
+  "Ticho po otazce je casto ten moment, kdy se rodi prodej."
 ];
+
+
 
 var curPhase = 0;
 var drawerTab = 0;
@@ -417,6 +460,7 @@ function init() {
   document.getElementById('dtab0').onclick = function() { openDrawer(0); };
   document.getElementById('dtab1').onclick = function() { openDrawer(1); };
   document.getElementById('dtab2').onclick = function() { openDrawer(2); };
+  document.getElementById('dtab3').onclick = function() { openDrawer(3); };
   document.getElementById('sendBtn').onclick = sendMsg;
   document.getElementById('ibox').onkeydown = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } };
   document.getElementById('ibox').oninput = function() { rsz(this); };
@@ -437,8 +481,8 @@ function init() {
     }
   });
 
-  if (localStorage.getItem('sc2w')) start();
-  else { localStorage.setItem('sc2w', WU); start(); }
+  localStorage.setItem('sc2w', WU);
+  start();
 }
 
 function start() {
@@ -480,7 +524,7 @@ function renderChips() {
 
 function openDrawer(tab) {
   drawerTab = tab;
-  [0,1,2].forEach(function(i) { document.getElementById('dtab' + i).classList.toggle('on', i === tab); });
+  [0,1,2,3].forEach(function(i) { document.getElementById('dtab' + i).classList.toggle('on', i === tab); });
   kbOpenId = null; kbOpenType = null;
   renderDrawer();
   document.getElementById('drawer').classList.add('open');
@@ -497,7 +541,8 @@ function renderDrawer() {
   if (kbOpenId) { renderKbDetail(el); return; }
   if (drawerTab === 0) renderKbList(el);
   else if (drawerTab === 1) renderDodList(el);
-  else renderPhrases(el);
+  else if (drawerTab === 2) renderPhrases(el);
+  else renderQuotes(el);
 }
 
 function renderKbList(el) {
@@ -542,6 +587,23 @@ function renderKbDetail(el) {
   };
 }
 
+function renderQuotes(el) {
+  var daily = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  var html = '<div style="background:var(--acd);border:1px solid var(--acb);border-radius:12px;padding:16px 18px;margin-bottom:12px;font-size:13px;color:var(--ac);line-height:1.7;font-style:italic;">';
+  html += '"' + esc(daily) + '"';
+  html += '<div style="margin-top:10px;"><button id="nqb" style="padding:5px 12px;background:transparent;border:1px solid var(--acb);border-radius:6px;color:var(--ac);font-size:11px;cursor:pointer;">Dalsi citat</button></div>';
+  html += '</div>';
+  html += '<div style="font-size:9px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;padding:4px 0 8px;">Vsechny citaty</div>';
+  QUOTES.forEach(function(q) {
+    html += '<div class="qrow" style="padding:10px 12px;border-radius:8px;background:var(--bg3);margin-bottom:6px;font-size:12px;color:var(--tx2);line-height:1.6;border-left:2px solid var(--brd);cursor:pointer;" data-q="' + q.replace(/"/g, '&quot;') + '">' + esc(q) + '</div>';
+  });
+  el.innerHTML = html;
+  var nb = document.getElementById('nqb');
+  if (nb) nb.onclick = function() { renderQuotes(el); };
+  el.querySelectorAll('.qrow').forEach(function(r) {
+    r.onclick = function() { fillInput(this.getAttribute('data-q')); closeDrawer(); };
+  });
+}
 function renderPhrases(el) {
   if (!phrases.length) {
     el.innerHTML = '<div style="font-size:12px;color:var(--tx3);padding:8px;">Zadne fraze. Pridej prvni!</div>' + addPhraseHtml();
@@ -700,41 +762,63 @@ function buildPrompt(pi, hist) {
   var dv = DODAV.map(function(d) { return d.n + ': ' + d.c.slice(0,100); }).join(' | ');
   var L = [
     'Jsi senior obchodnik s 15 lety zkusenosti v energetice CR. Prodavas po telefonu pro Usetreno.cz.',
-    'Styl: stucny, sebevdomy, prirozeny, zamereny na reseni problemu zakaznika - ne na vlastnosti produktu.',
-    'Mluvis jako zkuseny clovek ktery vi co dela - ne jako robot ani jako encyklopedie.',
+    'Pouzivas Straight Line prodejni metodu. Tady je tvuj kompletni framework:',
+    '',
+    'FRAME - ty vedes konverzaci, klient mluvi ale ty ridis flow. Nikdy se nenechas stahnou do kecani o nicem.',
+    'Tvoje mentalni nastaveni pred kazdy hovorem: Nepresvedcuju ho. Pomaham mu udelat spravne rozhodnuti.',
+    '',
+    'PRVNI 4 SEKUNDY: Sharp (strucny), Energy (lehke nadseni), Expert (vis co delas).',
+    'Vibe ne skript: Dobry den, tady [jmeno], volam ohledne vasi kalkulace energii - vezmu to rychle a prakticky, jo?',
+    '',
+    'INTELLIGENCE - bez toho jsi mrtvy. Zjistuj: co ma ted, co ho stve, proc to jeste neresil, kolik plati.',
+    'Otazky: Co vas na tom nejvic stve? Proc jste to zatim neresil? Kolik vas to ted stoji mesicne?',
+    '',
+    'PAIN + FUTURE:',
+    'Pain: Takze ted zbytatecne preplacite X mesicne... a nic se nemeni, jo?',
+    'Future: Kdyby se tohle odstranilo a mel jste to levnejsi bez starosti, to uz dava smysl, ne?',
+    'Lide kupuji aby se zbavili bolesti nebo aby se citili lip.',
+    '',
+    'THREE 10s - klient musi mit 10/10 v:',
+    '1. PRODUKT - tohle realne dava smysl',
+    '2. TY - tomuhle cloveku verim',
+    '3. FIRMA - nebude to scam / pruser',
+    'Kdyz klient rika namitku - NIKDY to neber doslova. Je to signal ze nema jednu z tech 10. Tvuj job: najit co chybi a doplnit jistotu.',
+    '',
+    'LOOPING - tvuj hlavni skill:',
+    'Spatne: tlacit na uzavreni.',
+    'Spravne: vratit se, vysvetlit, znovu zavrit.',
+    'Priklad: Klient: Poslete mi to do mailu. Ty: Jasne, poslu - jen at vam poslu presne co dava smysl... co vas na tom zatim nejvic brzdi?',
+    'Tim: neodmitas, vratis kontrolu, jdes zpet do prodeje.',
+    '',
+    'TONALITA = 50 % uspechu. Pouzivej:',
+    'Absolutni jistota: Tohle je ted pro vas nejlepsi reseni.',
+    'Reasonable man: Dava to smysl, ne?',
+    'Uprimnost: Reknu vam to na rovinu...',
+    'Scarcity: Uprimne... tohle neni uplne bezna nabidka.',
+    '',
+    'CLOSE - neptas se, vedes:',
+    'SPATNE: Chcete do toho jit?',
+    'SPRAVNE: Udelame to takhle - nastavime vam to od dalsiho obdobi, jo?',
+    'Assumption close - beres jako hotovou vec.',
+    '',
     'Faze hovoru: ' + ph.n + '. ' + ph.ctx,
     'Predchozi namitky: ' + (h || 'zadne'),
     'Znalosti: ' + kb,
     'Dodavatele: ' + dv,
     '',
-    'PRODEJNI FILOZOFIE:',
-    'Nejedeme nabizet - vedeme klienta k rozhodnuti. Klient ma pocit ze se sam rozhoduje.',
-    'Nikdy email jako prvni moznost. Aktivne vedeme hovor.',
-    'Vzdy konkretni uspora v Kc - ne procenta.',
-    '',
-    'FRAMEWORK NA NAMITKU:',
-    '1. POCHOPENI: sundat obranu. Klient musi citit ze ho chapeme.',
-    '   Priklad: Rozumim vam perfektne, tohle mi rika hodne lidi co si prosli Bohemia Energy.',
-    '2. ROZKLICOVANI: ukaz ze vis o cem mluvis, stav se expertem.',
-    '   Priklad: Tam byl problem ze to byly mensi spolecnosti bez zajistench nakupu energii - kdyz sly ceny nahoru, nestaly to.',
-    '3. RESENI: napoj na nabidku pres SYSTEM VYBERU - ne pres konkretni znacku.',
-    '   Priklad: Prave proto my vybirame jen velke stabilni spolecnosti s historii a zajistenymi nakupy dopredu.',
-    '4. MINI CLOSE: vrat klienta do flow otazkou na souhlas.',
-    '   Priklad: Takze dava smysl jit cestou jistoty a uspory zaroven - souhlasite?',
-    '',
-    'UZAVRENI:',
-    'Tuzka a papir: Vezmete si tuzku a papir, at to mate prehledne.',
+    'UZAVRENI - presny postup:',
+    'Tuzka a papir: Vezmete si tuzku a papir, at to mate prehledne pred sebou.',
     'Cena: Napiste si novou cenu a rocni usporu v Kc.',
-    'Close: Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Ted to nastavime.',
+    'Close: Nemusite nikam chodit - novy dodavatel zaridi administrativu. Meni se jen logo na vyuctovani a platite mene. Udelame to takhle - nastavime vam to od dalsiho obdobi, jo?',
     '',
-    'FORMAT pro NAMITKU KLIENTA:',
-    '{"type":"objection","analysis":"1 veta co klient skutecne mysli","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 prirozene vety cesky - pochopeni a rozklicovani","next":""},{"style":"RESENI + MINI CLOSE","text":"2 prirozene vety cesky - reseni pres system vyberu a mini close","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
+    'FORMAT pro NAMITKU KLIENTA - pouzij Straight Line framework:',
+    '{"type":"objection","analysis":"co klientovi skutecne chybi - ktera ze 3 desitek (produkt/ty/firma) neni na 10","responses":[{"style":"POCHOPENI + ROZKLICOVANI","text":"2 vety - sundat obranu, ukazat ze vis o cem mluvis, loop zpet do prodeje","next":""},{"style":"RESENI + CLOSE","text":"2 vety - doplnit chybejici jistotu, assumption close","next":"pokud rekne ano: tuzka papir cena uzavreni"}]}',
     '',
-    'FORMAT pro DOTAZ OBCHODNIKA (pojmy, procesy, dodavatele, jak prodat):',
-    '{"type":"info","text":"prakticka odpoved jako od zkuseneho kolegy","customer_tip":"presna veta jak to rict zakaznikovi primo v hovoru"}',
+    'FORMAT pro DOTAZ OBCHODNIKA:',
+    '{"type":"info","text":"prakticka odpoved jako od zkuseneho straight line obchodnika","customer_tip":"presna veta s tonalitou jak to rict zakaznikovi primo v hovoru"}',
     '',
-    'KRITICKY: Odpovez POUZE cisty JSON. Zadny text pred { ani po }. Zadne backticks. Zadne markdown.'
-  ];
+    'KRITICKY: Odpovez POUZE cisty JSON. Zadny text pred { ani po }. Zadne backticks.'
+];
   return L.join('\n');
 }
 
