@@ -973,8 +973,15 @@ async function sendMsg() {
       if (ji >= 0) cl = cl.slice(ji);
       var je = cl.lastIndexOf('}');
       if (je >= 0) cl = cl.slice(0, je+1);
+      // Fix unescaped newlines inside JSON strings
+      cl = cl.replace(/([^\\])\n/g, '$1\\n').replace(/([^\\])\r/g, '$1\\r').replace(/([^\\])\t/g, '$1\\t');
       parsed = JSON.parse(cl);
-    } catch(e) { parsed = {type:'info', text:raw}; }
+    } catch(e2) {
+      // Last resort: try to extract text manually
+      var tm = raw.match(/"text"\s*:\s*"([^"]+)"/);
+      if (tm) parsed = {type:'info', text:tm[1]};
+      else parsed = {type:'info', text:raw};
+    }
     c.history[c.history.length-1] = {role:'ai',content:parsed};
   } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
