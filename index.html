@@ -2,6 +2,9 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sales AI - Usetreno</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -809,47 +812,40 @@ function renderAI(d) {
 function renderFlowCard(r) {
   var text = r.text || '';
   var steps = [];
+  var delimiters = ['POCHOPENI:', 'REFRAME:', 'CLOSE OTAZKA:', 'CLOSE:'];
+  var colors = {'POCHOPENI':'#00b894','REFRAME':'#fdcb6e','CLOSE OTAZKA':'#6c5ce7','CLOSE':'#6c5ce7'};
 
-  // Split by known keywords - handle both \n and literal 
-
-  var normalized = text.replace(/\\n/g, '
-');
-  var parts = normalized.split(/
-/);
-
-  var cur = null;
-  parts.forEach(function(line) {
-    line = line.trim();
-    if (!line) return;
-    var up = line.toUpperCase();
-    if (up.indexOf('POCHOPENI') === 0) {
-      if (cur) steps.push(cur);
-      cur = {label:'POCHOPENI', color:'#00b894', text: line.replace(/^POCHOPENI\s*:\s*/i,'')};
-    } else if (up.indexOf('REFRAME') === 0) {
-      if (cur) steps.push(cur);
-      cur = {label:'REFRAME', color:'#fdcb6e', text: line.replace(/^REFRAME\s*:\s*/i,'')};
-    } else if (up.indexOf('CLOSE') === 0) {
-      if (cur) steps.push(cur);
-      cur = {label:'CLOSE OTAZKA', color:'#6c5ce7', text: line.replace(/^CLOSE\s*OTAZKA\s*:\s*/i,'').replace(/^CLOSE\s*:\s*/i,'')};
-    } else {
-      if (cur) cur.text += ' ' + line;
-      else cur = {label:'', color:'var(--tx2)', text: line};
-    }
+  var work = text;
+  var found = [];
+  delimiters.forEach(function(d) {
+    var pos = work.toUpperCase().indexOf(d.toUpperCase());
+    if (pos >= 0) found.push({pos:pos, label:d.replace(':',''), d:d});
   });
-  if (cur) steps.push(cur);
+  found.sort(function(a,b){return a.pos-b.pos;});
+
+  if (found.length >= 2) {
+    found.forEach(function(f, i) {
+      var start = f.pos + f.d.length;
+      var end2 = i+1 < found.length ? found[i+1].pos : work.length;
+      var t = work.slice(start, end2).trim();
+      t = t.replace(/\\n/g,' ').replace(/\n/g,' ').trim();
+      var lbl = f.label === 'CLOSE' ? 'CLOSE OTAZKA' : f.label;
+      var col = colors[f.label] || '#6c5ce7';
+      steps.push({label:lbl, color:col, text:t});
+    });
+  }
 
   var inner = '';
   if (steps.length >= 2) {
     inner = steps.map(function(s) {
-      var dot = s.label ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + s.color + ';margin-right:8px;"></span>' : '';
       return '<div style="margin-bottom:10px;padding:12px 14px;border-radius:10px;background:var(--bg);border-left:3px solid ' + s.color + ';">' +
-        (s.label ? '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.1em;color:' + s.color + ';font-weight:700;margin-bottom:6px;">' + dot + s.label + '</div>' : '') +
+        '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.1em;color:' + s.color + ';font-weight:700;margin-bottom:6px;">' + esc(s.label) + '</div>' +
         '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);">' + esc(s.text) + '</div>' +
         '</div>';
     }).join('');
   } else {
-    // No structure found - display as plain text
-    inner = '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);">' + esc(text.replace(/\\n/g, ' | ')) + '</div>';
+    var flat = text.replace(/\\n/g,' | ').replace(/\n/g,' | ');
+    inner = '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);">' + esc(flat) + '</div>';
   }
 
   var nextHtml = r.next ? '<div style="margin-top:8px;font-size:11px;color:var(--ac);font-family:DM Mono,monospace;padding-top:8px;border-top:1px solid var(--brd);">DALSI KROK: ' + esc(r.next) + '</div>' : '';
@@ -859,7 +855,6 @@ function renderFlowCard(r) {
     '<div class="rcard-body">' + inner + nextHtml + '</div>' +
     '</div>';
 }
-
 
 function cpbtn(t) { return '<button class="cpbtn" data-c="' + t.replace(/"/g,'&quot;') + '">Kopirovat</button>'; }
 function fillInput(t) { var b = document.getElementById('ibox'); b.value = t; b.focus(); rsz(b); }
