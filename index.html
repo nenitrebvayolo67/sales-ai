@@ -413,6 +413,39 @@ var ARGS = [
   {id:'ton',cat:'Ton hlasu a pristup',t:'Ton hlasu - jak mluvit aby klient slysel',c:'ZASADA: Klidny, trpelivy, partnersky - ne bojovny.\n\nSPATNE vs SPRAVNE:\n\nSPATNE: "Ja vam to uz vysvetluju ale vy si porad myslite neco jineho..."\nSPRAVNE: "Uplne vam rozumim, spousta lidi ma stejny pocit. A prave proto vam chci ukazat proc je to jinak."\n\nSPATNE: "To neni pravda, zlevnovat se urcite nebude."\nSPRAVNE: "Je pravda ze se trh meni. Zaroven ale situace nehraje v prospech zlevneni - prave proto chci zajistit nejlepsi podminky ted."\n\nKLIC - delej z klienta chytreho rozhodovatele:\n"Chapu ze chcete mit jistotu. Proto se podivame co vam dava nejvetsi smysl." \n\nDAJ POCIT KONTROLY:\n"Rozumim ze zvazujete co je pro vas nejlepsi. Prave proto se podivame na moznosti at vite s cim pracujete."'}
 ];
 
+// Add mindset entry to ARGS
+var ARGS_MINDSET = {id:'mindset',cat:'Inner Game - Mindset',t:'Prodej = prenos jistoty',c:'ZASADA: Selling is the transference of certainty.
+
+Neprodavas produkt. Prodavas JISTOTU. Klient musi CITIT ze tomu veris.
+
+STATE MANAGEMENT - pred kazdym hovorem:
+- Zvedni energii
+- Pripomen si ze produkt fakt pomaha
+- Dostani se do certainty state - 100% presvedceni
+
+KDYZ KLIENT VAHA - neni to o produktu:
+- Neciti jistotu (v produktu, v tobe, nebo ve firme)
+- Tvuj ukol: zjistit ktere ze Three 10s chybi a doplnit
+
+3 JISTOTY ktere musi byt na 10/10:
+1. PRODUKT - klient musi verit ze to dava smysl
+2. TY - klient musi verit ze jsi expert
+3. FIRMA - klient musi verit ze Usetreno neni scam
+
+METAFORA RADIATORU:
+Jsi jako radiator. Muses nejdriv ZAHRAT sebe - pak prenes teplo na klienta.
+Kdyz nejsi zahraty ty -> nepreneses nic.
+
+LIMITUJICI PRESVEDCENI ktera te brzdi:
+"Prodej je manipulace" - NE. Pomahate klientovi usetrit.
+"Nejsem dost dobry" - NE. Mas znalosti ktere klient nema.
+
+SPRAVNY MINDSET:
+Pred hovorem: "Nepresvedcuju ho. Pomaham mu udelat spravne rozhodnuti."'};
+ARGS.push(ARGS_MINDSET);
+
+
+
 var QUOTES = [
   "Neprodavas produkt. Prodavas rozhodnuti zmenit zivot.",
   "Klient nekupuje logiku. Kupuje pocit jistoty.",
@@ -786,32 +819,70 @@ function renderAI(d) {
     var ctip = d.customer_tip ? '<div class="info-ctip"><strong>JAK TO RICT ZAKAZNIKOVI</strong>' + esc(d.customer_tip) + '</div>' : '';
     return '<div class="ai-wrap"><div class="info-card"><div class="info-top"><span class="badge badge-i">ODPOVED</span>' + cpbtn(d.text) + '</div><div class="info-body"><div class="info-txt">' + esc(d.text) + '</div>' + ctip + '</div></div></div>';
   }
-  var an = d.analysis ? '<div class="situation"><span class="situation-lbl">SITUACE</span>' + esc(d.analysis) + '</div>' : '';
-  var cards = (d.responses || []).map(function(r) {
-    if (r.style === 'FLOW') {
-      var lines = r.text.split('\n').filter(function(l) { return l.trim(); });
-      var flowHtml = lines.map(function(line) {
-        var isClose = line.indexOf('CLOSE') >= 0 || line.indexOf('OTAZKA') >= 0;
-        var isPochop = line.indexOf('POCHOPENI') >= 0;
-        var isReframe = line.indexOf('REFRAME') >= 0;
-        var color = isPochop ? 'var(--gn)' : isReframe ? 'var(--am)' : isClose ? 'var(--ac)' : 'var(--tx2)';
-        var parts = line.split(':');
-        var label = parts[0] ? parts[0].trim() : '';
-        var text = parts.slice(1).join(':').trim();
-        if (text) {
-          return '<div style="margin-bottom:10px;padding:10px 12px;border-radius:8px;background:var(--bg4);border-left:2px solid ' + color + ';">' +
-            '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.08em;color:' + color + ';margin-bottom:4px;">' + esc(label) + '</div>' +
-            '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);">' + esc(text) + '</div>' +
-            '</div>';
-        }
-        return '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);margin-bottom:8px;">' + esc(line) + '</div>';
-      }).join('');
-      return '<div class="rcard"><div class="rcard-top"><span class="badge badge-p">INSTANT REBUTTAL</span>' + cpbtn(r.text.replace(/\n/g,' | ')) + '</div><div class="rcard-body">' + flowHtml + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
+  if (d.type === 'objection') {
+    var an = d.analysis ? '<div class="situation"><span class="situation-lbl">CO KLIENTOVI CHYBI</span>' + esc(d.analysis) + '</div>' : '';
+    var responses = d.responses || [];
+    var cards = responses.map(function(r) {
+      return renderFlowCard(r);
+    }).join('');
+    return '<div class="ai-wrap">' + an + cards + '</div>';
+  }
+  // fallback
+  var an2 = d.analysis ? '<div class="situation"><span class="situation-lbl">SITUACE</span>' + esc(d.analysis) + '</div>' : '';
+  var cards2 = (d.responses || []).map(function(r) { return renderFlowCard(r); }).join('');
+  return '<div class="ai-wrap">' + an2 + cards2 + '</div>';
+}
+
+function renderFlowCard(r) {
+  var text = r.text || '';
+  // Parse POCHOPENI / REFRAME / CLOSE OTAZKA from text
+  var steps = [];
+  var lines = text.split('\n');
+  var currentStep = null;
+  var currentText = [];
+
+  lines.forEach(function(line) {
+    line = line.trim();
+    if (!line) return;
+    var isPoch = /^POCHOPENI/i.test(line);
+    var isRef = /^REFRAME/i.test(line);
+    var isClose = /^CLOSE/i.test(line);
+    if (isPoch || isRef || isClose) {
+      if (currentStep) steps.push({label: currentStep.label, color: currentStep.color, text: currentText.join(' ').trim()});
+      currentStep = {
+        label: isPoch ? 'POCHOPENI' : isRef ? 'REFRAME' : 'CLOSE OTAZKA',
+        color: isPoch ? 'var(--gn)' : isRef ? 'var(--am)' : 'var(--ac)'
+      };
+      // Get text after the colon
+      var colonIdx = line.indexOf(':');
+      if (colonIdx >= 0) currentText = [line.slice(colonIdx+1).trim()];
+      else currentText = [];
+    } else {
+      if (currentStep) currentText.push(line);
     }
-    var bm = {'POCHOPENI + ROZKLICOVANI':'badge-p','RESENI + MINI CLOSE':'badge-r'};
-    return '<div class="rcard"><div class="rcard-top"><span class="badge ' + (bm[r.style] || 'badge-i') + '">' + esc(r.style) + '</span>' + cpbtn(r.text) + '</div><div class="rcard-body"><div class="rcard-txt">' + esc(r.text) + '</div>' + (r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '') + '</div></div>';
-  }).join('');
-  return '<div class="ai-wrap">' + an + cards + '</div>';
+  });
+  if (currentStep && currentText.length) steps.push({label: currentStep.label, color: currentStep.color, text: currentText.join(' ').trim()});
+
+  var inner = '';
+  if (steps.length >= 2) {
+    inner = steps.map(function(s) {
+      return '<div style="margin-bottom:10px;padding:10px 14px;border-radius:8px;background:var(--bg);border-left:3px solid ' + s.color + ';">' +
+        '<div style="font-size:9px;font-family:DM Mono,monospace;letter-spacing:.1em;color:' + s.color + ';font-weight:600;margin-bottom:5px;">' + s.label + '</div>' +
+        '<div style="font-size:13.5px;line-height:1.7;color:var(--tx);">' + esc(s.text) + '</div>' +
+        '</div>';
+    }).join('');
+  } else {
+    inner = '<div style="font-size:13.5px;line-height:1.75;color:var(--tx);white-space:pre-line;">' + esc(text) + '</div>';
+  }
+
+  var nextHtml = r.next ? '<div class="rcard-next">' + esc(r.next) + '</div>' : '';
+  var badge = r.style === 'FLOW' ? 'INSTANT REBUTTAL' : (r.style || 'ODPOVED');
+  var badgeCls = 'badge-p';
+
+  return '<div class="rcard" style="margin-bottom:8px;">' +
+    '<div class="rcard-top"><span class="badge ' + badgeCls + '">' + esc(badge) + '</span>' + cpbtn(text) + '</div>' +
+    '<div class="rcard-body">' + inner + nextHtml + '</div>' +
+    '</div>';
 }
 
 function cpbtn(t) { return '<button class="cpbtn" data-c="' + t.replace(/"/g,'&quot;') + '">Kopirovat</button>'; }
@@ -835,6 +906,7 @@ function buildPrompt(pi, hist) {
     '',
     'Znalosti: ' + kb,
     'Top argumenty a techniky: ' + argsText,
+    'Mindset a inner game: Prodej = prenos jistoty. State management pred hovorem. Three 10s: produkt/ty/firma. Radiator metafora - nejdriv zahrej sebe pak klienta.',
     'Dodavatele: ' + dv,
     '',
     'DULEZITE - RESPONDUJES JINAK DLE FAZE:',
@@ -895,7 +967,7 @@ async function doSummary() {
     })});
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
-    var parsed; try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'summary',text:raw}; }
+    var parsed; try { var bt=String.fromCharCode(96); var cl=raw.split(bt+'json').join('').split(bt).join('').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); var je=cl.lastIndexOf('}'); if(je>=0)cl=cl.slice(0,je+1); parsed=JSON.parse(cl); } catch(e) { parsed={type:'summary',text:raw}; }
     c.history[c.history.length-1] = {role:'ai',content:parsed};
   } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
@@ -921,7 +993,16 @@ async function sendMsg() {
     if (!r.ok) { var e2=await r.json(); throw new Error(e2.error?e2.error.message:'HTTP '+r.status); }
     var data = await r.json();
     var raw = data.content && data.content[0] ? data.content[0].text : '';
-    var parsed; try { var cl=raw.replace(/```json/g,'').replace(/```/g,'').trim(); var ji=cl.indexOf('{'); if(ji>0)cl=cl.slice(ji); parsed=JSON.parse(cl); } catch(e) { parsed={type:'info',text:raw}; }
+    var parsed;
+    try {
+      var bt = String.fromCharCode(96);
+      var cl = raw.split(bt + 'json').join('').split(bt).join('').trim();
+      var ji = cl.indexOf('{');
+      if (ji > 0) cl = cl.slice(ji);
+      var je = cl.lastIndexOf('}');
+      if (je >= 0) cl = cl.slice(0, je+1);
+      parsed = JSON.parse(cl);
+    } catch(e) { parsed = {type:'info', text:raw}; }
     c.history[c.history.length-1] = {role:'ai',content:parsed};
   } catch(e) { c.history[c.history.length-1] = {role:'ai',content:{type:'error',text:'Chyba: ' + e.message}}; }
   document.getElementById('sendBtn').disabled = false;
